@@ -1,0 +1,380 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Company Register</title>
+
+    <style>
+      body {
+        background: #eef1f6;
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+      }
+
+      /* MAIN CARD */
+      .container {
+        max-width: 500px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 25px 30px;
+        border-radius: 14px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+      }
+
+      /* Title */
+      .title {
+        text-align: center;
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 15px;
+      }
+
+      /* Wallpaper (same style as logo) */
+      .wallpaper-center {
+        text-align: center;
+        margin-bottom: 15px;
+      }
+      .wallpaper-preview {
+        width: 100%;
+        height: 160px;
+        border-radius: 12px;
+        background-size: cover;
+        background-position: center;
+        border: 1px solid #ddd;
+      }
+      .upload-btn-wall {
+        margin-top: 10px;
+        display: inline-block;
+        background: #2563eb;
+        padding: 7px 16px;
+        color: #fff;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 13px;
+      }
+      #id_wallpaper {
+        display: none;
+      }
+
+      /* Logo */
+      .logo-center {
+        text-align: center;
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
+      }
+      .logo-preview {
+        width: 95px;
+        height: 95px;
+        border-radius: 50%;
+        background: #eee;
+        border: 4px solid white;
+        background-size: cover;
+        background-position: center;
+        display: inline-block;
+        cursor: pointer;
+      }
+      .upload-btn-logo {
+        display: inline-block;
+        background: #2563eb;
+        padding: 6px 16px;
+        color: #fff;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 13px;
+      }
+      #id_logo {
+        display: none;
+      }
+
+      /* Inputs */
+      input,
+      textarea,
+      select {
+        width: 95%;
+        padding: 12px;
+        margin-bottom: 14px;
+        border-radius: 10px;
+        border: 1px solid #dcdcdc;
+        background: #fafafa;
+        font-size: 14px;
+      }
+      input:focus,
+      textarea:focus,
+      select:focus {
+        background: #fff;
+        border-color: #2669ff;
+      }
+
+      /* PLAN BUTTONS */
+      .plan-box {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+      .plan-btn {
+        width: 48%;
+        padding: 12px 0;
+        text-align: center;
+        border-radius: 10px;
+        cursor: pointer;
+        color: #fff;
+        font-weight: 600;
+        font-size: 14px;
+      }
+      .blue-plan {
+        background: #2669ff;
+      }
+      .red-plan {
+        background: #d62828;
+      }
+
+      .selected-plan {
+        outline: 3px solid #000;
+      }
+
+      /* Terms */
+      .check-box {
+        margin: 15px 0;
+      }
+
+      /* Submit */
+      .submit-btn {
+        width: 100%;
+        padding: 14px;
+        background: #2669ff;
+        color: white;
+        border-radius: 10px;
+        border: none;
+        font-size: 17px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      /* Amount Box */
+      .amount-box {
+        background: #f3f4f6;
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 18px;
+        font-weight: 600;
+      }
+
+      .error-text {
+        color: #d62828;
+        font-size: 13px;
+        margin-top: -10px;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h2 class="title">Company Register</h2>
+
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %} {% if form.non_field_errors %}
+        <div
+          style="
+            background: #ffe6e6;
+            color: #b30000;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+          "
+        >
+          {{ form.non_field_errors }}
+        </div>
+        {% endif %}
+
+        <!-- Wallpaper (NOW MATCHES LOGO STYLE) -->
+        <div class="wallpaper-center">
+          <div
+            class="wallpaper-preview"
+            id="wallPrev"
+            style="
+              background-image: url('https://cdn-icons-png.flaticon.com/512/847/847969.png');
+            "
+          ></div>
+          <label class="upload-btn-wall" for="id_wallpaper"
+            >Upload Wallpaper</label
+          >
+          <input type="file" name="wallpaper" accept="image/*" id="id_wallpaper" required>
+        </div>
+
+        <!-- Logo -->
+        <div class="logo-center">
+          <label class="upload-btn-logo" for="id_logo">Upload Logo</label>
+
+          <div
+            class="logo-preview"
+            id="logoPrev"
+            style="
+              background-image: url('https://cdn-icons-png.flaticon.com/512/847/847969.png');
+            "
+          ></div>
+
+          <input type="file" name="logo" accept="image/*" id="id_logo" required>
+        </div>
+
+        <!-- Username -->
+        <label>Username</label>
+        {{ form.username }}
+        <div class="error-text">{{ form.username.errors }}</div>
+
+        <!-- Email -->
+        <label>Email</label>
+        {{ form.email }}
+        <div class="error-text">{{ form.email.errors }}</div>
+
+        <!-- Password -->
+        <label>Password</label>
+        {{ form.password1 }}
+        <div class="error-text">{{ form.password1.errors }}</div>
+
+        <!-- Confirm Password -->
+        <label>Confirm Password</label>
+        {{ form.password2 }}
+        <div class="error-text">{{ form.password2.errors }}</div>
+
+        <!-- Company Name -->
+        <label>Company Name</label>
+        {{ form.company_name }}
+        <div class="error-text">{{ form.company_name.errors }}</div>
+
+        <!-- Description -->
+        <label>Description</label>
+        {{ form.description }}
+        <div class="error-text">{{ form.description.errors }}</div>
+
+        <!-- Experience -->
+        <label>Experience (Years)</label>
+        {{ form.experience }}
+        <div class="error-text">{{ form.experience.errors }}</div>
+
+        <!-- Total Projects -->
+        <label>Total Projects</label>
+        {{ form.total_projects }}
+        <div class="error-text">{{ form.total_projects.errors }}</div>
+
+        <!-- Ongoing Projects -->
+        <label>Ongoing Projects</label>
+        {{ form.ongoing_projects }}
+        <div class="error-text">{{ form.ongoing_projects.errors }}</div>
+
+        <!-- Completed Projects -->
+        <label>Completed Projects</label>
+        {{ form.completed_projects }}
+        <div class="error-text">{{ form.completed_projects.errors }}</div>
+
+        <!-- Address -->
+        <label>Company Address</label>
+        {{ form.address }}
+        <div class="error-text">{{ form.address.errors }}</div>
+
+        <!-- Contact Number -->
+        <label>Contact Number</label>
+        {{ form.contact_number }}
+        <div class="error-text">{{ form.contact_number.errors }}</div>
+
+        <!-- Plan -->
+        <label>Choose Plan</label>
+        <div class="plan-box">
+          <div class="plan-btn blue-plan" onclick="selectPlan(14999, this)">
+            ₹14999
+          </div>
+          <div class="plan-btn red-plan" onclick="selectPlan(19999, this)">
+            ₹19999
+          </div>
+        </div>
+        {{ form.plan }}
+        <div class="error-text">{{ form.plan.errors }}</div>
+
+        <!-- Duration -->
+        <label>Duration (Months)</label>
+        <select
+          id="durationSelect"
+          name="duration"
+          onchange="updateAmount()"
+          required
+        >
+          <option value="1">1 Month</option>
+          <option value="3">3 Months</option>
+          <option value="6">6 Months</option>
+        </select>
+        <div class="error-text">{{ form.duration.errors }}</div>
+
+        <!-- Amount Box -->
+        <div class="amount-box">
+          Total Amount: ₹ <span id="finalAmount">0</span>
+        </div>
+
+        <div class="check-box">
+          <input type="checkbox" style="width: auto" required /> I accept the
+          Terms & Conditions
+        </div>
+
+        <button class="submit-btn">Register</button>
+      </form>
+    </div>
+
+    <script>
+      let selectedPlanAmount = 0;
+
+      /* Wallpaper Preview (same as logo now) */
+      document
+        .getElementById("id_wallpaper")
+        .addEventListener("change", (e) => {
+          document.getElementById(
+            "wallPrev"
+          ).style.backgroundImage = `url(${URL.createObjectURL(
+            e.target.files[0]
+          )})`;
+        });
+
+      /* Logo Preview */
+      document.getElementById("id_logo").addEventListener("change", (e) => {
+        document.getElementById(
+          "logoPrev"
+        ).style.backgroundImage = `url(${URL.createObjectURL(
+          e.target.files[0]
+        )})`;
+      });
+
+      /* Select Plan */
+      function selectPlan(amount, elem) {
+        selectedPlanAmount = amount;
+        document.getElementById("id_plan").value = amount;
+
+        document
+          .querySelectorAll(".plan-btn")
+          .forEach((btn) => btn.classList.remove("selected-plan"));
+
+        elem.classList.add("selected-plan");
+
+        updateAmount();
+      }
+
+      /* Update Total Amount */
+      function updateAmount() {
+        let months = document.getElementById("durationSelect").value;
+        let total = selectedPlanAmount * months;
+        document.getElementById("finalAmount").innerText = total;
+      }
+    </script>
+  </body>
+</html>
+        updateAmount();
+      }
+
+      /* Update Total Amount */
+      function updateAmount() {
+        let months = document.getElementById("durationSelect").value;
+        let total = selectedPlanAmount * months;
+        document.getElementById("finalAmount").innerText = total;
+      }
+    </script>
+  </body>
+</html>

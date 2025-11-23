@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    {% for i in data %}
+    <video src="{{i.reel.url}}" controls width="300"></video>
+    <button onclick="like({{i.id}})">like</button>
+    <input type="text" id="commentBox" />
+    <button onclick="commentBox({{i.id}})">Post Comment</button>
+    {% endfor %}
+    <script>
+      function like(id) {
+        fetch(`likeReel/${id}`)
+          .then((res) => res.json())
+          .then((data) => {
+            location.reload();
+          })
+          .catch((err) => console.log(err));
+      }
+      const commentBox = (id) => {
+        c = document.getElementById("commentBox").value;
+        fetch(`comment/${id}/${c}`)
+          .then((res) => res.json())
+          .then((data) => location.reload());
+      };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,175 @@
+{% extends "base.htm" %} {% load static %} {% block content %}
+<style>
+  /* Custom Dashboard Styles */
+  .dashboard-header {
+    background: linear-gradient(90deg, #2b5876, #4e4376);
+    color: white;
+    padding: 30px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .dashboard-header h2 {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .summary-card {
+    border: none;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+  }
+
+  .summary-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .summary-card h5 {
+    color: #777;
+    font-weight: 500;
+  }
+
+  .summary-card h3 {
+    font-weight: 700;
+    color: #333;
+  }
+
+  .btn-success {
+    background-color: #28a745;
+    border: none;
+  }
+
+  .btn-success:hover {
+    background-color: #218838;
+  }
+
+  table img {
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  }
+
+  .table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+  }
+
+  .card-header {
+    background: #4e4376;
+    color: white;
+    font-weight: 600;
+  }
+</style>
+
+<div class="container mt-5">
+  <!-- Dashboard Header -->
+  <div
+    class="dashboard-header d-flex justify-content-between align-items-center"
+  >
+    <div>
+      <h2>👋 Welcome, {{ request.user.username|title }}</h2>
+      <p class="mb-0 text-light">
+        Here’s a summary of your property postings and ticket sales.
+      </p>
+    </div>
+    <a href="{% url 'client_logout' %}" class="btn btn-outline-light px-4 py-2"
+      >Logout</a
+    >
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="row text-center mb-4">
+    <div class="col-md-4 mb-3">
+      <div class="card summary-card p-4">
+        <h5>🏠 Total Properties</h5>
+        <h3>{{ properties.count }}</h3>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="card summary-card p-4">
+        <h5>🎫 Total Tickets</h5>
+        <h3>{{ total_tickets }}</h3>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="card summary-card p-4">
+        <h5>💰 Sold Tickets</h5>
+        <h3>{{ sold_tickets }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post Property Button -->
+  <div class="text-end mb-3">
+    <a
+      href="{% url 'create_property' %}"
+      class="btn btn-success btn-lg shadow-sm"
+    >
+      📝 Post New Property
+    </a>
+  </div>
+
+  <!-- Properties Table -->
+  <div class="card shadow-lg border-0">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">📋 My Properties</h5>
+      <span class="badge bg-light text-dark"
+        >{{ properties.count }} Active</span
+      >
+    </div>
+    <div class="card-body">
+      {% if properties %}
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead>
+            <tr>
+              <th>Property</th>
+              <th>Value (₹)</th>
+              <th>Total Tickets</th>
+              <th>Sold</th>
+              <th>Available</th>
+              <th>Luck ID</th>
+              <th>Image</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for prop in properties %}
+            <tr>
+              <td>{{ prop.owner_name }}</td>
+              <td>{{ prop.property_value|floatformat:0 }}</td>
+              <td>{{ prop.total_tickets }}</td>
+              <td>{{ prop.tickets_sold }}</td>
+              <td>{{ prop.tickets_available }}</td>
+              <td>
+                <span class="badge bg-info text-dark">{{ prop.luck_id }}</span>
+              </td>
+              <td>
+                {% if prop.image %}
+                <img
+                  src="{{ prop.image.url }}"
+                  width="70"
+                  height="70"
+                  class="object-fit-cover"
+                />
+                {% else %}
+                <span class="text-muted">No image</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="text-center text-muted my-4">
+        No properties posted yet. Click <strong>“Post New Property”</strong> to
+        get started.
+      </p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

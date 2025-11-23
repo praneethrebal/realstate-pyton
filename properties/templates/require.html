@@ -1,0 +1,443 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Submit Your Future Requirements</title>
+  
+     <style>
+/* ========== GLOBAL RESET ========== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Poppins", "Inter", sans-serif;
+  background: #f3f5f8;
+  color: #eaeaea;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* ========== WRAPPER SECTION ========== */
+.req-section {
+  width: 100%;
+  padding: 60px 20px;
+}
+
+/* ========== MAIN CARD ========== */
+.req-card {
+  background: white;
+  border-radius: 14px;
+  padding: 50px 60px;
+  max-width: 950px;
+  width: 100%;
+  margin: auto;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.req-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+}
+
+/* ========== HEADER ========== */
+.req-head {
+
+  color:black;
+  text-align: center;
+  padding: 16px 10px;
+  font-size: 22px;
+  font-weight: 600;
+  border-radius: 10px;
+  margin-bottom: 35px;
+  letter-spacing: 0.3px;
+}
+
+/* ========== FORM GRID ========== */
+form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px 30px;
+}
+
+label {
+  font-size: 14px;
+  color: black;
+  font-weight: 500;
+  margin-bottom: 8px;
+  display: block;
+}
+
+input {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 14px;
+  border: 1px solid black;
+  background:white;
+  border-radius: 8px;
+  color: #e5e5e5;
+  transition: all 0.25s ease;
+}
+
+input::placeholder {
+  color: #777;
+}
+
+input:focus {
+  border-color: #3b82f6;
+  background: #202020;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  outline: none;
+}
+
+/* ========== SUBMIT BUTTON ========== */
+button {
+  grid-column: span 2;
+  background: #1e5af9;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 13px 0;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 30%;
+  margin: 10px auto 0;
+  display: block;
+}
+
+button:hover {
+  background: #1747d4;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(30, 90, 249, 0.35);
+}
+
+/* ========== SUCCESS MESSAGE ========== */
+.success-message {
+  grid-column: span 2;
+  text-align: center;
+  color: #4ade80;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+/* ====== MOBILE VERSION ====== */
+@media (max-width: 768px) {
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  button {
+    width: 100%;
+  }
+}
+
+/* ====== FOOTER SECTION BELOW FORM ====== */
+
+
+    .footer {
+    font-family: 'Poppins', sans-serif;
+    background: #fff;
+    color: #333;
+    width: 100%;
+    
+}
+
+.footer-main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width:80%;
+    margin: auto;
+    padding: 50px 20px;
+    gap: 40px;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 230px;
+}
+
+.footer-section h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.footer-section p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.footer-section a {
+    color: #333;
+    text-decoration: none;
+}
+
+.footer-section a:hover {
+    text-decoration: underline;
+}
+
+.footer-section button {
+    background: #888;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 18px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.footer-section button:hover {
+    background: #555;
+}
+
+.footer-section h3 {
+  margin-bottom: 10px;
+  color: #222;
+  font-weight: 600;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-box input {
+  width: 200px;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+  border-color: #0056d2;
+  box-shadow: 0 0 4px rgba(0, 86, 210, 0.3);
+}
+
+.search-box button {
+  background-color: #666;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.search-box button:hover {
+  background-color: #0056d2;
+}
+
+.social-icons a {
+    font-size: 18px;
+    color: #444;
+    margin-right: 12px;
+    transition: color 0.3s;
+}
+
+.social-icons a:hover {
+    color: #0a66c2;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 6px;
+}
+
+.footer-section ul li a {
+    font-size: 14px;
+}
+
+.footer-bottom {
+    background: #0056d2;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 15px 40px;
+    font-size: 14px;
+}
+
+.footer-bottom span {
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .footer-main {
+        flex-direction: column;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+        gap: 6px;
+    }
+}
+
+</style>
+  </head>
+  <body>
+
+
+       {% include 'NavBar.html' %}
+      <br><br><br><br>
+      
+    <section class="req-section">
+      <div class="req-card">
+        <div class="req-head">Submit Your Future Requirements</div>
+
+        {% if messages %} {% for message in messages %}
+        <p class="success-message">{{ message }}</p>
+        {% endfor %} {% endif %}
+
+        <form method="POST" action="">
+          {% csrf_token %}
+          <div>
+            <label>What type of property looking for</label>
+            <input
+              type="text"
+              name="property_type"
+              placeholder="e.g., Apartment, Villa"
+              required
+            />
+          </div>
+          <div>
+            <label>Extent</label>
+            <input type="text" name="extent" placeholder="e.g., 1200 sqft" />
+          </div>
+          <div>
+            <label>Type of BHK</label>
+            <input type="text" name="bhk_type" placeholder="e.g., 2 BHK" />
+          </div>
+          <div>
+            <label>Facing</label>
+            <input type="text" name="facing" placeholder="e.g., East, North" />
+          </div>
+          <div>
+            <label>Budget</label>
+            <input type="text" name="budget" placeholder="e.g., ₹50 Lakhs" />
+          </div>
+          <div>
+            <label>Location</label>
+            <input type="text" name="location" placeholder="e.g., Hyderabad" />
+          </div>
+          <div>
+            <label>City</label>
+            <input type="text" name="city" placeholder="e.g., Bengaluru" />
+          </div>
+          <div>
+            <label>State</label>
+            <input type="text" name="state" placeholder="e.g., Karnataka" />
+          </div>
+          <div>
+            <label>Type of Approval</label>
+            <input
+              type="text"
+              name="approval_type"
+              placeholder="e.g., HMDA, DTCP"
+            />
+          </div>
+          <div>
+            <label>Project Name</label>
+            <input
+              type="text"
+              name="project_name"
+              placeholder="e.g., Green Meadows"
+            />
+          </div>
+          <div style="grid-column: span 2">
+            <label>Any Company Name</label>
+            <input
+              type="text"
+              name="company_name"
+              placeholder="e.g., ABC Constructions"
+            />
+          </div>
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-main">
+        <div class="footer-section">
+          <h3>SEARCH</h3>
+          <div class="search-box">
+            <input type="text" placeholder="Search For State" />
+            <button type="button">Search</button>
+          </div>
+        </div>
+
+        <div class="footer-section">
+          <h3>FIND PROPERTY</h3>
+          <p>Select From Thousands Of Options, Without Brokerage.</p>
+          <button>Enquiry Now</button>
+          <h3 style="margin-top: 25px">LIST YOUR PROPERTY</h3>
+          <p>For Free. Without Any Brokerage.</p>
+          <button>Post Now</button>
+        </div>
+
+        <div class="footer-section">
+          <h3>CONTACT US</h3>
+          <p>Toll Free - 1800 41 99099</p>
+          <p>9:30 AM To 6:30 PM (Mon-Sun)</p>
+          <p>
+            Email -
+            <a href="mailto:feedback@propertysr.com">feedback@propertysr.com</a>
+          </p>
+
+          <h3 style="margin-top: 20px">FOLLOW US</h3>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-section">
+          <h3>COMPANY</h3>
+          <ul>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">For Partners</a></li>
+            <li><a href="#">Terms</a></li>
+            <li><a href="#">Annual Return</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Unsubscribe</a></li>
+            <li><a href="#">Merger Hearing Advertisement</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>©<span>WEEKDAYS PROPERTIES</span>, All Rights Reserved.</p>
+        <p>Designed By <span>© 2023 YGR Gobal IT Services Pvt. Ltd.</span></p>
+      </div>
+    </footer>
+  </body>
+</html>

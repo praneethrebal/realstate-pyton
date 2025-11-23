@@ -1,0 +1,620 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static '/css/franchise.css' %}" />
+    <title>Franchise Locations</title>
+    <style>
+      /* ===== Base Style ===== */
+body {
+  margin: 0;
+  font-family: "Poppins", "Inter", sans-serif;
+  background: #f1f4f8;
+  color: #222;
+}
+
+/* ===== Franchise Section ===== */
+.fran {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 20px;
+  background: #e9ecef;
+}
+
+.fran-wrapper {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1200px;
+  width: 100%;
+  gap: 40px;
+}
+
+/* ===== Left Map ===== */
+.fran-map {
+  flex: 1;
+}
+
+.fran-map iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 350px;
+  border: 0;
+  border-radius: 10px;
+}
+
+/* ===== Right Content ===== */
+.fran-content {
+  flex: 1;
+  text-align: center;
+}
+
+.fran-content h3 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.fran-content h2 {
+  font-size: 26px;
+  margin-bottom: 20px;
+  color: #111;
+  font-weight: 700;
+}
+
+.city-list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.city {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.city img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.city img:hover {
+  transform: scale(1.05);
+}
+
+.city span {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #222;
+  font-weight: 500;
+}
+
+/* ===== Franchise Apply Section ===== */
+.fran-apply {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 20px;
+  background: #e9ecef;
+}
+
+.fran-apply-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 60px;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.fran-apply-img {
+  flex: 1;
+  text-align: center;
+}
+
+.fran-apply-img img {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 12px;
+}
+
+.fran-apply-form {
+  flex: 1;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+  padding: 40px 35px;
+  max-width: 520px;
+}
+
+.fran-apply-form h2 {
+  font-size: 22px;
+  margin-bottom: 25px;
+  color: #111;
+  font-weight: 600;
+  text-align: center;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.form-group label span {
+  color: red;
+}
+
+.fran-apply-form input,
+.fran-apply-form textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  background: #fafafa;
+  font-size: 14px;
+  resize: none;
+  font-family: "Poppins", sans-serif;
+}
+
+.fran-apply-form input:focus,
+.fran-apply-form textarea:focus {
+  border-color: #1e5af9;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(30, 90, 249, 0.15);
+}
+
+.fran-apply-form button {
+  width: 100%;
+  background: #1e5af9;
+  border: none;
+  color: #fff;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.fran-apply-form button:hover {
+  background: #1547c5;
+}
+
+/* ===== FOOTER ===== */
+
+      .footer {
+        font-family: "Poppins", sans-serif;
+        background: #fff;
+        color: #333;
+      }
+
+      .footer-main {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        max-width: 1200px;
+        margin: auto;
+        padding: 50px 20px;
+        gap: 40px;
+      }
+
+      .footer-section {
+        flex: 1;
+        min-width: 230px;
+      }
+
+      .footer-section h3 {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 12px;
+      }
+
+      .footer-section p {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 10px;
+        line-height: 1.6;
+      }
+
+      .footer-section a {
+        color: #333;
+        text-decoration: none;
+      }
+
+      .footer-section a:hover {
+        text-decoration: underline;
+      }
+
+      .footer-section button {
+        background: #888;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 18px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      .footer-section button:hover {
+        background: #555;
+      }
+
+      .footer-section h3 {
+        margin-bottom: 10px;
+        color: #222;
+        font-weight: 600;
+      }
+
+      .search-box {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .search-box input {
+        width: 200px;
+        padding: 10px 12px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        outline: none;
+        font-size: 14px;
+        transition: all 0.3s ease;
+      }
+
+      .search-box input:focus {
+        border-color: #0056d2;
+        box-shadow: 0 0 4px rgba(0, 86, 210, 0.3);
+      }
+
+      .search-box button {
+        background-color: #666;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 10px 16px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s ease;
+      }
+
+      .search-box button:hover {
+        background-color: #0056d2;
+      }
+
+      .social-icons a {
+        font-size: 18px;
+        color: #444;
+        margin-right: 12px;
+        transition: color 0.3s;
+      }
+
+      .social-icons a:hover {
+        color: #0a66c2;
+      }
+
+      .footer-section ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .footer-section ul li {
+        margin-bottom: 6px;
+      }
+
+      .footer-section ul li a {
+        font-size: 14px;
+      }
+
+      .footer-bottom {
+        background: #0056d2;
+        color: #fff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        padding: 15px 40px;
+        font-size: 14px;
+      }
+
+      .footer-bottom span {
+        font-weight: 600;
+      }
+@media (max-width: 768px) {
+  footer.footer {
+    display: none !important;
+  }
+}
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 900px) {
+
+  /* Franchise section */
+  .fran-wrapper {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .fran-map iframe {
+    height: 280px;
+  }
+
+  .city img {
+    width: 90px;
+    height: 90px;
+  }
+
+  /* Franchise Apply section */
+  .fran-apply-wrapper {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .fran-apply-img img {
+    max-width: 350px;
+  }
+
+  .fran-apply-form {
+    width: 100%;
+    padding: 30px 20px;
+  }
+}
+
+/* ===== MOBILE SCREEN (Perfect Mobile Layout) ===== */
+@media (max-width: 600px) {
+  
+  .city-list {
+    gap: 15px;
+  }
+
+  .city img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .fran-content h2 {
+    font-size: 22px;
+  }
+
+}
+@media (max-width: 768px) {
+  footer.footer {
+    display: none !important;
+  }
+} 
+    </style>
+  </head>
+  <body>
+
+
+      {% include 'NavBar.html' %}
+      <br><br><br>
+    <section class="fran">
+      <div class="fran-wrapper">
+        <!-- LEFT: MAP -->
+        <div class="fran-map">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d30773484.55170563!2d61.0245165611659!3d19.69009515037612!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30635ff06b92b791%3A0xd78c4fa1854213a6!2sIndia!5e0!3m2!1sen!2sin!4v1762923398193!5m2!1sen!2sin"
+            width="800"
+            height="600"
+            style="border: 0"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+
+        <!-- RIGHT: CONTENT -->
+        <div class="fran-content">
+          <h3>Available Franchises</h3>
+          <h2>Explore Our Network Of Franchises Across The Country</h2>
+
+          <div class="city-list">
+            <div class="city">
+              <img
+                src="{% static 'images/franchise/hyd.webp' %}"
+                alt="Hyderabad"
+              />
+              <span>Hyderabad</span>
+            </div>
+            <div class="city">
+              <img
+                src="{% static 'images/franchise/bangalore.jpeg' %}"
+                alt="Bangalore"
+              />
+              <span>Bangalore</span>
+            </div>
+            <div class="city">
+              <img
+                src="{% static 'images/franchise/mumbai.jpeg' %}"
+                alt="Mumbai"
+              />
+              <span>Mumbai</span>
+            </div>
+            <div class="city">
+              <img
+                src="{% static 'images/franchise/chennai.jpg' %}"
+                alt="Chennai"
+              />
+              <span>Chennai</span>
+            </div>
+            <div class="city">
+              <img
+                src="{% static 'images/franchise/delhi.jpeg' %}"
+                alt="Delhi"
+              />
+              <span>Delhi</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="fran-apply">
+      <div class="fran-apply-wrapper">
+        <!-- LEFT IMAGE -->
+        <div class="fran-apply-img">
+          <img
+            src="{% static 'images/img/banner.jpg' %}"
+            alt="Franchise Partnership"
+          />
+        </div>
+
+        <!-- RIGHT FORM -->
+        <div class="fran-apply-form">
+          <h2>Franchise Application Form</h2>
+
+          <form method="POST" action="{% url 'franchise' %}">
+            {% csrf_token %}
+            <div class="form-group">
+              <label>Full Name <span>*</span></label>
+              <input
+                type="text"
+                name="full_name"
+                placeholder="Enter your full name"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Email <span>*</span></label>
+              <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Contact Number <span>*</span></label>
+              <input
+                type="text"
+                name="contact"
+                placeholder="Enter your contact number"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label
+                >Where do you want to start your franchise?
+                <span>*</span></label
+              >
+              <input
+                type="text"
+                name="location"
+                placeholder="Enter your preferred location (e.g.,Hyderabad)"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Business Experience</label>
+              <textarea
+                name="experience"
+                rows="2"
+                placeholder="Describe your experience"
+              ></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Why Do You Want To Start A Franchise With Us?</label>
+              <textarea
+                name="reason"
+                rows="3"
+                placeholder="Write your reason"
+              ></textarea>
+            </div>
+
+            <button type="submit">Submit Application</button>
+          </form>
+
+          {% if success %}
+          <p style="color: green; text-align: center; margin-top: 10px">
+            Form submitted successfully!
+          </p>
+          {% endif %}
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-main">
+        <div class="footer-section">
+          <h3>SEARCH</h3>
+          <div class="search-box">
+            <input type="text" placeholder="Search For State" />
+            <button type="button">Search</button>
+          </div>
+        </div>
+
+        <div class="footer-section">
+          <h3>FIND PROPERTY</h3>
+          <p>Select From Thousands Of Options, Without Brokerage.</p>
+          <button>Enquiry Now</button>
+
+          <h3 style="margin-top: 25px">LIST YOUR PROPERTY</h3>
+          <p>For Free. Without Any Brokerage.</p>
+          <button>Post Now</button>
+        </div>
+
+        <div class="footer-section">
+          <h3>CONTACT US</h3>
+          <p>Toll Free - 1800 41 99099</p>
+          <p>9:30 AM To 6:30 PM (Mon-Sun)</p>
+          <p>
+            Email -
+            <a href="mailto:feedback@propertysr.com">feedback@propertysr.com</a>
+          </p>
+
+          <h3 style="margin-top: 20px">FOLLOW US</h3>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-section">
+          <h3>COMPANY</h3>
+          <ul>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">For Partners</a></li>
+            <li><a href="#">Terms</a></li>
+            <li><a href="#">Annual Return</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Unsubscribe</a></li>
+            <li><a href="#">Merger Hearing Advertisement</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>©<span>WEEKDAYS PROPERTIES</span>, All Rights Reserved.</p>
+        <p>Designed By <span>© 2023 YGR Gobal IT Services Pvt. Ltd.</span></p>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,817 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add New Property</title>
+  </head>
+  <body>
+    <div class="addProperty">
+      <style>
+        /* ===========================
+   GLOBAL (SCOPED) STYLES
+=========================== */
+
+        .addProperty {
+          height: 200%;
+          width: 100%;
+          margin-top: 10px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          font-family: Arial, sans-serif;
+        }
+
+        /* ===========================
+   FORM
+=========================== */
+        .addProperty form,
+        .addProperty form .step {
+          margin-top: 100px;
+          width: 100%;
+          max-width: 600px;
+          background-color: #ffffff; /* white card */
+          padding: 35px 40px;
+          margin: 60px 0;
+          border-radius: 16px;
+          box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+          color: #1f2937; /* dark gray text */
+          transition: all 0.3s ease;
+        }
+
+        /* Hide all steps by default */
+        .addProperty .form-step {
+          display: none;
+        }
+
+        /* Show the active step */
+        .addProperty .form-step.active {
+          display: block;
+        }
+
+        /* ===========================
+   HEADINGS
+=========================== */
+        .addProperty h2 {
+          text-align: center;
+          color: #1e40af; /* navy blue */
+          font-size: 26px;
+          font-weight: 700;
+          margin-bottom: 30px;
+        }
+
+        .addProperty h3 {
+          font-size: 16px;
+          font-weight: 600;
+          margin-bottom: 14px;
+          color: #374151;
+        }
+
+        /* ===========================
+   FORM SECTIONS
+=========================== */
+        .addProperty .form-section {
+          margin-bottom: 28px;
+        }
+
+        /* ===========================
+   OPTION BUTTONS
+=========================== */
+        .addProperty .options {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 12px;
+        }
+
+        .addProperty .option {
+          flex: 1 1 calc(50% - 12px);
+          text-align: center;
+          padding: 14px 0;
+          border-radius: 10px;
+          border: 1px solid #cbd5e1;
+          background-color: #f1f5f9;
+          cursor: pointer;
+          font-weight: 500;
+          color: #1f2937;
+          transition: all 0.3s ease;
+        }
+
+        .addProperty .option:hover {
+          background-color: #e0f2fe;
+          border-color: #3b82f6;
+        }
+
+        .addProperty .option.active {
+          background-color: #3b82f6;
+          color: #ffffff;
+          border-color: #3b82f6;
+        }
+
+        /* ===========================
+   INPUTS & SELECTS
+=========================== */
+        .addProperty input[type="text"],
+        .addProperty input[type="number"],
+        .addProperty input[type="file"],
+        .addProperty select {
+          width: 100%;
+          padding: 14px 16px;
+          margin-bottom: 16px;
+          border-radius: 10px;
+          border: 1px solid #cbd5e1;
+          font-size: 15px;
+          transition: border 0.2s ease, box-shadow 0.2s ease;
+          background-color: #f8fafc;
+          color: #1f2937;
+         
+        }
+
+        .addProperty input:focus,
+        .addProperty select:focus {
+          outline: none;
+          border-color: #3b82f6;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Custom style for input grid */
+        .addProperty .input-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 1rem;
+        }
+        /* ===========================
+   CHECKBOXES & LABELS
+=========================== */
+        .addProperty label {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-size: 15px;
+          margin-bottom: 14px;
+          color: #1f2937;
+        }
+
+        .addProperty input[type="checkbox"] {
+          width: 18px;
+          height: 18px;
+          accent-color: #3b82f6;
+          cursor: pointer;
+        }
+
+        /* ===========================
+   BUTTONS
+=========================== */
+        .addProperty .buttons {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 28px;
+          flex-wrap: wrap;
+          gap: 12px;
+        }
+
+        .addProperty button {
+          padding: 14px 24px;
+          border: none;
+          border-radius: 10px;
+          font-weight: 600;
+          font-size: 15px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .addProperty button.next,
+        .addProperty button[type="submit"] {
+          background-color: #3b82f6;
+          color: #ffffff;
+          box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .addProperty button.next:hover,
+        .addProperty button[type="submit"]:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 7px 18px rgba(59, 130, 246, 0.35);
+        }
+
+        .addProperty button[type="button"] {
+          background-color: #f1f5f9;
+          color: #1f2937;
+        }
+
+        .addProperty button[type="button"]:hover {
+          background-color: #e2e8f0;
+        }
+
+        .addProperty button:disabled {
+          background-color: #cbd5e1;
+          cursor: not-allowed;
+        }
+
+        /* ===========================
+   RESPONSIVE
+=========================== */
+        @media (max-width: 600px) {
+          .addProperty .option {
+            flex: 1 1 100%;
+          }
+
+          .addProperty .buttons {
+            flex-direction: column;
+          }
+        }
+
+
+      </style>
+
+ {% include 'NavBar.html' %}
+
+
+
+      <form method="post" id="addPropertyForm" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <!-- Step 1: Basic Info -->
+        <div class="form-step active" id="step-1">
+          <h2>Welcome {{ user.username|default:'User' }}</h2>
+          <div class="form-section">
+            <h3>Looking to</h3>
+            <div class="options">
+              {% for value, text in form.look.field.choices %}
+              <button
+                type="button"
+                class="option"
+                data-field="look"
+                data-value="{{ value }}"
+              >
+                {{ text }}
+              </button>
+              {% endfor %}
+            </div>
+            {{ form.look.as_hidden }}
+          </div>
+
+          <div class="form-section">
+            <h3>What is your Property</h3>
+            <div class="options">
+              {% for value, text in form.selectProperty.field.choices %}
+              <button
+                type="button"
+                class="option"
+                data-field="selectProperty"
+                data-value="{{ value }}"
+              >
+                {{ text }}
+              </button>
+              {% endfor %}
+            </div>
+            {{ form.selectProperty.as_hidden }}
+          </div>
+
+          <div class="buttons" style="justify-content: flex-end">
+            <button type="button" class="next" onclick="nextStep()">
+              Next &rarr;
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: Property Details -->
+        <div class="form-step" id="step-2">
+          <h2>Additional Information</h2>
+          <div class="input-grid">
+            <!-- Fields for Plot -->
+            <div class="conditional-fields" data-property-type="Plot">
+              <div class="form-field">
+                {{ form.projectName.label_tag }} {{ form.projectName }}
+              </div>
+              <div class="form-field">
+                {{ form.extent.label_tag }} {{ form.extent }}
+              </div>
+              <div class="form-field">
+                {{ form.units.label_tag }} {{ form.units }}
+              </div>
+              <div class="form-field">
+                {{ form.facing.label_tag }} {{ form.facing }}
+              </div>
+              <div class="form-field">
+                {{ form.roadSize.label_tag }} {{ form.roadSize }}
+              </div>
+              <div class="form-field">
+                {{ form.dimensions.label_tag }} {{ form.dimensions }}
+              </div>
+            </div>
+
+            <!-- Fields for House -->
+            <div class="conditional-fields" data-property-type="House">
+              <div class="form-field">
+                {{ form.projectName.label_tag }} {{ form.projectName }}
+              </div>
+              <div class="form-field">
+                {{ form.extent.label_tag }} {{ form.extent }}
+              </div>
+              <div class="form-field">
+                {{ form.units.label_tag }} {{ form.units }}
+              </div>
+              <div class="form-field">
+                {{ form.numberOfBHK.label_tag }} {{ form.numberOfBHK }}
+              </div>
+              <div class="form-field">
+                {{ form.numberOfFloors.label_tag }} {{ form.numberOfFloors }}
+              </div>
+              <div class="form-field">
+                {{ form.facing.label_tag }} {{ form.facing }}
+              </div>
+              <div class="form-field">
+                {{ form.roadSize.label_tag }} {{ form.roadSize }}
+              </div>
+              <div class="form-field">
+                {{ form.dimensions.label_tag }} {{ form.dimensions }}
+              </div>
+              <div class="form-field">
+                {{ form.builtUpArea.label_tag }} {{ form.builtUpArea }}
+              </div>
+              <div class="form-field">
+                {{ form.carpetArea.label_tag }} {{ form.carpetArea }}
+              </div>
+              <div class="form-field">
+                {{ form.openArea.label_tag }} {{ form.openArea }}
+              </div>
+              <div class="form-field">
+                {{ form.floorNo.label_tag }} {{ form.floorNo }}
+              </div>
+              <div class="form-field">
+                {{ form.rentalIncome.label_tag }} {{ form.rentalIncome }}
+              </div>
+              <div class="form-field">
+                {{ form.roadFacing.label_tag }} {{ form.roadFacing }}
+              </div>
+            </div>
+
+            <!-- Fields for Flat -->
+            <div class="conditional-fields" data-property-type="Flat">
+              <div class="form-field">
+                {{ form.projectName.label_tag }} {{ form.projectName }}
+              </div>
+              <div class="form-field">
+                {{ form.communityType.label_tag }} {{ form.communityType }}
+              </div>
+              <div class="form-field">
+                {{ form.facing.label_tag }} {{ form.facing }}
+              </div>
+              <div class="form-field">
+                {{ form.extent.label_tag }} {{ form.extent }}
+              </div>
+              <div class="form-field">
+                {{ form.units.label_tag }} {{ form.units }}
+              </div>
+              <div class="form-field">
+                {{ form.builtUpArea.label_tag }} {{ form.builtUpArea }}
+              </div>
+              <div class="form-field">
+                {{ form.carpetArea.label_tag }} {{ form.carpetArea }}
+              </div>
+              <div class="form-field">
+                {{ form.numberOfBHK.label_tag }} {{ form.numberOfBHK }}
+              </div>
+              <div class="form-field">
+                {{ form.floorNo.label_tag }} {{ form.floorNo }}
+              </div>
+            </div>
+
+            <!-- Fields for Villa -->
+            <div class="conditional-fields" data-property-type="Villa">
+              <div class="form-field">
+                {{ form.projectName.label_tag }} {{ form.projectName }}
+              </div>
+              <div class="form-field">
+                {{ form.facing.label_tag }} {{ form.facing }}
+              </div>
+              <div class="form-field">
+                {{ form.numberOfBHK.label_tag }} {{ form.numberOfBHK }}
+              </div>
+              <div class="form-field">
+                {{ form.dimensions.label_tag }} {{ form.dimensions }}
+              </div>
+              <div class="form-field">
+                {{ form.roadSize.label_tag }} {{ form.roadSize }}
+              </div>
+              <div class="form-field">
+                {{ form.extent.label_tag }} {{ form.extent }}
+              </div>
+              <div class="form-field">
+                {{ form.units.label_tag }} {{ form.units }}
+              </div>
+              <div class="form-field">
+                {{ form.builtUpArea.label_tag }} {{ form.builtUpArea }}
+              </div>
+              <div class="form-field">
+                {{ form.openArea.label_tag }} {{ form.openArea }}
+              </div>
+              <div class="form-field">
+                {{ form.rentalIncome.label_tag }} {{ form.rentalIncome }}
+              </div>
+            </div>
+
+            <!-- Fields for Farm -->
+            <div class="conditional-fields" data-property-type="Farm">
+              <div class="form-field">
+                {{ form.projectName.label_tag }} {{ form.projectName }}
+              </div>
+              <div class="form-field">
+                {{ form.extent.label_tag }} {{ form.extent }}
+              </div>
+              <div class="form-field">
+                {{ form.units.label_tag }} {{ form.units }}
+              </div>
+              <div class="form-field">
+                {{ form.facing.label_tag }} {{ form.facing }}
+              </div>
+              <div class="form-field">
+                {{ form.dimensions.label_tag }} {{ form.dimensions }}
+              </div>
+            </div>
+
+            <!-- Fields for Lands -->
+            <div class="conditional-fields" data-property-type="Lands">
+              <div class="form-field">
+                {{ form.landType.label_tag }} {{ form.landType }}
+              </div>
+              <div class="form-field">
+                {{ form.extent.label_tag }} {{ form.extent }}
+              </div>
+              <div class="form-field">
+                {{ form.units.label_tag }} {{ form.units }}
+              </div>
+              <div class="form-field">
+                {{ form.soilType.label_tag }} {{ form.soilType }}
+              </div>
+              <div class="form-field">
+                {{ form.waterSource.label_tag }} {{ form.waterSource }}
+              </div>
+              <div class="form-field">
+                {{ form.roadSize.label_tag }} {{ form.roadSize }}
+              </div>
+              <div class="form-field">
+                {{ form.roadFacing.label_tag }} {{ form.roadFacing }}
+              </div>
+            </div>
+
+            <!-- Fields for Developmentlands -->
+            <div
+              class="conditional-fields"
+              data-property-type="Developmentlands"
+            >
+              <div class="form-field">
+                {{ form.landType.label_tag }} {{ form.landType }}
+              </div>
+              <div class="form-field">
+                {{ form.extent.label_tag }} {{ form.extent }}
+              </div>
+              <div class="form-field">
+                {{ form.units.label_tag }} {{ form.units }}
+              </div>
+              <div class="form-field">
+                {{ form.soilType.label_tag }} {{ form.soilType }}
+              </div>
+              <div class="form-field">
+                {{ form.zone.label_tag }} {{ form.zone }}
+              </div>
+              <div class="form-field">
+                {{ form.roadSize.label_tag }} {{ form.roadSize }}
+              </div>
+              <div class="form-field">
+                {{ form.developmentType.label_tag }} {{ form.developmentType }}
+              </div>
+              <div class="form-field">
+                {{ form.expectedAdvance.label_tag }} {{ form.expectedAdvance }}
+              </div>
+              <div class="form-field">
+                {{ form.ratio.label_tag }} {{ form.ratio }}
+              </div>
+              <div class="form-field">
+                {{ form.roadFacing.label_tag }} {{ form.roadFacing }}
+              </div>
+            </div>
+
+            <!-- Fields for Disputelands -->
+            <div class="conditional-fields" data-property-type="Disputelands">
+              <div class="form-field">
+                {{ form.landType.label_tag }} {{ form.landType }}
+              </div>
+              <div class="form-field">
+                {{ form.extent.label_tag }} {{ form.extent }}
+              </div>
+              <div class="form-field">
+                {{ form.units.label_tag }} {{ form.units }}
+              </div>
+              <div class="form-field">
+                {{ form.soilType.label_tag }} {{ form.soilType }}
+              </div>
+              <div class="form-field">
+                {{ form.zone.label_tag }} {{ form.zone }}
+              </div>
+              <div class="form-field">
+                {{ form.roadSize.label_tag }} {{ form.roadSize }}
+              </div>
+              <div class="form-field">
+                {{ form.disputeDetails.label_tag }} {{ form.disputeDetails }}
+              </div>
+              <div class="form-field">
+                {{ form.problemDetails.label_tag }} {{ form.problemDetails }}
+              </div>
+              <div class="form-field">
+                {{ form.actualPrice.label_tag }} {{ form.actualPrice }}
+              </div>
+              <div class="form-field">
+                {{ form.salePrice.label_tag }} {{ form.salePrice }}
+              </div>
+              <div class="form-field">
+                {{ form.roadFacing.label_tag }} {{ form.roadFacing }}
+              </div>
+            </div>
+
+            <!-- Fields for Commerciallands -->
+            <div
+              class="conditional-fields"
+              data-property-type="Commerciallands"
+            >
+              <div class="form-field">
+                {{ form.landType.label_tag }} {{ form.landType }}
+              </div>
+              <div class="form-field">
+                {{ form.extent.label_tag }} {{ form.extent }}
+              </div>
+              <div class="form-field">
+                {{ form.units.label_tag }} {{ form.units }}
+              </div>
+              <div class="form-field">
+                {{ form.soilType.label_tag }} {{ form.soilType }}
+              </div>
+              <div class="form-field">
+                {{ form.waterSource.label_tag }} {{ form.waterSource }}
+              </div>
+              <div class="form-field">
+                {{ form.roadSize.label_tag }} {{ form.roadSize }}
+              </div>
+              <div class="form-field">
+                {{ form.roadFacing.label_tag }} {{ form.roadFacing }}
+              </div>
+            </div>
+          </div>
+
+          <div class="buttons">
+            <button type="button" onclick="prevStep()">&larr; Back</button>
+            <button type="button" class="next" onclick="nextStep()">
+              Next &rarr;
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 3: Final Details -->
+        <div class="form-step" id="step-3">
+          <h2>Final Details</h2>
+      <div class="input-grid">
+
+    <div class="form-field">
+        {{ form.reraApproved.label_tag }} {{ form.reraApproved }}
+    </div>
+
+    <div class="form-field">
+        {{ form.approvalType.label_tag }} {{ form.approvalType }}
+    </div>
+
+    <!-- Predefined amenities -->
+    <div class="form-field">
+        <label>{{ form.predefined_amenities.label_tag }}</label>
+        {{ form.predefined_amenities }}
+    </div>
+
+    <!-- Custom amenities with ADD button & display list -->
+    <div class="form-field">
+        <label>{{ form.custom_amenities_text.label_tag }}</label>
+<div style="display:flex; gap:8px;">
+    {{ form.custom_amenities_text }}
+    
+    <button type="button" id="addAmenityBtn" 
+        style="
+            padding:6px 12px;
+            background:#0d6efd; 
+            border:none; 
+            color:white; 
+            border-radius:4px;
+            cursor:pointer;
+            width:100px;
+            transition:0.3s ease;
+        "
+        onmouseover="this.style.background='#0951c9'"
+        onmouseout="this.style.background='#0d6efd'"
+    >
+        Add
+    </button>
+</div>
+
+
+        <!-- Display added amenities below -->
+        <ul id="addedAmenitiesList" style="margin-top:10px;"></ul>
+    </div>
+
+    <div class="form-field">
+        {{ form.highlights.label_tag }} {{ form.highlights }}
+    </div>
+
+    <div class="form-field">
+        {{ form.location.label_tag }} {{ form.location }}
+    </div>
+
+    <div class="form-field">
+        {{ form.locationUrl.label_tag }} {{ form.locationUrl }}
+    </div>
+    <style>
+.form-field {
+    text-align: left !important;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    
+
+}
+
+#id_location {
+    margin-left: 30px;   /* adjust as needed */
+} 
+</style>
+
+</style>
+
+
+    <div class="form-field">
+        {{ form.price.label_tag }} {{ form.price }}
+    </div>
+
+</div>
+
+
+          <div class="buttons">
+            <button type="button" onclick="prevStep()">&larr; Back</button>
+            <button type="button" class="next" onclick="nextStep()">
+              Next &rarr;
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 4: Media Upload -->
+        <div class="form-step" id="step-4">
+          <h2>Upload Media</h2>
+          <div class="input-grid">
+            <div class="form-field">
+              {{ form.image.label_tag }} {{ form.image }}
+            </div>
+            <div class="form-field">
+              {{ form.video.label_tag }} {{ form.video }}
+            </div>
+            <div class="form-field">
+              {{ form.document.label_tag }} {{ form.document }}
+            </div>
+          </div>
+          <div class="buttons">
+            <button type="button" onclick="prevStep()">&larr; Back</button>
+            <button type="submit">Post Property</button>
+          </div>
+        </div>
+
+        <!-- Step 4: Success Message (Optional) -->
+        <div class="form-step" id="step-5">
+          <h2>🎉 Property Added Successfully!</h2>
+          <p>Your property information has been saved and is pending review.</p>
+          <a href="{% url 'home' %}" class="button next">Go to Home</a>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      let currentStep = 1;
+      const formSteps = document.querySelectorAll(".form-step");
+
+      function showStep(stepNumber) {
+        formSteps.forEach((step, index) => {
+          step.classList.toggle("active", index + 1 === stepNumber);
+        });
+      }
+
+      function nextStep() {
+        if (currentStep < 4) {
+          currentStep++;
+          showStep(currentStep);
+        }
+      }
+
+      function prevStep() {
+        if (currentStep > 1) {
+          currentStep--;
+          showStep(currentStep);
+        }
+      }
+
+      function updateConditionalFields(propertyType) {
+        const allConditionalFields = document.querySelectorAll(
+          "#step-2 .conditional-fields"
+        );
+
+        allConditionalFields.forEach((set) => {
+          const isMatch = set.dataset.propertyType === propertyType;
+          set.style.display = isMatch ? "block" : "none"; // Set display style
+          set.classList.toggle("active-fieldset", isMatch);
+          set.querySelectorAll("input, select, textarea").forEach((input) => {
+            input.disabled = !isMatch;
+          });
+        });
+      }
+
+      function setupOptionButtons() {
+        document.querySelectorAll(".option").forEach((button) => {
+          button.addEventListener("click", () => {
+            const fieldName = button.dataset.field;
+            const fieldValue = button.dataset.value;
+
+            document.querySelector(`input[name="${fieldName}"]`).value =
+              fieldValue;
+
+            document
+              .querySelectorAll(`.option[data-field="${fieldName}"]`)
+              .forEach((btn) => btn.classList.remove("active"));
+            button.classList.add("active");
+
+            if (fieldName === "selectProperty") {
+              updateConditionalFields(fieldValue);
+            }
+          });
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        setupOptionButtons();
+        showStep(currentStep);
+        updateConditionalFields(null); // Initially hide all conditional fields
+
+        const propertyForm = document.getElementById("addPropertyForm");
+        propertyForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          // Re-enable fields in non-conditional steps (1, 3, 4)
+          document
+            .querySelectorAll("#step-1, #step-3, #step-4")
+            .forEach((step) => {
+              step
+                .querySelectorAll("input, select, textarea")
+                .forEach((input) => {
+                  input.disabled = false;
+                });
+            });
+
+          // Specifically find and re-enable inputs ONLY in the ACTIVE conditional fieldset in Step 2
+          const activeFieldSet = document.querySelector(
+            "#step-2 .conditional-fields.active-fieldset"
+          );
+          if (activeFieldSet) {
+            activeFieldSet
+              .querySelectorAll("input, select, textarea")
+              .forEach((input) => {
+                input.disabled = false;
+              });
+          }
+
+          this.submit();
+        });
+      });
+    </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const input = document.getElementById("id_custom_amenities_text");
+    const btn = document.getElementById("addAmenityBtn");
+    const list = document.getElementById("addedAmenitiesList");
+
+    btn.addEventListener("click", function () {
+        let value = input.value.trim();
+        if (value === "") return;
+
+        // Split comma-separated values
+        let items = value.split(",").map(a => a.trim()).filter(a => a !== "");
+
+        items.forEach(item => {
+            let li = document.createElement("li");
+            li.textContent = item;
+            list.appendChild(li);
+        });
+
+        // Clear input
+        input.value = "";
+    });
+});
+</script>
+
+
+
+    
+  </body>
+</html>

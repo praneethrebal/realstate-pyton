@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Listing</title>
+
+    <style>
+/* ---------------------------------------------------- */
+/*                      GLOBAL                          */
+/* ---------------------------------------------------- */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif;
+    background: #eef2f7;
+}
+
+/* ---------------------------------------------------- */
+/*                DESKTOP LAYOUT                        */
+/* ---------------------------------------------------- */
+.main-layout {
+    display: flex;
+    gap: 35px;
+    width: 92%;
+    margin: 100px auto 40px auto;
+}
+
+/* LEFT FILTER PANEL */
+.filter-box {
+    width: 27%;
+    background: white;
+    padding: 28px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    position: sticky;
+    top: 30px;
+    border: 1px solid #ececec;
+    animation: slideLeft 0.4s ease;
+}
+
+.filter-box h3 {
+    margin-bottom: 22px;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.field {
+    margin-bottom: 18px;
+}
+
+label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    background: #fafafa;
+}
+
+.price-row {
+    display: flex;
+    gap: 12px;
+}
+
+.apply, .reset {
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.apply { background: #0d6efd; color: white; }
+.reset { background: #e3e3e3; color: #333; }
+
+/* RIGHT PROPERTY LIST */
+.right-list {
+    width: 73%;
+}
+
+/* PROPERTY CARD */
+.card-container {
+    display: flex;
+    gap: 22px;
+    padding: 22px;
+    border: 1px solid #e3e3e3;
+    margin-bottom: 28px;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.10);
+    transition: 0.25s ease;
+}
+
+.card-container:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.left img {
+    width: 330px;
+    height: 210px;
+    object-fit: cover;
+    border-radius: 14px;
+    border: 1px solid #ddd;
+}
+
+.right h4 {
+    font-size: 15px;
+    color: #888;
+    margin-bottom: 4px;
+}
+
+.right h2 {
+    margin-top: 0;
+    font-size: 24px;
+    color: #333;
+    font-weight: 700;
+}
+
+.right p {
+    margin: 7px 0;
+    font-size: 16px;
+    color: #444;
+}
+
+/* ACTION BUTTONS */
+.action-buttons {
+    margin-top: 15px;
+    display: flex;
+    gap: 12px;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px 10px;
+    font-size: 20px;
+    border-radius: 8px;
+}
+
+/* ---------------------------------------------------- */
+/*                 MOBILE RESPONSIVE                    */
+/* ---------------------------------------------------- */
+@media (max-width: 768px) {
+
+    .main-layout {
+        flex-direction: column;
+        width: 100%;
+        padding: 10px;
+        margin-top: 80px;
+    }
+
+    .filter-box {
+        width: 100%;
+        position: static;
+    }
+
+    .right-list {
+        width: 100%;
+    }
+
+    .card-container {
+        flex-direction: column;
+        padding: 15px;
+    }
+
+    .left img {
+        width: 100%;
+        height: 200px;
+    }
+
+    .right h2 {
+        font-size: 20px;
+    }
+
+    .right p {
+        font-size: 14px;
+    }
+
+    .action-buttons {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .action-btn {
+        font-size: 16px;
+        padding: 12px;
+        background: #0d6efd;
+        color: white;
+        width: 100%;
+        border-radius: 10px;
+    }
+}
+    </style>
+</head>
+
+<body>
+
+{% include 'NavBar.html' %}
+
+<div class="main-layout">
+
+    <!-- FILTER BOX -->
+    <div class="filter-box">
+        <h3>Filters</h3>
+
+        <form method="GET" id="filter-form">
+
+            <div class="field">
+                <label>Location</label>
+                <input type="text" name="location" placeholder="Enter location" value="{{ request.GET.location }}">
+            </div>
+
+            <div class="field">
+                <label>Verified</label>
+                <select name="verified">
+                    <option value="">All</option>
+                    <option value="1" {% if request.GET.verified == '1' %}selected{% endif %}>Verified</option>
+                    <option value="0" {% if request.GET.verified == '0' %}selected{% endif %}>Unverified</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>Price range</label>
+                <div class="price-row">
+                    <input type="text" name="min_price" placeholder="Min ₹" value="{{ request.GET.min_price }}">
+                    <input type="text" name="max_price" placeholder="Max ₹" value="{{ request.GET.max_price }}">
+                </div>
+            </div>
+
+            <div class="field">
+                <label>Road Facing</label>
+                <select name="road">
+                    <option value="">All</option>
+                    <option>North</option>
+                    <option>South</option>
+                    <option>East</option>
+                    <option>West</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>Look (Sell / Rent)</label>
+                <select name="look">
+                    <option value="">All</option>
+                    <option>Sell</option>
+                    <option>Rent</option>
+                </select>
+            </div>
+
+            <button class="apply" type="submit">Apply</button>
+            <a href="{{ request.path }}" class="reset" style="display:block;text-align:center;text-decoration:none;">Reset</a>
+
+        </form>
+    </div>
+
+    <!-- RIGHT LIST -->
+    <div class="right-list">
+
+        {% for item in data %}
+        <div class="card-container">
+
+            <!-- IMAGE -->
+            <div class="left">
+                {% if item.image %}
+                    <img src="{{ item.image.url }}">
+                {% else %}
+                    <img src="/static/no-image.png">
+                {% endif %}
+            </div>
+
+            <!-- DETAILS -->
+            <div class="right">
+                <a href="{% url 'property_detail' item.id %}" style="color:inherit; text-decoration:none;">
+                    <h4>OWNER</h4>
+                    <h2>{{ item.user }}</h2>
+
+                    <p>📍 {{ item.location }}</p>
+                    <p>🙍 {{ item.selectProperty }}</p>
+                    <p>💰 ₹{{ item.price }}</p>
+                    <p>🔥 {{ item.description }}</p>
+                </a>
+
+                <!-- ACTION BUTTONS (not inside link) -->
+                <div class="action-buttons">
+                    <button class="action-btn">📞</button>
+                    <button class="action-btn">🔗</button>
+
+                    <button class="action-btn" onclick="saveImage('{{ item.image.url }}')">💾</button>
+                </div>
+
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const filterForm = document.getElementById('filter-form');
+    const rightList = document.querySelector('.right-list');
+
+    filterForm.addEventListener('submit', function (event) {
+        event.preventDefault(); 
+        const formData = new FormData(filterForm);
+        const params = new URLSearchParams(formData);
+
+
+        const fetchUrl = `${window.location.pathname}?${params.toString()}`;
+
+        
+        fetch(fetchUrl, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest' // To identify this as an AJAX request on the server if needed
+            }
+        })
+        .then(response => response.text())
+        .then(html => {
+            
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newRightList = doc.querySelector('.right-list');
+
+            if (newRightList) {
+
+                rightList.innerHTML = newRightList.innerHTML;
+            } else {
+                rightList.innerHTML = '<p>No properties found matching your criteria.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching filtered properties:', error);
+            rightList.innerHTML = '<p>An error occurred while filtering. Please try again.</p>';
+        });
+    });
+
+    // Make the reset button work with AJAX as well
+    const resetButton = filterForm.querySelector('.reset');
+    resetButton.addEventListener('click', function(event) {
+        event.preventDefault(); // Stop the link from navigating
+        
+        // Clear the form fields
+        filterForm.reset();
+
+        // Create a new submit event to trigger the fetch with cleared filters
+        filterForm.dispatchEvent(new Event('submit'));
+    });
+
+    // Function to handle saving an image (as in your original code)
+    window.saveImage = function(imageUrl) {
+        // This is a placeholder. You might want to implement functionality
+        // to add this to a "saved items" list, perhaps using localStorage or a backend endpoint.
+        alert('Save functionality for ' + imageUrl + ' can be implemented here!');
+    }
+});
+</script>
+
+</body>
+</html>

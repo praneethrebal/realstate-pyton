@@ -1,0 +1,264 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body {
+            background: #f5f6fa;
+            font-family: "Poppins", sans-serif;
+            margin: 0;
+        }
+
+        .profile-wrapper {
+            width: 95%;
+            max-width: 900px;
+            margin: 40px auto;
+            margin-top: 100px;
+        }
+
+        .profile-card {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 40px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Top Profile Row */
+        .top-row {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .profile-photo {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-basic h2 {
+            font-size: 26px;
+            margin: 0;
+        }
+
+        .user-basic p {
+            margin: 4px 0;
+            color: #666;
+        }
+
+        /* Location icon */
+        .location {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #ff4d6d;
+            font-weight: 500;
+        }
+
+        /* Stats Section */
+        .stats-box {
+            display: flex;
+            justify-content: space-between;
+            padding: 18px 30px;
+            background: #fafafa;
+            border-radius: 15px;
+            margin: 30px 0;
+            border: 1px solid #eee;
+        }
+
+        .stat-item {
+            width: 33%;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 24px;
+            margin: 0;
+            color: #007bff;
+        }
+
+        .stat-item p {
+            margin: 5px 0;
+            color: #666;
+        }
+
+        /* Info Section */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            column-gap: 40px;
+            row-gap: 12px;
+            margin-top: 20px;
+        }
+
+        .info-grid p {
+            font-size: 16px;
+            margin: 0;
+        }
+
+        /* Contact Button */
+        .call-btn {
+            display: block;
+            width: 40%;
+            margin: 30px auto 0 auto;
+            padding: 14px;
+            text-align: center;
+            background: rgb(84, 84, 151);
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .call-btn:hover {
+            background: #5a5a9d;
+        }
+
+        /* ================== RESPONSIVE ================== */
+        @media (max-width: 768px) {
+            .profile-wrapper {
+                margin-top: 110px; /* navbar space */
+                padding: 10px;
+            }
+
+            /* Stack top row vertically */
+            .top-row {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 15px;
+            }
+
+            /* Center and enlarge profile image */
+            .profile-photo {
+                width: 160px;
+                height: 160px;
+                margin: 0 auto;
+            }
+
+            /* Center user details below photo */
+            .user-basic {
+                width: 100%;
+                text-align: center;
+            }
+
+            .user-basic h2 {
+                font-size: 22px;
+            }
+
+            /* Stack stats vertically */
+            .stats-box {
+                flex-direction: column;
+                align-items: center;
+                gap: 18px;
+            }
+
+            .stat-item {
+                width: 100%;
+                text-align: center;
+            }
+
+            /* Convert info grid to 1 column */
+            .info-grid {
+                grid-template-columns: 1fr;
+                row-gap: 15px;
+            }
+
+            /* Contact button full width */
+            .call-btn {
+                width: 90%;
+                margin: 20px 5%;
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-card {
+                padding: 25px;
+            }
+
+            .profile-photo {
+                width: 140px;
+                height: 140px;
+            }
+
+            .user-basic h2 {
+                font-size: 20px;
+            }
+
+            .stats-box {
+                padding: 15px;
+            }
+
+            .stat-item h3 {
+                font-size: 20px;
+            }
+
+            .call-btn {
+                font-size: 16px;
+                padding: 12px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+    {% include 'NavBar.html' %}
+   
+
+    <div class="profile-wrapper">
+        <div class="profile-card">
+
+            <!-- Top Profile Row -->
+                  
+            <div class="top-row">
+              
+                <img src="{{ u.profile_image_path.url }}" class="profile-photo" />
+         
+               
+
+                <div class="user-basic">
+                    <h2>{{ u.username }}</h2>
+                    <p>{{ u.category }}</p>
+                    <p>{{ u.unique_id }}</p>
+                    <p class="location">📍 {{ u.location }}</p>
+                </div>
+            </div>
+
+            <!-- Stats Section -->
+            <div class="stats-box">
+                <div class="stat-item">
+                    <h3>{{ sold }}</h3>
+                    <p>Sold</p>
+                </div>
+                <div class="stat-item">
+                    <h3>{{ pending }}</h3>
+                    <p>Pending</p>
+                </div>
+                <div class="stat-item">
+                    <h3>{{ total }}</h3>
+                    <p>Total Posted</p>
+                </div>
+            </div>
+
+            <!-- User Info -->
+            <div class="info-grid">
+                <p><strong>Username:</strong> {{ u.username }}</p>
+                <p><strong>Email:</strong> {{ u.email }}</p>
+                <p><strong>Category:</strong> {{ u.category }}</p>
+                <p><strong>Experience:</strong> {{ u.experience }} Years</p>
+            </div>
+
+            <!-- Contact Button -->
+            <a href="tel:{{ u.contact_number }}" class="call-btn">📞 Contact</a>
+        </div>
+    </div>
+</body>
+</html>

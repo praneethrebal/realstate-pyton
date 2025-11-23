@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>user/uploade-propertys</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f4f8;
+              display: flex;
+        }
+
+        .card {
+            width: 360px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            margin: 20px auto;
+            background-color: white;   
+            text-align: center; /* center all inside */
+             box-shadow: 0 4px 10px rgba(0,0,0,0.15);  /* box shadow */
+           
+
+        }
+
+        .card img {
+            width: 300px;
+            height: 200px;
+            border-radius: 10px;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .details h3 {
+            margin: 5px 0 15px 0;
+            font-size: 20px;
+            color: black;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 140px;
+            padding-top: 40px;
+        }
+
+        .btn-group button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            background: #fff;
+            
+        }
+
+        .btn-group button:hover {
+            opacity: 0.8;
+        }
+        
+    </style>
+</head>
+<body>
+
+     {% include 'NavBar.html' %}
+
+{% for user in D %}
+<!-- step-01 -->
+<div class="card">
+    {% if user.image %}
+    <img src="{{ user.image.url }}" alt="uploaded_img">
+      {% else %}
+            <img src="/static/no-image.png" alt="No Image">
+        {% endif %}
+    <div class="details">
+        <h3>Looking_Choices:{{ user.look }}</h3>
+        <h3>Property_Choices: {{ user.selectProperty }}</h3>
+         <h3>Project Name: {{ user.projectName }}</h3>
+
+        <div class="btn-group">
+            <button type="button" style="background:#e63946; color:white;">Delete</button>
+
+            <button type="button" style="background:#5f12f0; color:white;">Make as Sold</button>
+        </div>
+    </div>
+</div>
+<!-- step-02 -->
+
+<!-- <div class="card">
+    <img src="{{ user.image.url }}" alt="uploaded_img">
+
+    <div class="details">
+        <h3>Project Name: {{ user.projectName }}</h3>
+
+        <div class="btn-group">
+            <button type="button" style="background:#e63946; color:white;">Delete</button>
+            <button type="button" style="background:#2a9d8f; color:white;">Sold</button>
+        </div>
+    </div>
+</div> -->
+
+<!-- step-03 -->
+
+<!-- <div class="card">
+    <img src="{{ user.image.url }}" alt="uploaded_img">
+
+    <div class="details">
+        <h3>Project Name: {{ user.projectName }}</h3>
+
+        <div class="btn-group">
+            <button type="button" style="background:#e63946; color:white;">Delete</button>
+            <button type="button" style="background:#2a9d8f; color:white;">Sold</button>
+        </div>
+    </div>
+</div> -->
+{% endfor %}
+
+</body>
+</html>

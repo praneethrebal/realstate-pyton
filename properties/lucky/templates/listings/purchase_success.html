@@ -1,0 +1,9 @@
+{% extends "base.htm" %} {% block content %}
+<div class="text-center">
+  <h3>Thank you for buying ticket(s)</h3>
+  <p>Your purchase is under verification. Help-Line: 9618411291</p>
+  <p><strong>Purchase ID:</strong> {{ purchase.pk }}</p>
+  <p><strong>Tickets:</strong> {{ purchase.ticket_code }}</p>
+  <a href="{% url 'prop:home' %}" class="btn btn-primary">Back to Home</a>
+</div>
+{% endblock %}

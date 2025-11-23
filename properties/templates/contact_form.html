@@ -1,0 +1,365 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Form</title>
+<link rel="stylesheet" href="{% static '/css/contactform.css' %}" />
+<style>
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
+}
+
+/* ---------- MAIN CONTAINER ---------- */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    padding: 40px 20px;
+    flex-wrap: wrap;
+    margin-top: 70px;
+}
+
+/* IMAGE SECTION */
+.image-container img {
+    width: 400px;
+    max-width: 100%;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+/* FORM SECTION */
+.form-container {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 40px 30px;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 25px;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+/* INPUTS AND SELECTS */
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+    font-size: 15px;
+    outline: none;
+    transition: 0.3s;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #e63946;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(230, 57, 70, 0.4);
+}
+
+textarea {
+    resize: none;
+    height: 90px;
+}
+
+/* BUTTON */
+button {
+    width: 100%;
+    background: linear-gradient(90deg, #e63946, #ff4757);
+    color: #fff;
+    font-size: 16px;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: 0.3s ease;
+}
+
+button:hover {
+    background: linear-gradient(90deg, #ff4757, #e63946);
+    transform: translateY(-2px);
+}
+
+/* ---------- FOOTER ---------- */
+.footer {
+    font-family: 'Poppins', sans-serif;
+    background: #fff;
+    color: #333;
+}
+
+.footer-main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: auto;
+    padding: 50px 20px;
+    gap: 40px;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 230px;
+}
+
+.footer-section h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.footer-section p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.footer-section a {
+    color: #333;
+    text-decoration: none;
+}
+
+.footer-section a:hover {
+    text-decoration: underline;
+}
+
+.footer-section button {
+    background: #888;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 18px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.footer-section button:hover {
+    background: #555;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-box input {
+    width: 200px;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+    border-color: #0056d2;
+    box-shadow: 0 0 4px rgba(0, 86, 210, 0.3);
+}
+
+.search-box button {
+    background-color: #666;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.search-box button:hover {
+    background-color: #0056d2;
+}
+
+.social-icons a {
+    font-size: 18px;
+    color: #444;
+    margin-right: 12px;
+    transition: color 0.3s;
+}
+
+.social-icons a:hover {
+    color: #0a66c2;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 6px;
+}
+
+.footer-section ul li a {
+    font-size: 14px;
+}
+
+.footer-bottom {
+    background: #0056d2;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 15px 40px;
+    font-size: 14px;
+}
+
+.footer-bottom span {
+    font-weight: 600;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 950px) {
+    .container {
+        flex-direction: column;
+        gap: 20px;
+        padding-top: 40px;
+    }
+
+    .image-container img {
+        display: none !important;
+    }
+
+    .form-container {
+        margin-right: 0;
+        width: 100%;
+        padding: 30px 20px;
+    }
+}
+
+@media (max-width: 500px) {
+    h2 {
+        font-size: 20px;
+    }
+
+    button {
+        font-size: 15px;
+        padding: 10px;
+    }
+
+    .search-box input {
+        width: 100%;
+    }
+
+    .footer {
+    display: none !important;
+}
+}
+</style>
+</head>
+<body>
+
+{% include 'NavBar.html' %}
+<div class="container">
+  <div class="image-container">
+    <img src="{% static 'images/contactimg.jpg' %}" alt="Contact Image">
+  </div>
+
+  <div class="form-container">
+    <h2>Kindly Please Fill This Form</h2>
+    <form method="POST">
+      {% csrf_token %}
+      <input type="text" name="customer_name" placeholder="Customer Name" required>
+      <input type="text" name="number" placeholder="Number" required>
+      <input type="text" name="alternate_number" placeholder="Alternate Number">
+      <select name="renovation_type" required>
+        <option value="">Select Renovation Type</option>
+        <option>Home Renovation</option>
+        <option>Office Renovation</option>
+        <option>Kitchen Renovation</option>
+        <option>Bathroom Renovation</option>
+      </select>
+      <input type="text" name="location" placeholder="Location" required>
+      <textarea name="additional_info" placeholder="Additional Info"></textarea>
+      <button type="submit">Submit</button>
+    </form>
+
+    {% if success %}
+    <script>
+      alert("✅ Form submitted successfully! Our team will contact you soon.");
+    </script>
+    {% endif %}
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-main">
+      <div class="footer-section">
+          <h3>SEARCH</h3>
+          <div class="search-box">
+              <input type="text" placeholder="Search For State">
+              <button type="button">Search</button>
+          </div>
+      </div>
+
+      <div class="footer-section">
+          <h3>FIND PROPERTY</h3>
+          <p>Select From Thousands Of Options, Without Brokerage.</p>
+          <button>Enquiry Now</button>
+
+          <h3 style="margin-top:25px;">LIST YOUR PROPERTY</h3>
+          <p>For Free. Without Any Brokerage.</p>
+          <button>Post Now</button>
+      </div>
+
+      <div class="footer-section">
+          <h3>CONTACT US</h3>
+          <p>Toll Free - 1800 41 99099</p>
+          <p>9:30 AM To 6:30 PM (Mon-Sun)</p>
+          <p>Email - <a href="mailto:feedback@propertysr.com">feedback@propertysr.com</a></p>
+
+          <h3 style="margin-top:20px;">FOLLOW US</h3>
+          <div class="social-icons">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+      </div>
+
+      <div class="footer-section">
+          <h3>COMPANY</h3>
+          <ul>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">For Partners</a></li>
+              <li><a href="#">Terms</a></li>
+              <li><a href="#">Annual Return</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Contact Us</a></li>
+              <li><a href="#">Unsubscribe</a></li>
+              <li><a href="#">Merger Hearing Advertisement</a></li>
+          </ul>
+      </div>
+  </div>
+
+  <div class="footer-bottom">
+      <p>©<span>WEEKDAYS PROPERTIES</span>, All Rights Reserved.</p>
+      <p>Designed By <span>© 2023 YGR Gobal IT Services Pvt. Ltd.</span></p>
+  </div>
+</footer>
+
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+</html>

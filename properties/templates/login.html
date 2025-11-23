@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'css/register.css' %}" />
+  </head>
+  <body>
+    <div class="register-form-container">
+      <h1 class="formHeading">Login</h1>
+
+      {% if messages %} {% for message in messages %}
+      <p class="error">{{ message }}</p>
+      {% endfor %} {% endif %}
+
+      <form method="POST">
+        {% csrf_token %}
+        <div class="commonFields">
+          {{ login_form.username }} {{ login_form.password }}
+        </div>
+        <button type="submit">Login</button>
+        <p style="text-align: center; margin-top: 10px">
+          Don't have an account?
+          <a href="{% url 'prop:register' %}">Register here</a>
+        </p>
+      </form>
+    </div>
+  </body>
+</html>

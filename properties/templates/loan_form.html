@@ -1,0 +1,364 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loan Application Form</title>
+<link rel="stylesheet" href="{% static '/css/loanform.css' %}" />
+<style>
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f1f3f6;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+/* ---------- MAIN CONTAINER ---------- */
+.container {
+    background-color: #ffffff;
+    margin: 40px 0;
+    padding: 40px 50px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+     margin-top: 100px;
+}
+
+/* HEADINGS */
+h2 {
+    text-align: center;
+    font-weight: 600;
+    color: rgb(4, 4, 69);
+    margin-bottom: 25px;
+}
+
+/* LABELS & INPUTS */
+label {
+    display: block;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 6px;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    outline: none;
+    transition: 0.2s;
+    margin-bottom: 15px;
+}
+
+input:focus, select:focus {
+    border-color: #007bff;
+    background-color: #fff;
+    box-shadow: 0 0 3px rgba(0,123,255,0.3);
+}
+
+/* RADIO & CHECKBOX GROUPS */
+.radio-group, .checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.radio-group input,
+.checkbox-group input {
+    width: auto;
+    transform: scale(1.2);
+    margin-right: 5px;
+}
+
+/* BUTTONS */
+.button-group {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 25px;
+    flex-wrap: wrap;
+}
+
+button {
+    flex: 1;
+    max-width: 220px;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-apply {
+    background-color: #28a745;
+}
+
+.btn-apply:hover {
+    background-color: #218838;
+}
+
+.btn-emi {
+    background-color: #007bff;
+}
+
+.btn-emi:hover {
+    background-color: #0069d9;
+}
+
+/* ===== EMI POPUP STYLES ===== */
+.emi-popup {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.emi-content {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 25px;
+    width: 90%;
+    max-width: 350px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(-10px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
+.emi-content h3 {
+    text-align: center;
+    margin-top: 0;
+}
+
+.emi-content label {
+    font-weight: bold;
+}
+
+.emi-content input {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.emi-content .result {
+    font-size: 18px;
+    font-weight: bold;
+    color: #007bff;
+    text-align: center;
+    margin: 10px 0;
+}
+
+.close-btn, .calc-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 48%;
+    padding: 10px;
+    font-weight: 600;
+}
+
+.close-btn:hover, .calc-btn:hover {
+    background-color: blue;
+}
+
+.call {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+/* ===== RESPONSIVE FIXES ===== */
+@media (max-width: 600px) {
+    .container {
+        padding: 25px 20px;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    button {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .radio-group, .checkbox-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .emi-content {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .close-btn, .calc-btn {
+        width: 100%;
+    }
+}
+
+</style>
+</head>
+<body>
+
+{% include 'NavBar.html' %}
+
+
+<div class="container">
+    <h2>Loan Application Form</h2>
+    <form id="loanForm" method="POST" action="">
+        {% csrf_token %}
+
+        <label>Full Name</label>
+        <input type="text" name="full_name" required>
+
+        <label>Email</label>
+        <input type="email" name="email" required>
+
+        <label>Phone Number</label>
+        <input type="text" name="phone" required>
+
+        <label>Date of Birth</label>
+        <input type="date" name="dob" required>
+
+        <label>Street Address</label>
+        <input type="text" name="street_address" required>
+
+        <label>Unit (optional)</label>
+        <input type="text" name="unit">
+
+        <label>City</label>
+        <input type="text" name="city" required>
+
+        <label>State</label>
+        <input type="text" name="state" required>
+
+        <label>Zip Code</label>
+        <input type="text" name="zip_code" required>
+
+        <label>Loan Amount</label>
+        <input type="number" name="loan_amount" required>
+
+        <label>Loan Purpose</label>
+        <select name="loan_purpose" required>
+            <option value="">Select Loan Purpose</option>
+            <option>Home Loan</option>
+            <option>Car Loan</option>
+            <option>Education Loan</option>
+            <option>Personal Loan</option>
+            <option>Business Loan</option>
+        </select>
+
+        <label>Date of Application</label>
+        <input type="date" name="application_date" required>
+
+        <label>Employment Status</label>
+        <div class="radio-group">
+            <label><input type="radio" name="employment_status" value="Employed" required> Employed</label>
+            <label><input type="radio" name="employment_status" value="Self-Employed"> Self-Employed</label>
+            <label><input type="radio" name="employment_status" value="Unemployed"> Unemployed</label>
+            <label><input type="radio" name="employment_status" value="Retired"> Retired</label>
+        </div>
+
+        <label>Are you represented by a Realtor?</label>
+        <div class="radio-group">
+            <label><input type="radio" name="realtor" value="Yes" required> Yes</label>
+            <label><input type="radio" name="realtor" value="No"> No</label>
+        </div>
+
+        <label>Credit Score Range</label>
+        <select name="credit_score" required>
+            <option value="">Select Credit Score Range</option>
+            <option>300 - 579 (Poor)</option>
+            <option>580 - 669 (Fair)</option>
+            <option>670 - 739 (Good)</option>
+            <option>740 - 799 (Very Good)</option>
+            <option>800 - 850 (Excellent)</option>
+        </select>
+
+        <div class="checkbox-group">
+            <input type="checkbox" name="agree" required>
+            <label>I agree to the terms and conditions and authorize a credit check.</label>
+        </div>
+
+        <div class="button-group">
+            <button type="submit" class="btn-apply">Apply Now</button>
+            <button type="button" class="btn-emi" onclick="openEMIPopup()">EMI Calculator</button>
+        </div>
+    </form>
+</div>
+
+<!-- EMI POPUP -->
+<div class="emi-popup" id="emiPopup">
+    <div class="emi-content">
+        <h3>EMI Calculator</h3>
+        <label>Loan Amount</label>
+        <input type="number" id="loanAmount" placeholder="Enter loan amount">
+        <label>Annual Interest Rate (%)</label>
+        <input type="number" id="interestRate" placeholder="Enter interest rate">
+        <label>Loan Tenure (in months)</label>
+        <input type="number" id="loanTenure" placeholder="Enter loan tenure">
+        <div class="result" id="emiResult">Estimated EMI: ₹0.00</div>
+        <div class="call">
+            <button class="calc-btn" onclick="calculateEMI()">Calculate</button>
+            <button class="close-btn" onclick="closeEMIPopup()">Close</button>
+        </div>
+    </div>
+</div>
+
+<script>
+function openEMIPopup() {
+    document.getElementById('emiPopup').style.display = 'flex';
+}
+
+function closeEMIPopup() {
+    document.getElementById('emiPopup').style.display = 'none';
+}
+
+function calculateEMI() {
+    const loanAmount = parseFloat(document.getElementById('loanAmount').value);
+    const interestRate = parseFloat(document.getElementById('interestRate').value)/12/100;
+    const loanTenure = parseFloat(document.getElementById('loanTenure').value);
+
+    if (!loanAmount || !interestRate || !loanTenure) {
+        document.getElementById('emiResult').textContent = "Please fill all fields.";
+        return;
+    }
+
+    const emi = (loanAmount * interestRate * Math.pow(1 + interestRate, loanTenure)) /
+                (Math.pow(1 + interestRate, loanTenure) - 1);
+
+    document.getElementById('emiResult').textContent = `Estimated EMI: ₹${emi.toFixed(2)}`;
+}
+
+document.getElementById('loanForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    alert("✅ Loan Application submitted successfully!");
+    this.reset();
+});
+</script>
+
+</body>
+</html>

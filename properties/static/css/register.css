@@ -1,0 +1,224 @@
+.register-form-container {
+  max-width: 600px;
+  margin: 10px auto;
+  padding: 30px 40px;
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  font-family: "Poppins", sans-serif;
+  color: #000;
+}
+
+.register-form-container .formHeading {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 25px;
+  font-weight: 600;
+  color: #000;
+}
+
+.register-form-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Profile Photo */
+.register-form-container .profile-Photo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.register-form-container .profile-Photo p {
+  font-weight: 500;
+}
+
+.register-form-container .profile-preview {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+  object-fit: cover;
+  object-position: center;
+  border: 2px solid #ccc;
+}
+
+/* File upload */
+.register-form-container .custom-file-upload {
+  display: inline-block;
+  padding: 8px 14px;
+  cursor: pointer;
+  background-color: #6a5acd;
+  color: white;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background 0.3s;
+}
+
+.register-form-container .custom-file-upload:hover {
+  background-color: #5849c1;
+}
+
+.register-form-container input[type="file"] {
+  display: none;
+}
+
+/* Inputs inherit styles */
+.register-form-container input,
+.register-form-container select,
+.register-form-container textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  background-color: #fff !important;
+  color: #000 !important;
+  outline: none;
+  transition: 0.2s ease;
+}
+
+.register-form-container input:focus,
+.register-form-container select:focus,
+.register-form-container textarea:focus,
+.register-form-container input:not([type="radio"]):focus {
+  border-color: #6a5acd;
+  box-shadow: 0 0 5px rgba(106, 90, 205, 0.2);
+}
+
+/* Password field */
+.register-form-container .password-field {
+  display: flex;
+  gap: 10px;
+}
+.register-form-container .password-field input {
+  flex: 1;
+}
+
+/* Submit button */
+.register-form-container button[type="submit"] {
+  background-color: #6a5acd;
+  color: white;
+  font-size: 1rem;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.register-form-container button[type="submit"]:hover {
+  background-color: #5849c1;
+}
+.commonFields {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.role-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.company {
+  background-color: #6a5acd;
+  color: white;
+  font-size: 1rem;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.25s ease;
+  width: 60%;
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Common Fields */
+.commonFields,
+.role-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Validation Styles */
+.input-error {
+  border: 2px solid red !important;
+}
+
+.input-valid {
+  border: 2px solid green !important;
+}
+
+.error {
+  color: red;
+  font-size: 0.85rem;
+  margin: 2px 0 8px 0;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  .register-form-container {
+    padding: 25px 20px;
+  }
+
+  .register-form-container button[type="submit"],
+  .register-form-container .custom-file-upload {
+    width: 100%;
+  }
+}
+/* Add this to your UserRegisterationFormStyles.css */
+
+.otp-section {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.otp-section input {
+  flex-grow: 1;
+}
+
+.otp-btn {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  white-space: nowrap;
+  transition: background-color 0.3s ease;
+}
+
+.otp-btn:hover {
+  background-color: #0056b3;
+}
+
+.otp-btn:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 3px solid rgba(255, 255, 255, 0.6);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

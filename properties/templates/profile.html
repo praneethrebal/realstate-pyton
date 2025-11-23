@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile Page</title>
+
+    <style>
+      body {
+        background: #f2f4f8;
+        font-family: "Poppins", sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      .profile-container {
+        width: 65%;
+        margin: 40px auto;
+        background: #fff;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 0 25px rgba(0, 0, 0, 0.08);
+      }
+
+      /* Profile header flex */
+      .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        text-align: left;
+        margin-bottom: 20px;
+      }
+
+      .profile-img {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid #e6e6e6;
+      }
+
+      .profile-info h2 {
+        margin: 5px 0;
+      }
+
+      .ref {
+        color: black;
+        font-size: 18px;
+      }
+
+      .ref-code {
+        color: #007bff;
+        font-weight: 600;
+      }
+
+      .upload-box {
+        padding: 20px;
+        margin: 20px auto;
+        width: 50%;
+        border-radius: 12px;
+        background: #f6f6f6;
+        text-align: center;
+      }
+
+      .details-card {
+        background: #fdfdfd;
+        padding: 25px;
+        margin-top: 25px;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 18px;
+        margin: 10px 0;
+        padding-left: 40px;
+        padding-right: 40px;
+      }
+
+      .button-row {
+        margin-top: 18px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .button-row a {
+        text-decoration: none;
+      }
+
+      .btn {
+        padding: 10px 20px;
+        border-radius: 8px;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-size: 15px;
+      }
+      .btn.blue {
+        background: #007bff;
+      }
+      .btn.green {
+        background: #28a745;
+      }
+      .btn.red {
+        background: #ff4d4d;
+      }
+
+      /* Popup Background */
+      .popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+      }
+
+      /* Popup Box */
+      .popup-box {
+        background: #fff;
+        width: 400px;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        animation: fadeIn 0.3s ease-in-out;
+      }
+
+      .popup-box h3 {
+        margin-top: 0;
+        text-align: center;
+        color: #333;
+      }
+
+      .popup-box input,
+      .popup-box textarea {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+      }
+
+      .popup-buttons {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .popup-buttons button {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        color: white;
+        font-size: 15px;
+      }
+
+      .save-btn {
+        background: #28a745;
+      }
+      .close-btn {
+        background: #ff4d4d;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      /* ====================== RESPONSIVE ======================= */
+
+      /* --- Mobile (max-width: 768px) --- */
+      @media (max-width: 768px) {
+        .profile-container {
+          width: 92%;
+          margin: 20px auto;
+          padding: 20px;
+          border-radius: 15px;
+        }
+
+        /* Profile section */
+        .profile-header {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .profile-img {
+          width: 95px;
+          height: 95px;
+        }
+
+        .profile-info h2 {
+          font-size: 20px;
+        }
+
+        /* Upload box */
+        .upload-box {
+          width: 85%;
+          padding: 15px;
+        }
+
+        /* Cards & Rows */
+        .details-card {
+          padding: 15px;
+        }
+
+        .row {
+          flex-direction: column;
+          align-items: flex-start;
+          padding-left: 15px;
+          padding-right: 15px;
+          font-size: 16px;
+          gap: 10px;
+        }
+
+        .desc {
+          padding: 0 15px;
+          margin-top: 10px;
+          font-size: 15px;
+        }
+
+        /* Buttons */
+        .button-row {
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .button-row a,
+        .button-row button {
+          width: 100%;
+          text-align: center;
+          padding: 12px !important;
+          font-size: 16px;
+        }
+
+        /* Popup box responsive */
+        .popup-box {
+          width: 90%;
+        }
+      }
+
+      /* --- Extra Small (max-width: 480px) --- */
+      @media (max-width: 480px) {
+        .profile-img {
+          width: 80px;
+          height: 80px;
+        }
+
+        .profile-info h2 {
+          font-size: 18px;
+        }
+
+        .row {
+          font-size: 15px;
+        }
+
+        .button-row {
+          gap: 10px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    {% include 'NavBar.html' %} <br /><br /><br />
+
+    <div class="profile-container">
+      <!-- Profile Header -->
+      <div class="profile-header">
+        <img
+          src="{{ data.profile_image_path.url }}"
+          class="profile-img"
+          alt="Profile"
+        />
+        <div class="profile-info">
+          <h2>{{ data.username }}</h2>
+          <!-- <h2>{{ data.phone }}</h2> -->
+          <p class="ref">
+            Referral Code:
+            <span class="ref-code">{{ data.user_referral_code }}</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="upload-box">
+        <h3>{{ upload_count }}</h3>
+        <p>Uploaded</p>
+      </div>
+
+      <div class="details-card">
+        <div class="row">
+          <span
+            ><strong>Category:</strong>
+            <span id="catText">{{ data.category }}</span></span
+          >
+          <span class="loc">
+            <i class="fa fa-map-marker"></i>
+            <span id="locText">{{ data.location }}</span>
+          </span>
+        </div>
+
+        <div class="row">
+          <span
+            ><strong>Deals:</strong>
+            <span id="dealText">{{ data.deals }}</span></span
+          >
+          <span
+            ><strong>Experience:</strong>
+            <span id="expText">{{ data.experience }}</span></span
+          >
+        </div>
+
+        <p class="desc" id="descText">{{ data.description }}</p>
+
+        <div class="button-row">
+          <a href="{% url 'prop:edit_profile' %}" class="btn blue"
+            >Edit Profile</a
+          >
+          <a href="{% url 'prop:user_uploades'  %}" class="btn green"
+            >Uploaded</a
+          >
+          <button class="btn red">Reels</button>
+          <a href="{% url 'prop:referral'  %}" class="btn green"
+            >My Referrals</a
+          >
+
+          <!-- <button class="btn blue">My Referrals</button> -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Popup Section -->
+    <br /><br />
+  </body>
+</html>

@@ -1,0 +1,231 @@
+{% load static %}
+
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+/>
+<link rel="stylesheet" href="{% static 'css/navbar.css' %}" />
+
+<nav
+  class="navbar-desktop d-none d-md-flex shadow-sm"
+  style="box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.2)"
+>
+  <div class="navbar-left" onclick="location.href='/'">
+    <img src="{% static 'images/logo.jpg' %}" style="height: 40px" />
+  </div>
+
+  {% if user.is_authenticated %}
+  <div class="nav-links">
+    <button onclick="redirect('/menu')" class="btn btn-light">
+      <i class="fa fa-list"></i> Menu
+    </button>
+
+    <button onclick="redirect('/saved')" class="btn btn-light">
+      <i class="fa fa-heart"></i> Saved
+    </button>
+
+    <button onclick="handleAddPost()" class="btn btn-light">
+      <i class="fa fa-plus-square"></i>
+      {% if user.role == "COMPANY" %} Add Project {% else %} Post {% endif %}
+    </button>
+
+    <button onclick="redirect('/reelsView')" class="btn btn-light">
+      <i class="fa fa-video"></i> Reels
+    </button>
+
+    <button onclick="redirectProfile()" class="btn btn-light">
+      <i class="fa fa-user"></i> Profile
+    </button>
+
+    <form
+      action="{% url 'prop:logout' %}"
+      method="post"
+      style="display: inline"
+    >
+      {% csrf_token %}
+      <button type="submit" class="btn btn-light">
+        <i class="fa fa-sign-out-alt"></i>Logout
+      </button>
+    </form>
+  </div>
+  {% else %}
+  <button
+    onclick="redirect('/login')"
+    class="btn btn-sm btn-outline-success w-100"
+    style="background-color: white; font-size: 15px; border: none"
+  >
+    <i class="fa fa-sign-in-alt"></i> Login
+  </button>
+  {% endif %}
+</nav>
+
+<!-- ================= MOBILE NAVBAR ================= -->
+<nav
+  class="navbar-mobile d-md-none shadow-sm"
+  style="box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.2)"
+>
+  <span onclick="redirect('/')">
+    <img src="{% static 'images/logo.jpg' %}" style="height: 40px" />
+  </span>
+
+  <button class="menu-btn" onclick="toggleMenu()" style="margin-right: 5%">
+    <i class="fa fa-bars"></i>
+  </button>
+
+  <div id="mobile-menu" class="mobile-menu hidden" style="margin-right: 3%">
+    {% if user.is_authenticated %}
+
+    <button
+      onclick="redirect('/menu')"
+      class="btn btn-sm btn-outline-secondary w-100 mb-2"
+    >
+      <i class="fa fa-list"></i> Menu
+    </button>
+
+    <button
+      onclick="redirect('/saved')"
+      class="btn btn-sm btn-outline-secondary w-100 mb-2"
+    >
+      <i class="fa fa-heart"></i> Saved
+    </button>
+
+    <button
+      onclick="handleAddPost()"
+      class="btn btn-sm btn-outline-primary w-100 mb-2"
+    >
+      <i class="fa fa-plus-square"></i>
+      {%if user.role == "COMPANY" %} Add Project {% else %}Add Property{%endif%}
+    </button>
+    <form action="{% url 'prop:logout' %}" method="post" class="w-100">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-sm btn-outline-danger w-100 mb-2">
+        <i class="fa fa-sign-out-alt"></i> LogOut
+      </button>
+    </form>
+
+    {% else %}
+    <button
+      onclick="redirect('/login')"
+      class="btn btn-sm btn-outline-success w-100"
+    >
+      <i class="fa fa-sign-in-alt"></i> Login
+    </button>
+    {% endif %}
+  </div>
+</nav>
+
+<!-- ================= MOBILE FOOTER NAV ================= -->
+<div class="footer-nav d-block d-md-none shadow-sm">
+  <div onclick="redirect('/')">
+    <i class="fa fa-home"></i>
+    <div>Home</div>
+  </div>
+
+  <div onclick="redirect('/search')">
+    <i class="fa fa-search"></i>
+    <div>Search</div>
+  </div>
+
+  {% if user.is_authenticated %}
+  <div class="add-btn" onclick="openAddModal()">
+    <i class="fa fa-plus"></i>
+  </div>
+
+  <div onclick="redirect('/reelsView')">
+    <i class="fa fa-video"></i>
+    <div>Reels</div>
+  </div>
+
+  <div onclick="redirectProfile()">
+    <i class="fa fa-user"></i>
+    <div>Profile</div>
+  </div>
+  {% endif %}
+</div>
+
+<!-- ================== ADD MODAL ================== -->
+<div
+  id="addModal"
+  class="modal-backdrop hidden"
+  onclick="closeAddModal()"
+></div>
+
+<div id="addModalBox" class="modal-box hidden">
+  <button class="close-btn" onclick="closeAddModal()">
+    <i class="fa fa-times"></i>
+  </button>
+
+  <p>Select an action</p>
+
+  {% if user.role == "COMPANY" %}
+  <button
+    class="btn btn-outline-primary w-100 mb-2"
+    onclick="redirect('/add-project')"
+  >
+    ➕ Add Project
+  </button>
+  {% endif %}
+
+  <button
+    class="btn btn-outline-primary w-100 mb-2"
+    onclick="redirect('/addProperty')"
+  >
+    🏠 Add Property
+  </button>
+
+  {% if user.role != "OWNER" and user.role != "PROFESSIONAL" %}
+  <button
+    class="btn btn-outline-primary w-100 mb-2"
+    onclick="redirect('/add-reel')"
+  >
+    🎥 Post Reel
+  </button>
+  {% endif %}
+
+  <button class="btn btn-light w-100" onclick="closeAddModal()">Cancel</button>
+</div>
+
+<script>
+    function redirect(url) {
+        window.location.href = url;
+    }
+
+    function toggleMenu() {
+      document.getElementById("mobile-menu").classList.toggle("show");
+  }
+
+  // Close menu when scrolling (mobile only)
+  window.addEventListener("scroll", function () {
+      if (window.innerWidth < 768) {
+          document.getElementById("mobile-menu").classList.remove("show");
+      }
+  });
+
+    function handleAddPost() {
+        {% if user.role == "COMPANY" %}
+            redirect("addproject/");
+        {% else %}
+            redirect("/addProperty");
+        {% endif %}
+    }
+
+    function redirectProfile() {
+        {% if user.role == "COMPANY" %}
+            redirect("/companyprofile");
+        {% elif user.role == "FRANCHISE" %}
+            redirect("/FranchiseProfile");
+        {% else %}
+            redirect("/profile");
+        {% endif %}
+    }
+
+    function openAddModal() {
+        document.getElementById("addModal").classList.remove("hidden");
+        document.getElementById("addModalBox").classList.remove("hidden");
+    }
+
+    function closeAddModal() {
+        document.getElementById("addModal").classList.add("hidden");
+        document.getElementById("addModalBox").classList.add("hidden");
+    }
+</script>

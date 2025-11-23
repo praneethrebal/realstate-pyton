@@ -1,0 +1,134 @@
+{% extends "base.htm" %} {% load static %} {% block content %}
+<div class="container mt-4">
+  <h2 class="text-center">🏠 Admin Dashboard</h2>
+
+  <div class="row text-center mt-4">
+    <div class="col-md-4">
+      <div class="card shadow p-3">
+        <h5>Total Properties</h5>
+        <h3>{{ total_properties }}</h3>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow p-3">
+        <h5>Total Tickets Sold</h5>
+        <h3>{{ total_tickets_sold }}</h3>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow p-3">
+        <h5>Total Sales (₹)</h5>
+        <h3>{{ total_sales }}</h3>
+      </div>
+    </div>
+  </div>
+  <div class="text-end mb-3">
+    <a
+      href="{% url 'create_property' %}"
+      class="btn btn-success btn-lg shadow-sm"
+    >
+      📝 Post New Property
+    </a>
+  </div>
+
+  <hr class="mt-4" />
+  <h4 class="text-center">🎟️ Property Purchases</h4>
+
+  <table class="table table-bordered mt-3">
+    <thead class="table-dark">
+      <tr>
+        <th>Property</th>
+        <th>Buyer</th>
+        <th>Tickets id</th>
+        <th>Transaction id</th>
+        <th>Image</th>
+        <th>Status</th>
+        <th>View Property</th>
+        <th>WhatsApp</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for purchase in purchases %}
+      <tr>
+        <td>
+          {{ purchase.property.luck_id }} - {{ purchase.property.owner_name }}
+        </td>
+        <td>
+          {{ purchase.buyer.full_name }}<br />
+          📞 {{ purchase.buyer.mobile }}
+        </td>
+        <td>{{ purchase.ticket_code }}</td>
+        <td>{{ purchase.transaction_id }}</td>
+        <td>
+          {% if purchase.payment_screenshot %}
+          <a href="{{ purchase.payment_screenshot.url }}" target="_blank">
+            <img
+              src="{{ purchase.payment_screenshot.url }}"
+              alt="Payment Screenshot"
+              width="80"
+              height="80"
+              class="img-thumbnail"
+            />
+          </a>
+          {% else %}
+          <span class="text-muted">No Image</span>
+          {% endif %}
+        </td>
+
+        <td>
+          {% if purchase.status == 'VERIFIED' %}
+          <span class="badge bg-success">Verified</span>
+          {% elif purchase.status == 'REJECTED' %}
+          <span class="badge bg-danger">Rejected</span>
+          {% else %}
+          <span class="badge bg-warning text-dark">Pending</span>
+          {% endif %}
+        </td>
+
+        <td>
+          <a
+            href="{% url 'property_detail' purchase.property.id %}"
+            target="_blank"
+          >
+            View Property
+          </a>
+        </td>
+
+        <td>
+          {% if purchase.buyer.whatsapp_no %}
+          <a
+            href="https://wa.me/{{ purchase.buyer.country_code }}{{ purchase.buyer.whatsapp_no }}?text=Hi%20Mr.%20{{ purchase.buyer.full_name|urlencode }},%0A%0AThank%20you%20for%20participating%20in%20the%20Lucky%20Property%20Draw!%20We%20heartfully%20wish%20you%20win%20the%20draw.%0A%0A🎟️%20Your%20Ticket%20ID:%20{{ purchase.ticket_code }}%0A🏡%20Property:%20{{ purchase.property.luck_id }}%0A🔗%20View%20Property:%20https://weekdaysproperties.com/property/{{ purchase.property.id }}/%0A%0AThank%20you%20for%20being%20part%20of%20our%20Lucky%20Draw!%0A%0A—%20Team%20Weekdays%20Properties"
+            class="btn btn-success btn-sm"
+            target="_blank"
+          >
+            💬 WhatsApp
+          </a>
+          {% else %}
+          <span class="text-muted">No WhatsApp</span>
+          {% endif %}
+        </td>
+
+        <td>
+          {% if purchase.status == 'PENDING' %}
+          <a
+            href="{% url 'verify_purchase' purchase.id %}"
+            class="btn btn-primary btn-sm"
+            >✅ Verify</a
+          >
+          {% elif purchase.status == 'VERIFIED' %}
+          <a
+            href="https://wa.me/{{ purchase.buyer.country_code }}{{ purchase.buyer.whatsapp_no }}?text=Hi%20Mr.%20{{ purchase.buyer.full_name|urlencode }},%0A%0AThank%20you%20for%20participating%20in%20the%20Lucky%20Property%20Draw!%20We%20heartfully%20wish%20you%20win%20the%20draw.%0A%0A🎟️%20Your%20Ticket%20ID:%20{{ purchase.ticket_code }}%0A🏡%20Property:%20{{ purchase.property.luck_id }}%0A🔗%20View%20Property:%20https://weekdaysproperties.com/property/{{ purchase.property.id }}/%0A%0AThank%20you%20for%20being%20part%20of%20our%20Lucky%20Draw!%0A%0A—%20Team%20Weekdays%20Properties"
+            class="btn btn-success btn-sm"
+            target="_blank"
+          >
+            📤 Send WhatsApp
+          </a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

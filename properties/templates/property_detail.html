@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Details</title>
+
+    <style>
+     body {
+    font-family: Arial, sans-serif;
+    background: #ffffff;
+    margin: 0;
+    padding: 0;
+}
+
+/* MAIN CONTAINER */
+.container {
+    width: 90%;
+    margin: auto;
+    padding: 30px;
+    margin-top: 70px;
+}
+
+/* OWNER NAME */
+.owner-name {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* INFO BOXES */
+.info-box-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.info-box {
+    flex: 1;
+    min-width: 150px;
+    padding: 15px;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    background: white;
+    text-align: center;
+}
+
+.label {
+    font-size: 13px;
+    color: black;
+}
+
+/* SECTION TITLE */
+.section-title {
+    font-size: 22px;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+/* AMENITIES */
+.amenities-list {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.amenity-pill {
+    padding: 7px 14px;
+    background: #eaf3ff;
+    border: 1px solid #d3e3ff;
+    border-radius: 20px;
+}
+
+/* PRICE BOX */
+.price-box {
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.price-box small {
+    display: block;
+    font-size: 13px;
+    color: black;
+    margin-top: 5px;
+}
+
+/* IMAGE (DESKTOP DEFAULT) */
+.left img {
+    width: 40%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 12px;
+    display: block;
+}
+
+/* VIDEO */
+.video-box video {
+    width: 20%;
+    height: 20%;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* CONTACT BUTTON */
+.contact-btn {
+    margin-top: 30px;
+    text-align: right;
+}
+
+.contact-btn button {
+    background: #0d6efd;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* ------------------------------------------------ */
+/*               MOBILE VERSION                     */
+/* ------------------------------------------------ */
+@media (max-width: 768px) {
+
+    .container {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .owner-name {
+        font-size: 26px;
+        text-align: center;
+    }
+
+    .info-box-row {
+        flex-direction: column;
+    }
+
+    .section-title {
+        text-align: center;
+        font-size: 20px;
+    }
+
+    .left img {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .video-box video {
+        width: 100%;
+        height: auto;
+    }
+
+    .contact-btn {
+        text-align: center;
+    }
+
+    .contact-btn button {
+        width: 100%;
+        padding: 14px;
+        font-size: 18px;
+    }
+}
+
+    </style>
+
+</head>
+
+<body>
+
+    {% include 'NavBar.html' %}
+  
+
+<div class="container">
+
+    <!-- PROPERTY IMAGE (SAFE) -->
+    <div class="left">
+        {% if item.image %}
+            <img src="{{ item.image.url }}" alt="Property Image">
+        {% else %}
+            <img src="/static/no-image.png" alt="No Image">
+        {% endif %}
+    </div>
+
+    <!-- OWNER NAME -->
+    <h2 class="owner-name">{{ item.user }}</h2>
+
+    <!-- INFO BOXES -->
+    <div class="info-box-row">
+
+        <div class="info-box">
+            <p class="label">Looking To</p>
+            <h3>{{ item.look }}</h3>
+        </div>
+
+        <div class="info-box">
+            <p class="label">Extent</p>
+            <h3>{{ item.extent }}</h3>
+        </div>
+
+        <div class="info-box">
+            <p class="label">Dimensions</p>
+            <h3>{{ item.dimensions }}</h3>
+        </div>
+
+        <div class="info-box">
+            <p class="label">Facing</p>
+            <h3>{{ item.facing }}</h3>
+        </div>
+
+        <div class="info-box">
+            <p class="label" >RERA</p>
+
+            {% if item.reraApproved %}
+                <h3 style="color:green;">Approved</h3>
+            {% else %}
+                <h3 style="color:red;">Not Approved</h3>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <!-- PRICE -->
+    <div class="price-box">
+        ₹{{ item.price }}
+        <small>price</small>
+    </div>
+
+    <!-- HIGHLIGHTS -->
+    <h3 class="section-title">Highlights</h3>
+    <p>{{ item.highlights }}</p>
+
+    <!-- AMENITIES (SAFE) -->
+    <h3 class="section-title">Amenities</h3>
+    <div class="amenities-list">
+        {% if item.amenities %}
+            {% for a in item.amenities %}
+                <div class="amenity-pill">{{ a }}</div>
+            {% endfor %}
+        {% else %}
+            <p style="color:gray;">No amenities listed</p>
+        {% endif %}
+    </div>
+
+    <!-- VIDEO (SAFE) -->
+    <h3 class="section-title">Property Video</h3>
+    <div class="video-box">
+        {% if item.video %}
+            <video controls>
+                <source src="{{ item.video.url }}" type="video/mp4">
+            </video>
+        {% else %}
+            <p style="color:gray;">No video uploaded</p>
+        {% endif %}
+    </div>
+
+    <!-- CONTACT -->
+    <div class="contact-btn">
+        <button>Contact Owner</button>
+    </div>
+
+</div>
+
+<br><br><br><br>
+
+</body>
+</html>
