@@ -6,7 +6,7 @@ from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import  get_object_or_404
-from .models import LoanApplication, AddProject,AddPropertyModel, FranchiseApplication, Reels, Role,User
+from .models import Comment, LoanApplication, AddProject,AddPropertyModel, FranchiseApplication, Reels, Role,User
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
@@ -569,8 +569,10 @@ def like_reel(req,id):
     return JsonResponse({"status": "success", "likes": reel.likeCount})
 def comment_reel(req,id,comment):
     reel=Reels.objects.get(id=id)
-    reel.Comments=comment
-    reel.commentCount+=1
-    reel.save()
-    return JsonResponse({"status": "success", "commentCount": reel.commentCount})
+    new_comment=Comment.objects.create(
+        user=req.user,
+        reel=reel,
+        comment=comment
+    )
+    return JsonResponse({"status": "success", "comment": reel.commentCount})
     

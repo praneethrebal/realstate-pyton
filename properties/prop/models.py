@@ -351,11 +351,17 @@ class Reels(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
     reel=models.FileField(upload_to='reels/',null=True,blank=True)
     description=models.CharField(max_length=50)
-    
     likeCount=models.IntegerField(default=0)
-    Comments=models.CharField(max_length=255,null=True,blank=True)
     commentCount=models.IntegerField(default=0)
     shareCount=models.IntegerField(default=0)
+class Comment(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    reel=models.ForeignKey(Reels,on_delete=models.CASCADE)
+    comment=models.CharField(max_length=255)
+    created_at=models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return self.comment
+    
 
 
  

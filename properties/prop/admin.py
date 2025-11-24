@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import FranchiseApplication, FutureRequirement, Reels, User, AddPropertyModel,LoanApplication,ContactForm,MoveRequest,AddProject
+from .models import Comment, FranchiseApplication, FutureRequirement, Reels, User, AddPropertyModel,LoanApplication,ContactForm,MoveRequest,AddProject
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -45,3 +45,4 @@ admin.site.register(ContactForm)
 admin.site.register(LoanApplication)
 admin.site.register(AddProject)
 admin.site.register(Reels)
+admin.site.register(Comment)
