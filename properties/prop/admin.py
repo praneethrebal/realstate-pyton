@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Comment, FranchiseApplication, FutureRequirement, Reels, User, AddPropertyModel,LoanApplication,ContactForm,MoveRequest,AddProject
+from .models import *
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -44,5 +44,15 @@ admin.site.register(MoveRequest)
 admin.site.register(ContactForm)
 admin.site.register(LoanApplication)
 admin.site.register(AddProject)
+
+
+@admin.register(ContactMessage)
+class ContactMessageAdmin(admin.ModelAdmin):
+    list_display = ("id", "name", "email", "requirement", "message", "cid", "user", "created_at")
+    search_fields = ("name", "email", "requirement", "message", "cid")
+    list_filter = ("created_at",)
+    ordering = ("-created_at",)
+
+
 admin.site.register(Reels)
 admin.site.register(Comment)

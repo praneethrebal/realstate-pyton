@@ -1,9 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import User, AddPropertyModel,FutureRequirement,Reels
-
+from .models import *
 ROLE_CHOICES = [
-  
+     ('','Select Role'),
     ('PROFESSIONAL', 'Professional'),
     ('OWNER', 'Citizen'),
     ('MARKETER', 'Marketer'),
@@ -42,7 +41,7 @@ class UserRegisterForm(UserCreationForm):
     plan_type = forms.ChoiceField(choices=PLAN_CHOICES, required=False, widget=forms.RadioSelect(attrs={'class': 'plan-radio-select'}))
     description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Description'}), required=False)
     location = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Location'}), required=False)
-    experience = forms.IntegerField(required=False)
+    experience = forms.IntegerField(required=False,widget=forms.NumberInput(attrs={'placeholder': 'Experience'}))
     referred_by_code = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Referral Code (Optional)'}), required=False)
     deals = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Deals (Optional)'}), required=False)
     profile_image_path = forms.ImageField(required=False, widget=forms.FileInput(attrs={'id': 'id_profile_image_path'}))
@@ -251,12 +250,14 @@ class FranchiseForm(UserCreationForm):
         if not phone.isdigit():
             raise forms.ValidationError("Phone number must contain only digits.")
         return phone
-        
+    
+
 class ReelsForm(forms.ModelForm):
-    class Meta:
+  class Meta:
         model=Reels
         fields=['reel','description']
-      
+        
+
 
 
 

@@ -1,7 +1,10 @@
 {% extends "base.htm" %} {% load static %} {% block content %}
+
+ {% include 'NavBar.html' %}
+
 <!-- FORM START -->
 <h2 class="text-center mb-3">
-  🎫 Buy Lucky Ticket for {{ property.owner_name|title }}’s Property
+  🎫 Book your Property {{ property.owner_name|title }}’s Property
 </h2>
 
 <div class="card p-4 shadow">
@@ -123,4 +126,11 @@
     <button class="btn btn-primary mt-3">Submit & Buy Ticket</button>
   </form>
 </div>
+
+
+
 {% endblock %}
+
+
+
+  

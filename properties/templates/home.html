@@ -9,794 +9,6 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
     <title>Weekdays Properties - Home</title>
-
-    <!-- <style>
-  body {
-    margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  overflow-x: hidden; /* No horizontal scroll */
- 
-}
-
-    /* HEADER */
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 12px ;
-        background: white;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        position: sticky;
-        top: 0;
-        z-index: 10;
-    }
-
-    .logo img {
-        width: 180px;
-    }
-
-    .right-links {
-        display: flex;
-        gap: 25px;
-        align-items: center;
-        font-size: 18px;
-        font-weight: 600;
-    }
-
-    .right-links a {
-        color: black;
-        text-decoration: none;
-        transition: 0.3s;
-    }
-
-    .right-links a:hover {
-        color: red;
-    }
-
-    /* ✅ BACKGROUND SLIDESHOW */
-    .slideshow {
-        position:absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100vh;
-        overflow: hidden;
-        z-index: 1;
-    }
-
-    .slideshow img {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        opacity: 0;
-        animation: fade 18s infinite;
-    }
-
-    .slideshow img:nth-child(1) { animation-delay: 0s; }
-    .slideshow img:nth-child(2) { animation-delay: 6s; }
-    .slideshow img:nth-child(3) { animation-delay: 12s; }
-
-    @keyframes fade {
-        0% { opacity: 0; }
-        10% { opacity: 1; }
-        30% { opacity: 1; }
-        40% { opacity: 0; }
-        100% { opacity: 0; }
-    }
-
-    /* ✅ HERO CONTENT (center box) */
-    .hero-content {
-        position: relative;
-        z-index: 5;
-        text-align: center;
-        background: rgba(0, 0, 0, 0.65);
-        color: white;
-        padding: 50px 40px;
-        border-radius: 12px;
-        width: 60%;
-        margin: 0 auto;
-        margin-top: 130px;
-        box-shadow: 0 0 25px rgba(0,0,0,0.4);
-    }
-
-    .hero-content h2 {
-        font-size: 34px;
-        margin-bottom: 25px;
-        font-weight: 700;
-        text-shadow: 0 2px 5px rgba(0,0,0,0.4);
-    }
-
-    /* CATEGORY BUTTONS */
-    .cat-buttons {
-        margin-bottom: 25px;
-    }
-
-    .cat-buttons button {
-        border: none;
-        padding: 10px 22px;
-        margin: 5px;
-        border-radius: 25px;
-        cursor: pointer;
-        background: rgba(255, 255, 255, 0.15);
-        color: white;
-        font-weight: 600;
-        transition: 0.3s;
-        border: 1px solid rgba(255, 255, 255, 0.4);
-    }
-
-    .cat-buttons button:hover {
-        background:orangered;
-        color:black;
-    }
-
-    /* SEARCH BOX */
-    .search-box {
-        background: white;
-        border-radius: 50px;
-        padding: 10px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        width: 60%;
-        margin: 0 auto;
-    }
-
-    .search-box select,
-    .search-box input {
-        padding: 10px 15px;
-        border: none;
-        outline: none;
-        border-radius: 30px;
-        font-size: 16px;
-        width: 200px;
-    }
-
-    .search-btn {
-        background: orangered;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 30px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: 0.3s;
-    }
-
-    .search-btn:hover {
-        background: #e60000;
-    }
-
-    /* OWNER SECTION */
-    .owner {
-        margin-top: 25px;
-        font-size: 18px;
-        color: white;
-    }
-
-    .post-btn {
-        background: transparent;
-        color: white;
-        border: 2px solid #ff3b3b;
-        padding: 10px 25px;
-        border-radius: 30px;
-        cursor: pointer;
-        margin-top: 10px;
-        font-size: 17px;
-        font-weight: 600;
-        transition: 0.3s;
-    }
-
-    .post-btn:hover {
-        background:orangered;
-    }
-
-
-    hr {
-    border: none;
-    height: 2px;
-    background-color: #ff3b3b;
-    margin: 20px 0;
-}
-
-/* ✅ MOBILE RESPONSIVE FIXES */
-    @media (max-width: 768px) {
-        body {
-            overflow-x: hidden;
-        }
-
-        .header {
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            gap: 10px;
-        }
-
-        .logo img {
-            width: 130px;
-        }
-
-        .right-links {
-            gap: 15px;
-            font-size: 15px;
-        }
-
-        .hero-content {
-            width: 90%;
-            padding: 25px 15px;
-            margin-top: 100px;
-        }
-
-        .hero-content h2 {
-            font-size: 24px;
-        }
-
-        .cat-buttons button {
-            width: 45%;
-            font-size: 14px;
-        }
-
-        .search-box {
-            flex-direction: column;
-            border-radius: 20px;
-            width: 100%;
-        }
-
-        .search-box select,
-        .search-box input,
-        .search-btn {
-            width: 100%;
-            margin-bottom: 10px;
-            border-radius: 10px;
-            font-size: 15px;
-        }
-
-        .post-btn {
-            width: 80%;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .hero-content h2 {
-            font-size: 20px;
-        }
-
-        .cat-buttons button {
-            width: 100%;
-            font-size: 13px;
-        }
-    }
-
-
-
-        /* ---------------------- SECTIONS ---------------------- */
-        .sec{
-            background-color: rgb(230, 238, 241);
-            padding: 10px;
-        }
-        .section1 {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px;
-            margin: 30px auto;
-            max-width: 80%;
-            border-radius: 10px;
-            gap: 30px;
-        }
-
-        .section1:nth-child(even) {
-            flex-direction: row-reverse; /* alternate layout */
-        }
-
-        .section1 img {
-            width: 50%;
-            height: 50%;
-         
-        }
-
-        .section1-content {
-            padding: 40px;
-            width: 50%;
-        }
-
-        .section1-content h2 {
-            color: #0a66c2;
-            margin-bottom: 15px;
-        }
-
-        .section1-content p {
-            color: #444;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .section1-content button {
-            background: #0a66c2;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: 0.3s;
-
-        }
-
-        .section1-content button:hover {
-            background: #084a9a;
-        }
-
-        /* ---------------------- RESPONSIVE ---------------------- */
-        @media (max-width: 768px) {
-            .section1 {
-                flex-direction: column;
-            }
-            .section1 img, .section-content {
-                width: 100%;
-            }
-            .section1-content {
-                padding: 20px;
-                text-align: center;
-            }
-        }
-
-         h2 { 
-    font-size:28px; 
-    margin-bottom:25px; 
-    font-weight:bold; 
-    color:#1A1A1A; 
-    text-align:center; 
-  }
-
-  .lucky-section {
-  background-color: #f0f8ff; /* Light bluish background */
-  text-align: center;
-  padding: 30px;
-  border-radius: 8px;
-  margin: 50px ;
-  max-width: 80%;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.lucky-container h2 {
-  font-size: 28px;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 10px;
-}
-
-.lucky-container p {
-  color: #555;
-  font-size: 16px;
-  margin-bottom: 25px;
-}
-
-.lucky-btn {
-  background-color: #17844c; /* green button */
-  color: white;
-  font-size: 18px;
-  font-weight: 600;
-  padding: 14px 60px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s ease;
-  width: 100%;
-  max-width: 700px;
-}
-
-.lucky-btn:hover {
-  background-color: #106c3f;
-}
-
-
-  section { padding:50px 0; }
-  .container1 { max-width:1200px; margin:auto; padding:0 16px; }
-
-
-  /* ---------------- DESKTOP CAROUSEL ---------------- */
-  .carousel-wrapper { position:relative; }
-  .carousel-container { overflow:hidden; width:100%; }
-  .carousel-track { display:flex; transition:0.5s; }
-  .carousel-item { flex-shrink:0; width:100%; padding:12px; }
-   .carousel-item a{
-    text-decoration: none;
-   }
-  @media(min-width:768px){ .carousel-item { width:50%; } }
-  @media(min-width:1100px){ .carousel-item { width:33.33%; } }
-
-  .card { 
-    background:#FFFFFF; 
-    border-radius:10px; 
-    overflow:hidden;
-    box-shadow:0 4px 12px rgba(0,0,0,0.18); 
-    cursor:pointer; 
-    transition:0.3s;
-  }
-
-  .card:hover { 
-    transform:scale(1.03); 
-    box-shadow:0 6px 15px rgba(0,0,0,0.25); 
-  }
-
-  .card img { width:100%; height:200px; object-fit:cover; }
-
-  .card-title { 
-    padding:14px; 
-    text-align:center; 
-    font-size:22px; 
-    color:#2C2C2C; 
-    
-  }
-
-  .carousel-buttons { 
-    display:flex; 
-    justify-content:center; 
-    margin-top:20px; 
-    gap:18px; 
-  }
-
-  .carousel-buttons button {
-    background:#FFFFFF;
-    border:1px solid #D6D6D6;
-    color:#1A1A1A;
-    border-radius:50%;
-    width:38px;
-    height:38px;
-    cursor:pointer;
-    box-shadow:0 2px 8px rgba(0,0,0,0.15);
-  }
-
-
-  /* ---------------- MOBILE GRID ---------------- */
-  .mobile-heading{ display:none; text-align:center; font-size:24px; font-weight:700; color:#1A1A1A; margin-bottom:20px; }
-
-  .mobile-grid{
-    display:none;
-    grid-template-columns:repeat(3,1fr);
-    gap:22px;
-    max-width:500px;
-    margin:auto;
-  }
-
-  .category-box{
-    text-align:center;
-    text-decoration:none;
-  }
-
-  .category-box img{
-    width:85px;
-    height:85px;
-    border-radius:50%;
-    object-fit:cover;
-    box-shadow:0 4px 12px rgba(0,0,0,0.18);
-    border:3px solid #fff;
-    transition:0.3s;
-  }
-
-  .category-box img:hover{
-    transform:scale(1.08);
-  }
-
-  .category-box p{
-    font-size:14px;
-    margin-top:8px;
-    font-weight:600;
-    color:#2C2C2C;
-  }
-
-
-  /* DISPLAY RULES */
-  @media(max-width:768px){
-    .carousel-wrapper{ display:none; }
-    .mobile-heading { display:block; }
-    .mobile-grid{ display:grid; }
-  }
-
-
-
-  *    /*--------- Handpicked Homes, Just For You!------css */
-
-.slider-container {
-    width: 100%;
-    text-align: center;
-    margin-top: 20px;
-}
-
-.card-grid {
-    display: flex;
-    gap: 20px;
-    overflow: hidden;
-    padding: 10px;
-     
-}
-
-.property-card {
-    min-width: 260px;
-    background: #fff;
-    border-radius: 12px;
-    padding: 15px;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.1);
-}
-
-.owner-section {
-    display: flex;
-    align-items: center;
-    gap: 8px;             /* space between image and name */
-    margin-bottom: 10px;
-}
-
-.owner-photo {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-}
-.owner-name {
-    font-size: 15px;
-    margin: 0;
-    font-weight: bold;
-}
-
-.property-photo {
-    width: 100%;
-    height: 160px;
-    border-radius: 10px;
-    margin: 10px 0;
-}
-
-.action-buttons button {
-    width: 48%;
-    padding: 8px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.call-btn {
-    background: green;
-    color: white;
-    border: none;
-}
-
-.view-btn {
-    background: white;
-    border: 1px solid blue;
-    color: blue;
-}
-
-/* ✅ Arrows below */
-.arrows-below {
-    margin-top: 15px;
-}
-
-.arrow {
-    background: black;
-    color: white;
-    font-size: 20px;
-    border: none;
-    border-radius: 30px;
-    width: 45px;
-    height: 45px;
-    margin: 0 10px;
-    cursor: pointer;
-}
-
-.see-all {
-  text-align: center;
-  margin-top: 20px;
-  padding-top: 180px;
-}
-
-.see-all-circle {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  width: 60px;
-  height: 60px;
-  background-color: #007bff;
-  color: #fff;
-  border-radius: 50%;
-  text-decoration: none;
-  font-size: 24px;
-  font-weight: bold;
-  transition: 0.3s ease;
-  
-}
-.see-all a
-{
-    font-size: 16px;
-}
-
-/* Hover effect */
-.see-all-circle:hover {
-  background-color: #0056b3;
-  transform: scale(1.1);
-}
-
-
-*
-
-   /* Wrapper */
-.biz-wrapper {
-  padding: 40px 20px;
-  display: flex;
-  justify-content: center;
-}
-
-/* White Card */
-.biz-card {
-  width: 100%;
-  max-width: 1200px;
-  background: #ffffff;
-  border-radius: 18px;
-  box-shadow: 0px 10px 30px rgba(0,0,0,0.10);
-  display: flex;
-  overflow: hidden;
-}
-
-/* LEFT CONTENT */
-.biz-content {
-  width: 50%;
-  padding: 70px 50px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-}
-
-.biz-content h2 {
-  color: #11263c;       
-  font-size: 32px;
-  font-weight: 600;
-  line-height: 1.3;
-  margin-bottom: 20px;
-}
-
-.biz-content p {
-  color: #444444;      
-  margin-bottom: 30px;
-  font-size: 17px;
-}
-
-/* Button */
-.biz-btn {
-  background: #0A3D62;    
-  color: #ffffff;
-  padding: 12px 30px;
-  font-size: 18px;
-  border-radius: 40px;
-  text-decoration: none;
-  font-weight: 500;
-  width: fit-content;
-  margin: auto;
-  display: inline-block;
-}
-
-/* RIGHT IMAGE */
-.biz-image {
-  width: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.biz-image img {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-}
-
-
-/* ============= RESPONSIVE ============= */
-@media(max-width: 900px) {
-  .biz-card {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .biz-content {
-    width: 100%;
-    padding: 40px 20px;
-  }
-
-  .biz-image {
-    width: 100%;
-  }
-
-  .biz-content h2 {
-    font-size: 26px;
-  }
-
-  .biz-btn {
-    margin: auto;
-  }
-}
-
-
-/* ************footer************** */
-
-.footer {
-    font-family: 'Poppins', sans-serif;
-    background: #fff;
-    color: #333;
-}
-.footer-main {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    max-width: 1200px;
-    margin: auto;
-    padding: 50px 20px;
-    gap: 40px;
-}
-.footer-section {
-    flex: 1;
-    min-width: 230px;
-}
-.footer-section h3 {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 12px;
-}
-.footer-section p {
-    font-size: 14px;
-    color: #555;
-    margin-bottom: 10px;
-    line-height: 1.6;
-}
-.footer-section a {
-    color: #333;
-    text-decoration: none;
-}
-.footer-section a:hover {
-    text-decoration: underline;
-}
-.search-box {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.search-box input {
-  width: 200px;
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  outline: none;
-  font-size: 14px;
-}
-.search-box button {
-  background-color: #666;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 10px 16px;
-  cursor: pointer;
-}
-.footer-bottom {
-    background: #0056d2;
-    color: #fff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    padding: 15px 40px;
-    font-size: 14px;
-}
-.footer-bottom span {
-    font-weight: 600;
-}
-@media (max-width: 768px) {
-    .footer-main { flex-direction: column; }
-    .footer-bottom { flex-direction: column; text-align: center; gap: 6px; }
-}
-
-
-</style> -->
-
-
-
  
  <style>
   /* HORIZONTAL SCROLL CONTAINER */
@@ -950,34 +162,31 @@ section h2, section p {
     </div>
 
     <!-- HERO SECTION -->
+   
     <div class="hero-content">
       <h1>Explore, Buy, Rent - All In One Place!</h1>
+     <div class="cat-buttons">
+  <button>Plot</button>
+  <button>Villa</button>
+  <button>Land</button>
+  <button>Flat</button>
+  <button>Commerciallands</button>
+</div>
 
-      <div class="cat-buttons">
-        <button>Plots</button>
-        <button>Villas</button>
-        <button>Lands</button>
-        <button>Flats</button>
-        <button>Commercial</button>
-      </div>
+<div class="search-box">
+ {% include 'search_form.html' %}
+</div>
 
-      <div class="search-box">
-        <select>
-          <option>Flats</option>
-          <option>Villas</option>
-          <option>Plots</option>
-          <option>Commercial</option>
-          <option>Lands</option>
-        </select>
-        <input type="text" placeholder="Enter City" />
-        <button class="search-btn">Search</button>
-      </div>
-      <hr />
-    
-      <div class="owner" >
-        <p>Are You A Property Owner?</p>
-      <a href="{% url 'prop:add_property' %}">  <button class="post-btn">➕ Post Property Ad</button></a>
-      </div>
+<hr />
+  <p>Are You A Property Owner?</p>
+  <a href="{% url 'prop:add_property' %}">
+    <button class="post-btn">➕ Post Property Ad</button></a
+  >
+
+
+</div>
+
+      
     </div>
    
 
@@ -985,10 +194,11 @@ section h2, section p {
 
     <div class="lucky-section">
       <div class="lucky-container">
-        <h2>Check Your Luck!</h2>
+        <h2> Book Your Service</h2>
         <p>
-          Feeling lucky? Participate in our property lottery for a chance to win
-          amazing properties.
+        
+          Book your service in advance and receive an assured gift! You’ll definitely
+           need our services in the future, so lock your slot now.
         </p>
         <a href="{% url 'lucky:property_list' %}"> <button class="lucky-btn">Book a Slot</button></a>
       </div>
@@ -1156,92 +366,276 @@ section h2, section p {
       </div>
     </section>
 
+<style>
+    .project {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 25px;
+        margin-top: 30px;
+        padding-left: 30px;
+    }
+
+    .project-card {
+        background: white;
+        padding: 25px;
+        border-radius: 20px;
+        box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
+        text-align: center;
+        transition: 0.3s;
+    }
+
+    .project-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0px 6px 20px rgba(0,0,0,0.15);
+    }
+
+    .project-card img {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-top: -10px;
+        border: 4px solid #f0f0f0;
+    }
+
+    .card-details1 h3 {
+        margin-top: 15px;
+        font-size: 20px;
+        font-weight: bold;
+        color: #222;
+    }
+
+    .card-details1 p {
+        margin: 5px 0;
+        font-size: 15px;
+        color: #444;
+    }
+
+    .call-btn {
+        display: block;
+        margin: 18px auto 5px;
+        width: 70%;
+        padding: 12px;
+        background: #4c3eb6;
+        color: white;
+        border-radius: 12px;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: 500;
+        transition: 0.3s;
+    }
+
+    .call-btn:hover {
+        background: #3a2ea1;
+    }
+
+    .location-pin {
+        color: #e63946;
+        font-size: 18px;
+    }
+</style>
+
+<!-- Company Pro Projects -->
+<h2>Company Pro Projects</h2>
+<div class="project">
+    {% for p in pro_projects %}
+    <div class="project-card">
+        <a href="{% url 'prop:project_detail' p.id %}">
+            {% if p.image %}
+                <img src="{{ p.image.url }}" alt="{{ p.project_name }}">
+            {% else %}
+                <img src="{% static 'default.jpg' %}" alt="No Image">
+            {% endif %}
+        </a>
+        <div class="card-details1">
+            <h3>{{ p.project_name }}</h3>
+            <p>📍 {{ p.project_location }}</p>
+            <p><strong>Price:</strong> ₹{{ p.pricing }}</p>
+            <a class="call-btn" href="{% url 'prop:project_detail' p.id %}">View Details</a>
+        </div>
+    </div>
+    {% empty %}
+    <p>No Company Pro projects found.</p>
+    {% endfor %}
+</div>
+<div class="center-btn" style="padding-left: 43%;">
+    <a href="{% url 'prop:all_projects' %}?category=pro" class="see-all-btn">See All Pro projects</a>
+</div>
+
+<!-- Company Normal Projects -->
+<h2>Company Normal Projects</h2>
+<div class="project">
+    {% for p in normal_projects %}
+    <div class="project-card">
+        <a href="{% url 'prop:project_detail' p.id %}">
+            {% if p.image %}
+                <img src="{{ p.image.url }}" alt="{{ p.project_name }}">
+            {% else %}
+                <img src="{% static 'default.jpg' %}" alt="No Image">
+            {% endif %}
+        </a>
+        <div class="card-details1">
+            <h3>{{ p.project_name }}</h3>
+            <p>📍 {{ p.project_location }}</p>
+            <p><strong>Price:</strong> ₹{{ p.pricing }}</p>
+            <a class="call-btn" href="{% url 'prop:project_detail' p.id %}">View Details</a>
+        </div>
+    </div>
+    {% empty %}
+    <p>No Company Normal projects found.</p>
+    {% endfor %}
+
+    
+</div>
+<div class="center-btn" style="padding-left: 43%;">
+    <a href="{% url 'prop:all_projects' %}?category=normal" class="see-all-btn">See All Normal projects </a>
+</div>
+
+
+
+
 
     <!-- ***************expert section************** -->
-
-   <section class="experts-section">
-      <h2>Connect With Our Marketing Experts</h2>
-      <p>Hear from our satisfied customers about their experiences</p>
-
-      <div class="slider-container">
-        <!-- Slider row -->
-        <div class="card-grid" id="expert-slider">
-          {% for u in marketing_experts|slice:":4" %}
-          <a
-            href="{% url 'prop:user_detail' u.id %}"
-            class="card-link"
-            style="text-decoration: none">
-            <div class="expert-card">
-                <img src="{{ u.profile_image_path.url }}" class="profile-img"/>
-                
-                 <div class="card-details">
-                <h3>{{ u.username }}</h3>
-               <p class="location">📍 {{ u.location }}</p>
-                <p>Experience: {{ u.experience }} years</p>
-                </div>
-              <a href="tel:{{ u.contact_number }}" class="call-btn">📞 Contact</a>
-            </div>
-          </a>
-          {% endfor %}
+<section class="featured-pro-section">
+  <h2>Featured Companies Pro</h2>
+  <p>Discover Pro-level trusted builders and real estate brands</p>
+  <div class="slider-container">
+    <div class="card-grid" id="company-pro-slider">
+      {% for u in featured_companies_pro %}
+      <a href="{% url 'prop:company_profile_with_id' u.id %}" style="text-decoration: none;">
+        <div class="expert-card">
+          <img src="{{ u.profile_image_path.url }}" class="profile-img"/>
+          <div class="card-details">
+            <h3>{{ u.username }}</h3>
+            <p class="location">📍 {{ u.location }}</p>
+            <p>Experience: {{ u.experience }} yrs</p>
+          </div>
+          <a href="tel:{{ u.contact_number }}" class="call-btn">📞 Contact</a>
         </div>
+      </a>
+      {% empty %}
+      <p>There is no user found.</p>
+      {% endfor %}
+    </div>
+     
+    <div class="center-btn">
+      <a href="/all-users?category=company_pro" class="see-all-btn">See All Companies Pro</a>
+    </div>
+  </div>
+</section>
 
-        <!-- BUTTON BELOW -->
-        <div class="center-btn">
-       <a href="/all-users?category=marketer" class="see-all-btn">See All Experts</a>
-        </div>
-      </div>
-    </section>
+<section class="experts-pro-section">
+  <h2>Connect With Our Marketing Experts Pro</h2>
+  <p>Hear from our pro-level marketing experts</p>
 
-    <section class="featured-section">
-      <h2>Featured Companies</h2>
-      <p>Discover Trusted Builders and Real Estate Brands Across India</p>
-      <div class="slider-container">
-        <div class="card-grid" id="company-slider">
-          {% for u in featured_companies %}
-          <a href="{% url 'prop:user_detail' u.id %}" style="text-decoration: none">
-            <div class="expert-card">
-              <img src="{{ u.profile_image_path.url }}"class="profile-img"/>
-                  <div class="card-details">
-                <h3>{{ u.username }}</h3>
-                 <p class="location">📍 {{ u.location }}</p>
-                <p>Experience: {{ u.experience }} yrs</p>
-                </div>
-              <a href="tel:{{ u.contact_number }}" class="call-btn" >📞 Contact</a>
-            </div>
-          </a>
-          {% endfor %}
+  <div class="slider-container">
+    <div class="card-grid" id="expert-pro-slider">
+      {% for u in marketing_experts_pro|slice:":4" %}
+      <a href="{% url 'prop:user_detail' u.id %}" class="card-link" style="text-decoration: none">
+        <div class="expert-card">
+          <img src="{{ u.profile_image_path.url }}" class="profile-img"/>
+          <div class="card-details">
+            <h3>{{ u.username }}</h3>
+            <p class="location">📍 {{ u.location }}</p>
+            <p>Experience: {{ u.experience }} years</p>
+          </div>
+          <a href="tel:{{ u.contact_number }}" class="call-btn">📞 Contact</a>
         </div>
-        <div class="center-btn">
-          <a href="/all-users?category=company" class="see-all-btn">See All Companies</a>
-        </div>
-      </div>
-    </section>
+      </a>
+      {% empty %}
+      <p>There is no user found.</p>
+      {% endfor %}
+    </div>
 
-    <section class="construction-section">
-      <h2>Connect With Construction Professionals</h2>
-      <p>One top-rated professional from each category</p>
+    <div class="center-btn">
+      <a href="/all-users?category=marketer_pro" class="see-all-btn">See All Experts Pro</a>
+    </div>
+  </div>
+</section>
 
-      <div class="slider-container">
-        <div class="card-grid" id="pro-slider">
-          {% for u in professionals %}
-          <a href="{% url 'prop:user_detail' u.id %}" style="text-decoration: none">
-            <div class="expert-card">
-            <img src="{{ u.profile_image_path.url }}" class="profile-img"/>
-            <div class="card-details">
-                <h3>{{ u.username }}</h3>
-               <p class="location">📍 {{ u.location }}</p>
-                <p>Experience: {{ u.experience }} yrs</p>
-                </div>
-              <a href="tel:{{ u.contact_number }}" class="call-btn">📞 Contact</a>
-            </div>
-          </a>
-          {% endfor %}
+<section class="featured-section" >
+  <h2>Featured Companies</h2>
+  <p>Discover Trusted Builders and Real Estate Brands Across India</p>
+  <div class="slider-container">
+    <div class="card-grid" id="company-slider">
+      {% for u in featured_companies %}
+      <a href="{% url 'prop:company_profile_with_id' u.id %}" style="text-decoration: none;">
+        <div class="expert-card">
+          <img src="{{ u.profile_image_path.url }}" class="profile-img"/>
+          <div class="card-details">
+            <h3>{{ u.username }}</h3>
+            <p class="location">📍 {{ u.location }}</p>
+            <p>Experience: {{ u.experience }} yrs</p>
+          </div>
+          <a href="tel:{{ u.contact_number }}" class="call-btn">📞 Contact</a>
         </div>
-        <div class="center-btn">
-         <a href="/all-users?category=professional" class="see-all-btn">See All Professionals</a>
+      </a>
+      {% empty %}
+      <p>There is no user found.</p>
+      {% endfor %}
+    </div>
+    <div class="center-btn">
+      <a href="/all-users?category=company" class="see-all-btn">See All Companies</a>
+    </div>
+  </div>
+</section>
+
+<section class="experts-section">
+  <h2>Connect With Our Marketing Experts</h2>
+  <p>Hear from our satisfied customers about their experiences</p>
+
+  <div class="slider-container">
+    <div class="card-grid" id="expert-slider">
+      {% for u in marketing_experts|slice:":4" %}
+      <a href="{% url 'prop:user_detail' u.id %}" class="card-link" style="text-decoration: none">
+        <div class="expert-card">
+          <img src="{{ u.profile_image_path.url }}" class="profile-img"/>
+          <div class="card-details">
+            <h3>{{ u.username }}</h3>
+            <p class="location">📍 {{ u.location }}</p>
+            <p>Experience: {{ u.experience }} years</p>
+          </div>
+          <a href="tel:{{ u.contact_number }}" class="call-btn">📞 Contact</a>
         </div>
-      </div>
-    </section>
+      </a>
+      {% empty %}
+      <p>There is no user found.</p>
+      {% endfor %}
+    </div>
+
+    <div class="center-btn">
+      <a href="/all-users?category=marketer" class="see-all-btn">See All Experts</a>
+    </div>
+  </div>
+</section>
+
+<section class="construction-section">
+  <h2>Connect With Construction Professionals</h2>
+  <p>One top-rated professional from each category</p>
+
+  <div class="slider-container">
+    <div class="card-grid" id="pro-slider">
+      {% for u in professionals %}
+      <a href="{% url 'prop:user_detail' u.id %}" style="text-decoration: none">
+        <div class="expert-card">
+          <img src="{{ u.profile_image_path.url }}" class="profile-img"/>
+          <div class="card-details">
+            <h3>{{ u.username }}</h3>
+            <p class="location">📍 {{ u.location }}</p>
+            <p>Experience: {{ u.experience }} yrs</p>
+          </div>
+          <a href="tel:{{ u.contact_number }}" class="call-btn">📞 Contact</a>
+        </div>
+      </a>
+      {% empty %}
+      <p>There is no user found.</p>
+      {% endfor %}
+    </div>
+    <div class="center-btn">
+      <a href="/all-users?category=professional" class="see-all-btn">See All Professionals</a>
+    </div>
+  </div>
+</section>
 
     <!-- Section 1 -->
     <div class="sec">
@@ -1403,65 +797,9 @@ section h2, section p {
       </div>
     </div>
 
-    <footer class="footer">
-      <div class="footer-main">
-        <div class="footer-section">
-          <h3>SEARCH</h3>
-          <div class="search-box">
-            <input type="text" placeholder="Search For State" />
-            <button type="button">Search</button>
-          </div>
-        </div>
-
-        <div class="footer-section">
-          <h3>FIND PROPERTY</h3>
-          <p>Select From Thousands Of Options, Without Brokerage.</p>
-          <button>Enquiry Now</button>
-
-          <h3 style="margin-top: 25px">LIST YOUR PROPERTY</h3>
-          <p>For Free. Without Any Brokerage.</p>
-          <button>Post Now</button>
-        </div>
-
-        <div class="footer-section">
-          <h3>CONTACT US</h3>
-          <p>Toll Free - 1800 41 99099</p>
-          <p>9:30 AM To 6:30 PM (Mon-Sun)</p>
-          <p>
-            Email -
-            <a href="mailto:feedback@propertysr.com">feedback@propertysr.com</a>
-          </p>
-
-          <h3 style="margin-top: 20px">FOLLOW US</h3>
-          <div class="social-icons">
-            <a href="#"><i class="fab fa-facebook-f"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-          </div>
-        </div>
-
-        <div class="footer-section">
-          <h3>COMPANY</h3>
-          <ul>
-            <li><a href="#">Careers</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">For Partners</a></li>
-            <li><a href="#">Terms</a></li>
-            <li><a href="#">Annual Return</a></li>
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Contact Us</a></li>
-            <li><a href="#">Unsubscribe</a></li>
-            <li><a href="#">Merger Hearing Advertisement</a></li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="footer-bottom">
-        <p>©<span>WEEKDAYS PROPERTIES</span>, All Rights Reserved.</p>
-        <p>Designed By <span>© 2023 YGR Gobal IT Services Pvt. Ltd.</span></p>
-      </div>
-    </footer>
-
+    <br><br><br><br>
+   
+    {% include 'footer.html' %}
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         const select = document.querySelector(".search-box select");
@@ -1504,6 +842,5 @@ section h2, section p {
       checkWidth();
     </script>
 
-    <br><br><br><br>
   </body>
 </html>

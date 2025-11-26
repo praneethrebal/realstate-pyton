@@ -17,6 +17,7 @@
             display: flex;
             justify-content: center;
             padding-top: 40px;
+            margin-top: 70px;
         }
 
         .form-card {
@@ -107,6 +108,9 @@
 </head>
 <body>
 
+
+ {% include 'NavBar.html' %}
+
 <div class="container">
     <div class="form-card">
         
@@ -195,7 +199,7 @@
     <h2>Upload Files</h2>
 
     <label>Upload Images (max 10):</label>
-    <input type="file" name="imgae" id="imageInput" multiple accept="image/*">
+    <input type="file" name="image" id="imageInput" multiple accept="image/*">
     <div id="imagePreview" class="preview-box"></div>
 
     <label>Upload Videos:</label>
@@ -219,6 +223,8 @@
     </div>
 </div>
 
+ {% include 'footer.html' %}
+
 <script>
     function goToStep(step) {
         document.querySelectorAll(".step").forEach(s => s.classList.remove("active"));
@@ -229,4 +235,3 @@
 
 </body>
 </html>
-<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d122527.51455784161!2d80.35211576273007!3d16.32371936903701!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a4a755cb1787785%3A0x9f7999dd90f1e694!2sGuntur%2C%20Andhra%20Pradesh!5e0!3m2!1sen!2sin!4v1763634830976!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>

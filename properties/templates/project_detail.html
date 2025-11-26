@@ -1,0 +1,426 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ project.project_name }}</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            margin: 0;
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+            padding: 25px 0;
+            margin-top: 90px;
+        }
+
+        /* ================= IMAGE ================= */
+        .slider {
+            width: 100%;
+            max-height: 350px;
+            overflow: hidden;
+            border-radius: 12px;
+            background: #ddd;
+            position: relative;
+        }
+
+        .slider img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        /* ================= CONTACT BUTTON ================= */
+        .contact-btn {
+            float: right;
+            padding: 12px 20px;
+            background: #545bc7;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* ================= DETAILS CARD ================= */
+        .details-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .details-card h2 {
+            margin-top: 50px;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .item-box {
+            background: #fafafa;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0px 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .item-box strong {
+            display: block;
+            font-size: 15px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .item-box span {
+            font-size: 16px;
+            color: #222;
+        }
+
+        .section-title {
+            margin-top: 18px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* ================= VIDEO ================= */
+        video {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 14px;
+        }
+
+        /* ================= DOWNLOAD BUTTON ================= */
+        .download-btn {
+            padding: 10px 15px;
+            background: royalblue;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+  /* ---------- FOOTER ---------- */
+.footer {
+    font-family: 'Poppins', sans-serif;
+    background: #fff;
+    color: #333;
+}
+
+.footer-main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: auto;
+    padding: 50px 20px;
+    gap: 40px;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 230px;
+}
+
+.footer-section h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.footer-section p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.footer-section a {
+    color: #333;
+    text-decoration: none;
+}
+
+.footer-section a:hover {
+    text-decoration: underline;
+}
+
+.footer-section button {
+    background: #888;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 18px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.footer-section button:hover {
+    background: #555;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-box input {
+    width: 200px;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+    border-color: #0056d2;
+    box-shadow: 0 0 4px rgba(0, 86, 210, 0.3);
+}
+
+.search-box button {
+    background-color: #666;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.search-box button:hover {
+    background-color: #0056d2;
+}
+
+.social-icons a {
+    font-size: 18px;
+    color: #444;
+    margin-right: 12px;
+    transition: color 0.3s;
+}
+
+.social-icons a:hover {
+    color: #0a66c2;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 6px;
+}
+
+.footer-section ul li a {
+    font-size: 14px;
+}
+
+.footer-bottom {
+    background: #0056d2;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 15px 40px;
+    font-size: 14px;
+}
+
+.footer-bottom span {
+    font-weight: 600;
+}
+
+        /* =================== RESPONSIVE =================== */
+        @media (max-width: 992px) {
+            .details-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* =========== MOBILE =========== */
+        @media (max-width: 600px) {
+
+            .slider {
+                max-height: none;
+            }
+
+            .contact-btn {
+                display: block;
+                width: 100%;
+                float: none;
+                text-align: center;
+                margin: 10px 0;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .details-card h2 {
+                margin-top: 20px;
+                font-size: 22px;
+            }
+
+            .item-box {
+                padding: 14px;
+            }
+
+            /* FORCE HIDE FOOTER ON MOBILE */
+            .footer {
+                display: none !important;
+                visibility: hidden !important;
+                height: 0 !important;
+                overflow: hidden !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+{% include 'NavBar.html' %}
+
+<div class="container">
+
+    <!-- ============ IMAGE ============ -->
+    <div class="slider">
+        {% if project.image %}
+            <img src="{{ project.image.url }}" alt="Project Image">
+        {% else %}
+            <span>No Image Available</span>
+        {% endif %}
+    </div>
+
+    <!-- ============ DETAILS CARD ============ -->
+    <div class="details-card">
+
+        <!-- CONTACT BUTTON -->
+        <a class="contact-btn" id="contactBtn">Contact</a>
+
+        <h2>{{ project.project_name }}</h2>
+
+        <div class="details-grid">
+            <div class="item-box"><strong>No. of Units</strong><span>{{ project.number_of_units }}</span></div>
+            <div class="item-box"><strong>Available Sizes</strong><span>{{ project.available_sizes }}</span></div>
+            <div class="item-box"><strong>Project Area</strong><span>{{ project.total_project_area }}</span></div>
+            <div class="item-box"><strong>Price</strong><span>{{ project.pricing }}</span></div>
+            <div class="item-box"><strong>Available Units</strong><span>{{ project.available_units }}</span></div>
+            <div class="item-box"><strong>RERA</strong><span>{% if project.rera_approved %}Yes{% else %}No{% endif %}</span></div>
+            <div class="item-box"><strong>Facing</strong><span>{{ project.available_facing }}</span></div>
+            <div class="item-box"><strong>Location</strong><span>{{ project.project_location }}</span></div>
+        </div>
+
+        <!-- HIGHLIGHTS -->
+        <h3 class="section-title">Highlights</h3>
+        <p>{{ project.highlights }}</p>
+
+        <!-- AMENITIES -->
+        <h3 class="section-title">Amenities</h3>
+        <p>{{ project.select_amenities }}</p>
+
+        <!-- BROCHURE -->
+        {% if project.document %}
+        <h3 class="section-title">Brochure</h3>
+        <a class="download-btn" href="{{ project.document.url }}" download>Download Brochure</a>
+        {% endif %}
+
+        <!-- VIDEOS -->
+        <h3 class="section-title">Project Videos</h3>
+        {% if project.video %}
+            <video controls>
+                <source src="{{ project.video.url }}">
+            </video>
+        {% else %}
+            <p>No Videos Available</p>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    const phoneNumber = "{{ project.contact_info }}";
+
+    const contactBtn = document.getElementById('contactBtn');
+
+    function isMobile() {
+        return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    }
+
+    contactBtn.addEventListener('click', function() {
+        if (phoneNumber) {
+            if (isMobile()) {
+                window.location.href = `tel:${phoneNumber}`;
+            } else {
+                window.open(`https://wa.me/${phoneNumber}`, '_blank');
+            }
+        } else {
+            alert("Contact number not available");
+        }
+    });
+</script>
+
+<br><br><br>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-main">
+      <div class="footer-section">
+          <h3>SEARCH</h3>
+          <input type="text" placeholder="Search For State">
+          <button type="button">Search</button>
+      </div>
+
+      <div class="footer-section">
+          <h3>FIND PROPERTY</h3>
+          <p>Select From Thousands Of Options, Without Brokerage.</p>
+          <button>Enquiry Now</button>
+          <h3 style="margin-top:25px;">LIST YOUR PROPERTY</h3>
+          <p>For Free. Without Any Brokerage.</p>
+          <button>Post Now</button>
+      </div>
+
+      <div class="footer-section">
+          <h3>CONTACT US</h3>
+          <p>Toll Free - 1800 41 99099</p>
+          <p>Email - feedback@propertysr.com</p>
+      </div>
+
+      <div class="footer-section">
+          <h3>COMPANY</h3>
+          <ul>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Terms</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+          </ul>
+      </div>
+  </div>
+
+  <div class="footer-bottom">
+      <p>©<span>WEEKDAYS PROPERTIES</span>, All Rights Reserved.</p>
+      <p>Designed By <span> YGR GOBAL IT SERVICES Pvt. Ltd,2023.</span></p>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,175 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Projects</title>
+
+    <style>
+        body {
+            background: #f5f6fa;
+            margin: 0;
+            font-family: "Poppins", sans-serif;
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+            padding-top: 40px;
+            margin-top: 100px;
+            display: flex;
+            gap: 25px;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 25px;
+            width: 100%;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            width: 100%;
+        }
+
+        .project-card {
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+            transition: 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .project-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #ddd;
+        }
+
+        .card-details {
+            padding: 15px;
+        }
+
+        .card-details h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: #222;
+        }
+
+        .card-details p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .call-btn {
+            display: block;
+            background: #5252c7;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            margin-top: 12px;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .call-btn:hover {
+            background: #3f3f9d;
+        }
+
+        .filter-box {
+            width: 330px;
+            padding: 25px;
+            border-radius: 12px;
+            background: #ffffff;
+            box-shadow: 0px 4px 15px rgba(0,0,0,0.08);
+            border: 1px solid #e3e6ec;
+            height: fit-content;
+        }
+
+        @media (max-width: 1024px) {
+            .project-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .project-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+{% include 'NavBar.html' %}
+
+<div class="container">
+
+    <!-- FILTER BOX -->
+    <form method="GET" class="filter-box">
+        <input type="hidden" name="category" value="{{ category }}">
+
+        <h3>🔎 Filter Projects</h3>
+
+        <label>Project Name</label>
+        <input type="text" name="name" placeholder="Search by name" value="{{ name }}">
+
+        <label>Location</label>
+        <input type="text" name="location" placeholder="Search by location" value="{{ location }}">
+
+        <div style="display:flex; justify-content: space-between; margin-top: 15px;">
+            <button type="submit" class="call-btn" style="width:48%; background:#2e8b35;">Apply</button>
+            <a href="?category={{ category }}" class="call-btn" style="width:48%; background:#233b8e;">Reset</a>
+        </div>
+    </form>
+
+    <div style="width:100%;">
+        <h2>
+            {% if category == "pro" %}
+                Company Pro Projects
+            {% elif category == "normal" %}
+                Company Normal Projects
+            {% else %}
+                All Projects
+            {% endif %}
+        </h2>
+
+        <div class="project-grid">
+            {% for p in projects %}
+            <div class="project-card">
+                <a href="{% url 'prop:project_detail' p.id %}">
+                    {% if p.image %}
+                        <img src="{{ p.image.url }}" alt="{{ p.project_name }}">
+                    {% else %}
+                        <img src="{% static 'default.jpg' %}" alt="No Image">
+                    {% endif %}
+                </a>
+
+                <div class="card-details">
+                    <h3>{{ p.project_name }}</h3>
+                    <p>📍 {{ p.project_location }}</p>
+                    <p><strong>Price:</strong> ₹{{ p.pricing }}</p>
+
+                    <a class="call-btn" href="{% url 'prop:project_detail' p.id %}">View Details</a>
+                </div>
+            </div>
+            {% empty %}
+            <p style="text-align:center; width:100%;">No projects found.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+{% include 'footer.html' %}
+
+</body>
+</html>

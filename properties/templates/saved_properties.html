@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Saved Properties</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Poppins", sans-serif;
+            background: #eef2f7;
+        }
+
+        /* FIX: top spacing for mobile navbar */
+        .main-layout {
+            width: 92%;
+            margin: 140px auto 40px auto;
+        }
+
+        .right-list {
+            width: 100%;
+        }
+
+        /* CARD */
+        .card-container {
+            display: flex;
+            gap: 22px;
+            padding: 22px;
+            border: 1px solid #e3e3e3;
+            margin-bottom: 28px;
+            border-radius: 16px;
+            background: #ffffff;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.10);
+            transition: 0.25s ease;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .card-container:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .left img {
+            width: 330px;
+            height: 210px;
+            object-fit: cover;
+            border-radius: 14px;
+            border: 1px solid #ddd;
+        }
+
+        .right h4 {
+            font-size: 15px;
+            color: #888;
+            margin-bottom: 4px;
+        }
+
+        .right h2 {
+            margin-top: 0;
+            font-size: 24px;
+            color: #333;
+            font-weight: 700;
+        }
+
+        .right p {
+            margin: 7px 0;
+            font-size: 16px;
+            color: #444;
+        }
+
+        .action-buttons {
+            margin-top: 14px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap; /* Fix for mobile */
+        }
+
+        .action-btn {
+            background: #eee;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .save-btn {
+            background: #ffdddd;
+        }
+
+            /* ---------- FOOTER ---------- */
+.footer {
+    font-family: 'Poppins', sans-serif;
+    background: #fff;
+    color: #333;
+}
+
+.footer-main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: auto;
+    padding: 50px 20px;
+    gap: 40px;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 230px;
+}
+
+.footer-section h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.footer-section p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.footer-section a {
+    color: #333;
+    text-decoration: none;
+}
+
+.footer-section a:hover {
+    text-decoration: underline;
+}
+
+.footer-section button {
+    background: #888;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 18px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.footer-section button:hover {
+    background: #555;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-box input {
+    width: 200px;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+    border-color: #0056d2;
+    box-shadow: 0 0 4px rgba(0, 86, 210, 0.3);
+}
+
+.search-box button {
+    background-color: #666;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.search-box button:hover {
+    background-color: #0056d2;
+}
+
+.social-icons a {
+    font-size: 18px;
+    color: #444;
+    margin-right: 12px;
+    transition: color 0.3s;
+}
+
+.social-icons a:hover {
+    color: #0a66c2;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 6px;
+}
+
+.footer-section ul li a {
+    font-size: 14px;
+}
+
+.footer-bottom {
+    background: #0056d2;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 15px 40px;
+    font-size: 14px;
+}
+
+.footer-bottom span {
+    font-weight: 600;
+}
+
+        /* ---------------------------------------
+           📱 MOBILE FIX — Perfect responsive layout
+           --------------------------------------- */
+        @media (max-width: 768px) {
+
+            .main-layout {
+                margin-top: 110px; /* navbar spacing fix */
+            }
+
+            .card-container {
+                flex-direction: column;
+                padding: 16px;
+                gap: 14px;
+            }
+
+            .left img {
+                width: 100%;
+                height: 200px;
+            }
+
+            .right h2 {
+                font-size: 20px;
+            }
+
+            .right p {
+                font-size: 14px;
+            }
+
+            .action-btn {
+                width: 100%; /* full width buttons */
+                text-align: center;
+            }
+        }
+
+        /* EXTRA SMALL SCREENS (iPhone SE, 360px) */
+        @media (max-width: 480px) {
+            .main-layout {
+                width: 95%;
+                margin-top: 100px;
+            }
+
+            .right h2 {
+                font-size: 18px;
+            }
+
+            .right p {
+                font-size: 13px;
+            }
+
+            .footer {
+           display: none !important;
+         }
+        }
+
+ 
+  
+    </style>
+</head>
+
+<body>
+
+{% include "NavBar.html" %}
+
+<div class="main-layout">
+
+    <h2 style="text-align:center;">Saved Properties</h2>
+    <br>
+
+    <div class="right-list">
+
+        {% if saved_list %}
+            {% for saved in saved_list %}
+            <div class="card-container">
+
+                <!-- LEFT IMAGE -->
+                <div class="left">
+                    {% if saved.property.image %}
+                        <img src="{{ saved.property.image.url }}">
+                    {% else %}
+                        <img src="/static/no-image.png">
+                    {% endif %}
+                </div>
+
+                <!-- RIGHT DETAILS -->
+                <div class="right">
+                    <h4>OWNER</h4>
+                    <h2>{{ saved.property.user }}</h2>
+
+                    <p>📍 {{ saved.property.location }}</p>
+                    <p>🙍 {{ saved.property.selectProperty }}</p>
+                    <p>💰 ₹{{ saved.property.price }}</p>
+                    <p>🔥 {{ saved.property.description }}</p>
+
+                    <div class="action-buttons">
+                        <button class="action-btn">📞</button>
+                        <button class="action-btn">🔗</button>
+
+                        <!-- REMOVE BUTTON -->
+                        <button class="action-btn save-btn"
+                                onclick="removeSave({{ saved.property.id }}, this)">
+                            ❌ Remove
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+            {% endfor %}
+        {% else %}
+            <p style="text-align:center; font-size:18px; margin-top:30px;">
+                No saved properties.
+            </p>
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+
+
+
+<script>
+function removeSave(id, btn) {
+    fetch(`/save/${id}/`)
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === "removed") {
+            btn.closest(".card-container").remove();
+        }
+    });
+}
+</script>
+<br><br><br>
+
+ <footer class="footer">
+  <div class="footer-main">
+      <div class="footer-section">
+          <h3>SEARCH</h3>
+          <div class="search-box">
+              <input type="text" placeholder="Search For State">
+              <button type="button">Search</button>
+          </div>
+      </div>
+
+      <div class="footer-section">
+          <h3>FIND PROPERTY</h3>
+          <p>Select From Thousands Of Options, Without Brokerage.</p>
+          <button>Enquiry Now</button>
+
+          <h3 style="margin-top:25px;">LIST YOUR PROPERTY</h3>
+          <p>For Free. Without Any Brokerage.</p>
+          <button>Post Now</button>
+      </div>
+
+      <div class="footer-section">
+          <h3>CONTACT US</h3>
+          <p>Toll Free - 1800 41 99099</p>
+          <p>9:30 AM To 6:30 PM (Mon-Sun)</p>
+          <p>Email - <a href="mailto:feedback@propertysr.com">feedback@propertysr.com</a></p>
+
+          <h3 style="margin-top:20px;">FOLLOW US</h3>
+          <div class="social-icons">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+      </div>
+
+      <div class="footer-section">
+          <h3>COMPANY</h3>
+          <ul>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">For Partners</a></li>
+              <li><a href="#">Terms</a></li>
+              <li><a href="#">Annual Return</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Contact Us</a></li>
+              <li><a href="#">Unsubscribe</a></li>
+              <li><a href="#">Merger Hearing Advertisement</a></li>
+          </ul>
+      </div>
+  </div>
+
+  <div class="footer-bottom">
+       <p>©<span>WEEKDAYS PROPERTIES</span>, All Rights Reserved.</p>
+      <p>Designed By <span> YGR GOBAL IT SERVICES Pvt. Ltd,2023.</span></p>
+  </div>
+</footer>
+
+
+</body>
+</html>

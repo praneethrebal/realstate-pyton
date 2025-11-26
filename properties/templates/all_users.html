@@ -6,182 +6,76 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Users</title>
-
-    <!-- External CSS -->
-    <link rel="stylesheet" href="{% static '/css/all_users.css' %}" />
-
     <style>
-
-           body {
-            background: #f5f6fa;
-            font-family: "Poppins", sans-serif;
-            margin: 0;
+        body { background: #f5f6fa; font-family: "Poppins", sans-serif; margin: 0; }
+        .container1 { width: 100%; margin: auto; padding: 20px; margin-top: 100px; gap: 50px; }
+        .section { display: none; }
+        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .card { background: #ffffff; border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: 0.3s; text-align: center; width: 100%; }
+        .card:hover { transform: translateY(-5px); }
+        .card a { text-decoration: none; color: #222; }
+        .profile-img, .pro-img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; display: block; margin: 0 auto 15px auto; }
+        .card-details { text-align: left; margin-top: 10px; font-size: 16px; }
+        .btn { display: block; width: 90%; margin: 15px auto 0 auto; padding: 12px; text-align: center; background: rgb(84, 84, 151); color: white; font-size: 16px; border-radius: 10px; text-decoration: none; transition: 0.3s; }
+        .btn:hover { background: #5a5a9d; }
+        h2 { text-align: center; margin: 20px 0; }
+        h3 { font-size: 18px; margin: 5px 0; }
+        .location { font-size: 14px; color: #555; }
+        .filter-box { width: 330px; padding: 25px; border-radius: 12px; background: #ffffff; box-shadow: 0px 4px 15px rgba(0,0,0,0.08); border: 1px solid #e3e6ec; margin-left: 0; }
+        .filter-box h3 { margin-bottom: 18px; font-size: 20px; font-weight: 600; color: #3a3d45; }
+        .filter-box label { font-size: 14px; font-weight: 500; color: #4a4a4a; }
+        .filter-box input { width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid #d1d5db; margin-top: 5px; font-size: 14px; outline: none; }
+        .apply-btn { background: #2e8b35; border: none; color: white; font-size: 15px; border-radius: 8px; cursor: pointer; padding: 10px; width: 48%; }
+        .reset-btn { background: #233b8e; color: white; text-align: center; font-size: 15px; border-radius: 8px; text-decoration: none; padding: 10px; width: 48%; display: inline-block; text-align: center; }
+        .main-layout { display: flex; width: 95%; margin: 20px auto; gap: 25px; }
+        @media (max-width: 1024px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 768px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { 
+            .grid { grid-template-columns: 1fr !important; gap: 20px; width: 100% !important; }
+            .card { width: 95% !important; margin: 0 auto !important; padding: 18px !important; }
+            .profile-img, .pro-img { width: 130px !important; height: 130px !important; margin: 0 auto 14px !important; }
+            .card-details { text-align: center !important; font-size: 15px !important; }
+            .btn { width: 95% !important; padding: 14px !important; font-size: 16px !important; }
+            h2 { font-size: 22px !important; }
+            h3 { font-size: 18px !important; }
         }
-
-        /* ===== Container ===== */
-        .container1 {
-            width: 90%;
-            margin: auto;
-            padding: 20px;
-        }
-
-        /* Hide sections initially */
-        .section {
-            display: none;
-        }
-
-        /* Default Grid (4 columns desktop) */
-        .grid,
-        .scroll-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-        }
-
-        /* ===== Card Style ===== */
-        .card {
-            background: #ffffff;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            transition: 0.3s;
-            text-align: center;
-        }
-
-        /* Remove link underline */
-        .card a {
-            text-decoration: none;
-            color: #222;
-        }
-
-        /* Circle Image */
-        .profile-img,
-        .pro-img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            display: block;
-            margin: 0 auto 15px auto;
-        }
-
-        /* Card details */
-        .card-details {
-            text-align: left;
-            margin-top: 10px;
-            font-size: 18px;
-        }
-
-        /* Contact Button */
-        .btn {
-            display: block;
-            width: 90%;
-            margin: 15px auto 0 auto;
-            padding: 12px;
-            text-align: center;
-            background: rgb(84, 84, 151);
-            color: white;
-            font-size: 16px;
-            border-radius: 10px;
-            text-decoration: none;
-            transition: 0.3s;
-        }
-
-        .btn:hover {
-            background: #5a5a9d;
-        }
-
-        h2 {
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        h3 {
-            font-size: 20px;
-        }
-
-        /* ======= RESPONSIVE BREAKPOINTS ======= */
-        @media (max-width: 1024px) {
-            .grid,
-            .scroll-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .grid,
-            .scroll-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        /* ======= MOBILE FIX — ONE CARD PER ROW ======= */
-        @media (max-width: 600px) {
-
-            .grid,
-            .scroll-grid {
-                grid-template-columns: 1fr !important;
-                gap: 20px;
-                width: 100% !important;
-            }
-
-            .card {
-                width: 95% !important;
-                margin: 0 auto !important;
-                padding: 18px !important;
-                text-align: center !important;
-            }
-
-            .profile-img,
-            .pro-img {
-                width: 130px !important;
-                height: 130px !important;
-                margin: 0 auto 14px !important;
-            }
-
-            .card-details {
-                text-align: center !important;
-                margin-top: 10px;
-                font-size: 17px !important;
-            }
-
-            h3 {
-                font-size: 20px !important;
-            }
-
-            .btn {
-                width: 95% !important;
-                padding: 14px !important;
-                font-size: 17px !important;
-                border-radius: 10px;
-            }
-
-            h2 {
-                font-size: 24px !important;
-                text-align: center;
-            }
-        }
-    </style> 
+    </style>
 </head>
 
 <body>
+{% include 'NavBar.html' %}
 
-    {% include 'NavBar.html' %}
+         
 
-    <br><br><br><br>
+<div class="container1">
 
-    <div class="container1">
+    <div class="main-layout">
+        <!-- FILTER -->
+        <form method="GET" class="filter-box">
+            <input type="hidden" name="category" value="{{ category }}">
+            <h3>🔎 Filter Users</h3>
+            <label>Name</label>
+            <input type="text" name="name" placeholder="Search by name" value="{{ filters.name }}">
+            <label>Category</label>
+            <input type="text" name="user_category" placeholder="Category" value="{{ filters.user_category }}">
+            <label>Experience</label>
+            <input type="text" name="experience" placeholder="Experience" value="{{ filters.experience }}">
+            <div style="display:flex; justify-content: space-between;">
+                <button type="submit" class="apply-btn">Apply</button>
+                <a href="?category={{ category }}" class="reset-btn">Reset</a>
+            </div>
+        </form>
 
-        <!-- ========== COMPANY SECTION ========== -->
-        <div class="section" {% if category == 'company' %}style="display:block"{% endif %}>
-            <h2>All Companies</h2>
+        <!-- USER LIST -->
+        <div class="profile-container" style="width: 70%;">
 
+            {% if category == 'company' and company_normal %}
+                <h2>All Companies</h2>
             <div class="grid">
-                {% for u in users %}
+                {% for u in company_normal %}
                 <div class="card">
-                    <a href="{% url 'user_detail' u.id %}">
-                        <img src="{{ u.company_logo_path.url }}" class="profile-img">
-
+                    <a href="{% url 'prop:company_profile_with_id' u.id %}">
+                        <img src="{{ u.profile_image_path.url }}" class="profile-img" alt="{{ u.username }}">
                         <div class="card-details">
                             <h3>{{ u.username }}</h3>
                             <p class="location">📍 {{ u.location }}</p>
@@ -189,23 +83,39 @@
                             <p><strong>Deals:</strong> {{ u.deals }}</p>
                         </div>
                     </a>
-
                     <a class="btn" href="tel:{{ u.contact_number }}">📞 Contact</a>
                 </div>
                 {% endfor %}
             </div>
-        </div>
+            {% endif %}
 
-        <!-- ========== MARKETERS SECTION ========== -->
-        <div class="section" {% if category == 'marketer' %}style="display:block"{% endif %}>
-            <h2>All Marketing Experts</h2>
-
+            {% if category == 'company_pro' and company_pro %}
+            <h2>All Companies Pro</h2>
             <div class="grid">
-                {% for u in users %}
+                {% for u in company_pro %}
                 <div class="card">
-                    <a href="{% url 'user_detail' u.id %}">
-                        <img src="{{ u.profile_image_path.url }}" class="profile-img">
+                    <a href="{% url 'prop:company_profile_with_id' u.id %}">
+                        <img src="{{ u.profile_image_path.url }}" class="profile-img" alt="{{ u.username }}">
+                        <div class="card-details">
+                            <h3>{{ u.username }}</h3>
+                            <p class="location">📍 {{ u.location }}</p>
+                            <p>Experience: {{ u.experience }} yrs</p>
+                            <p><strong>Deals:</strong> {{ u.deals }}</p>
+                        </div>
+                    </a>
+                    <a class="btn" href="tel:{{ u.contact_number }}">📞 Contact</a>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
 
+            {% if category == 'marketer' and marketer_export %}
+            <h2>All Marketing Experts</h2>
+            <div class="grid">
+                {% for u in marketer_export %}
+                <div class="card">
+                    <a href="{% url 'prop:user_detail' u.id %}">
+                        <img src="{{ u.profile_image_path.url }}" class="profile-img" alt="{{ u.username }}">
                         <div class="card-details">
                             <h3>{{ u.username }}</h3>
                             <p class="location">📍 {{ u.location }}</p>
@@ -213,23 +123,39 @@
                             <p>Deals: {{ u.deals }}</p>
                         </div>
                     </a>
-
                     <a class="btn" href="tel:{{ u.contact_number }}">📞 Contact</a>
                 </div>
                 {% endfor %}
             </div>
-        </div>
+            {% endif %}
 
-        <!-- ========== PROFESSIONALS SECTION ========== -->
-        <div class="section" {% if category == 'professional' %}style="display:block"{% endif %}>
-            <h2>All Construction Professionals</h2>
-
+            {% if category == 'marketer_pro' and marketer_export_pro %}
+            <h2>All Marketing Experts Pro</h2>
             <div class="grid">
-                {% for u in users %}
+                {% for u in marketer_export_pro %}
                 <div class="card">
-                    <a href="{% url 'user_detail' u.id %}">
-                        <img src="{{ u.profile_image_path.url }}" class="pro-img">
+                    <a href="{% url 'prop:user_detail' u.id %}">
+                        <img src="{{ u.profile_image_path.url }}" class="profile-img" alt="{{ u.username }}">
+                        <div class="card-details">
+                            <h3>{{ u.username }}</h3>
+                            <p class="location">📍 {{ u.location }}</p>
+                            <p>Experience: {{ u.experience }} yrs</p>
+                            <p>Deals: {{ u.deals }}</p>
+                        </div>
+                    </a>
+                    <a class="btn" href="tel:{{ u.contact_number }}">📞 Contact</a>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
 
+            {% if category == 'professional' and professional_users %}
+            <h2>All Construction Professionals</h2>
+            <div class="grid">
+                {% for u in professional_users %}
+                <div class="card">
+                    <a href="{% url 'prop:user_detail' u.id %}">
+                        <img src="{{ u.profile_image_path.url }}" class="pro-img" alt="{{ u.username }}">
                         <div class="card-details">
                             <h3>{{ u.username }}</h3>
                             <p class="location">📍 {{ u.location }}</p>
@@ -237,15 +163,15 @@
                             <p>Experience: {{ u.experience }} yrs</p>
                         </div>
                     </a>
-
                     <a class="btn" href="tel:{{ u.contact_number }}">📞 Contact</a>
                 </div>
                 {% endfor %}
             </div>
-        </div>
+            {% endif %}
 
+        </div>
     </div>
+</div>
 
 </body>
-
 </html>

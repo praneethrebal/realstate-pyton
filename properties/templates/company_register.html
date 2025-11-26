@@ -3,6 +3,8 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Company Register</title>
 
     <style>
@@ -14,7 +16,7 @@
 
       /* MAIN CARD */
       .container {
-        max-width: 500px;
+        max-width: 400px;
         margin: 40px auto;
         background: #fff;
         padding: 25px 30px;
@@ -30,7 +32,7 @@
         margin-bottom: 15px;
       }
 
-      /* Wallpaper (same style as logo) */
+      /* Wallpaper */
       .wallpaper-center {
         text-align: center;
         margin-bottom: 15px;
@@ -74,6 +76,7 @@
         background-position: center;
         display: inline-block;
         cursor: pointer;
+        margin-bottom: 10px;
       }
       .upload-btn-logo {
         display: inline-block;
@@ -134,9 +137,13 @@
         outline: 3px solid #000;
       }
 
-      /* Terms */
-      .check-box {
-        margin: 15px 0;
+      /* Amount Box */
+      .amount-box {
+        background: #f3f4f6;
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 18px;
+        font-weight: 600;
       }
 
       /* Submit */
@@ -150,15 +157,6 @@
         font-size: 17px;
         font-weight: 600;
         cursor: pointer;
-      }
-
-      /* Amount Box */
-      .amount-box {
-        background: #f3f4f6;
-        padding: 12px;
-        border-radius: 10px;
-        margin-bottom: 18px;
-        font-weight: 600;
       }
 
       .error-text {
@@ -189,7 +187,7 @@
         </div>
         {% endif %}
 
-        <!-- Wallpaper (NOW MATCHES LOGO STYLE) -->
+        <!-- Wallpaper -->
         <div class="wallpaper-center">
           <div
             class="wallpaper-preview"
@@ -198,11 +196,13 @@
               background-image: url('https://cdn-icons-png.flaticon.com/512/847/847969.png');
             "
           ></div>
+
           <label class="upload-btn-wall" for="id_wallpaper"
             >Upload Wallpaper</label
           >
-          <input type="file" name="wallpaper" accept="image/*" id="id_wallpaper" required>
+          {{ form.wallpaper }}
         </div>
+        <div class="error-text">{{ form.wallpaper.errors }}</div>
 
         <!-- Logo -->
         <div class="logo-center">
@@ -216,65 +216,55 @@
             "
           ></div>
 
-          <input type="file" name="logo" accept="image/*" id="id_logo" required>
+          {{ form.logo }}
         </div>
+        <div class="error-text">{{ form.logo.errors }}</div>
 
-        <!-- Username -->
+        <!-- Fields -->
         <label>Username</label>
         {{ form.username }}
         <div class="error-text">{{ form.username.errors }}</div>
 
-        <!-- Email -->
         <label>Email</label>
         {{ form.email }}
         <div class="error-text">{{ form.email.errors }}</div>
 
-        <!-- Password -->
         <label>Password</label>
         {{ form.password1 }}
         <div class="error-text">{{ form.password1.errors }}</div>
 
-        <!-- Confirm Password -->
         <label>Confirm Password</label>
         {{ form.password2 }}
         <div class="error-text">{{ form.password2.errors }}</div>
 
-        <!-- Company Name -->
         <label>Company Name</label>
         {{ form.company_name }}
         <div class="error-text">{{ form.company_name.errors }}</div>
 
-        <!-- Description -->
         <label>Description</label>
         {{ form.description }}
         <div class="error-text">{{ form.description.errors }}</div>
 
-        <!-- Experience -->
-        <label>Experience (Years)</label>
+        <label>Experience</label>
         {{ form.experience }}
         <div class="error-text">{{ form.experience.errors }}</div>
 
-        <!-- Total Projects -->
         <label>Total Projects</label>
         {{ form.total_projects }}
         <div class="error-text">{{ form.total_projects.errors }}</div>
 
-        <!-- Ongoing Projects -->
         <label>Ongoing Projects</label>
         {{ form.ongoing_projects }}
         <div class="error-text">{{ form.ongoing_projects.errors }}</div>
 
-        <!-- Completed Projects -->
         <label>Completed Projects</label>
         {{ form.completed_projects }}
         <div class="error-text">{{ form.completed_projects.errors }}</div>
 
-        <!-- Address -->
-        <label>Company Address</label>
+        <label>Address</label>
         {{ form.address }}
         <div class="error-text">{{ form.address.errors }}</div>
 
-        <!-- Contact Number -->
         <label>Contact Number</label>
         {{ form.contact_number }}
         <div class="error-text">{{ form.contact_number.errors }}</div>
@@ -304,9 +294,8 @@
           <option value="3">3 Months</option>
           <option value="6">6 Months</option>
         </select>
-        <div class="error-text">{{ form.duration.errors }}</div>
 
-        <!-- Amount Box -->
+        <!-- Amount -->
         <div class="amount-box">
           Total Amount: ₹ <span id="finalAmount">0</span>
         </div>
@@ -323,7 +312,6 @@
     <script>
       let selectedPlanAmount = 0;
 
-      /* Wallpaper Preview (same as logo now) */
       document
         .getElementById("id_wallpaper")
         .addEventListener("change", (e) => {
@@ -334,7 +322,6 @@
           )})`;
         });
 
-      /* Logo Preview */
       document.getElementById("id_logo").addEventListener("change", (e) => {
         document.getElementById(
           "logoPrev"
@@ -343,7 +330,6 @@
         )})`;
       });
 
-      /* Select Plan */
       function selectPlan(amount, elem) {
         selectedPlanAmount = amount;
         document.getElementById("id_plan").value = amount;
@@ -357,23 +343,10 @@
         updateAmount();
       }
 
-      /* Update Total Amount */
       function updateAmount() {
         let months = document.getElementById("durationSelect").value;
-        let total = selectedPlanAmount * months;
-        document.getElementById("finalAmount").innerText = total;
-      }
-    </script>
-  </body>
-</html>
-        updateAmount();
-      }
-
-      /* Update Total Amount */
-      function updateAmount() {
-        let months = document.getElementById("durationSelect").value;
-        let total = selectedPlanAmount * months;
-        document.getElementById("finalAmount").innerText = total;
+        document.getElementById("finalAmount").innerText =
+          selectedPlanAmount * months;
       }
     </script>
   </body>

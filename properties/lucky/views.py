@@ -67,7 +67,7 @@ def create_property(request):
             # The model's save() method will automatically generate the luck_id.
             form.save()
             print("sucess")
-            return redirect('property_list')  # redirect to all properties page
+            return redirect('lucky:property_list')  # redirect to all properties page
         else:
             # If the form is not valid, print errors to the console for debugging
             print(form.errors)

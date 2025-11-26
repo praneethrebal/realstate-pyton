@@ -1,14 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import FutureRequirementForm, ReelsForm, UserRegisterForm,CompanyRegisterForm,FranchiseForm,AddPropertyForm
+from .forms import FutureRequirementForm, UserRegisterForm,CompanyRegisterForm,FranchiseForm,AddPropertyForm
 from django.contrib.auth import login, authenticate
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import  get_object_or_404
-from .models import Comment, LoanApplication, AddProject,AddPropertyModel, FranchiseApplication, Reels, Role,User
+from .models import *
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+
 
 
 
@@ -33,7 +33,7 @@ def register_user(request):
 
             username = form.cleaned_data.get('username')
             messages.success(request, f"Account created for {username}! You can now log in.")
-            return redirect("login") 
+            return redirect("prop:login") 
     else:
         form = UserRegisterForm()
     return render(request, "register.html", {"form": form})
@@ -74,7 +74,7 @@ def add_property(request):
             # The form now handles assigning the user and saving.
            
             form.save(user=request.user)
-            return redirect('home') # Redirect to a valid URL name like 'home'
+            return redirect('prop:home') # Redirect to a valid URL name like 'home'
         else:
             # If the form is not valid, print the errors to the console for debugging.
             # This will show which fields are failing validation.
@@ -86,18 +86,127 @@ def add_property(request):
 
 
 # dash bord 
+# def home(request):
+#     # Regular users (exclude Pro plan users)
+#     marketing_experts = User.objects.filter(
+#         role=Role.MARKETER, 
+#     ).exclude(plan_type=PlanType.MARKETER_EXPORT_PRO)[:4]
+
+#     featured_companies = User.objects.filter(
+#         role=Role.COMPANY,
+#     ).exclude(plan_type=PlanType.COMPANY_PRO)[:4]
+
+#     professionals = User.objects.filter(role=Role.PROFESSIONAL)[:4]
+
+#     # Pro users
+#     marketing_experts_pro = User.objects.filter(plan_type=PlanType.MARKETER_EXPORT_PRO)[:4]
+#     featured_companies_pro = User.objects.filter(plan_type=PlanType.COMPANY_PRO)[:4]
+
+#     # Latest projects
+#     projects = AddProject.objects.all().order_by('-id')[:4]
+
+#     return render(request, "home.html", {
+#         "marketing_experts": marketing_experts,
+#         "featured_companies": featured_companies,
+#         "professionals": professionals,
+#         "marketing_experts_pro": marketing_experts_pro,
+#         "featured_companies_pro": featured_companies_pro,
+#         "projects": projects,
+#     })
+
+from django.shortcuts import render
+from .models import AddProject, User, Role, PlanType
 
 def home(request):
-    marketing_experts = User.objects.filter(role=Role.MARKETER)[:4]
-    featured_companies = User.objects.filter(role=Role.COMPANY)[:4]
+    # Regular users (exclude Pro plan users)
+    marketing_experts = User.objects.filter(
+        role=Role.MARKETER
+    ).exclude(plan_type=PlanType.MARKETER_EXPORT_PRO)[:4]
+
+    featured_companies = User.objects.filter(
+        role=Role.COMPANY
+    ).exclude(plan_type=PlanType.COMPANY_PRO)[:4]
+
     professionals = User.objects.filter(role=Role.PROFESSIONAL)[:4]
+
+    # Pro users
+    marketing_experts_pro = User.objects.filter(plan_type=PlanType.MARKETER_EXPORT_PRO)[:4]
+    featured_companies_pro = User.objects.filter(plan_type=PlanType.COMPANY_PRO)[:4]
+
+    # ⭐ FIXED: Filter based on project.plan_type (NOT type_of_project)
+    normal_projects = AddProject.objects.filter(
+        plan_type=PlanType.COMPANY_NORMAL
+    ).order_by('-id')[:4]
+
+    pro_projects = AddProject.objects.filter(
+        plan_type=PlanType.COMPANY_PRO
+    ).order_by('-id')[:4]
 
     return render(request, "home.html", {
         "marketing_experts": marketing_experts,
         "featured_companies": featured_companies,
         "professionals": professionals,
+        "marketing_experts_pro": marketing_experts_pro,
+        "featured_companies_pro": featured_companies_pro,
+        "normal_projects": normal_projects,
+        "pro_projects": pro_projects,
     })
 
+
+# from django.shortcuts import render
+# from .models import AddProject
+
+# def all_projects(request):
+#     projects = AddProject.objects.all()  # base queryset
+
+
+#     # Get filter values from GET
+#     project_name = request.GET.get("name", "")
+#     location = request.GET.get("location", "")
+
+#     # Apply filters
+#     if project_name:
+#         projects = projects.filter(project_name__icontains=project_name)
+#     if location:
+#         projects = projects.filter(project_location__icontains=location)
+
+#     # Pass to template
+#     context = {
+#         "projects": projects,
+#         "name": project_name,
+#         "location": location,
+#     }
+
+#     return render(request, "all_projects.html", context)
+
+
+def all_projects(request):
+    category = request.GET.get("category")
+    name = request.GET.get("name", "")
+    location = request.GET.get("location", "")
+
+    qs = AddProject.objects.all()
+
+    # Name filter
+    if name:
+        qs = qs.filter(project_name__icontains=name)
+
+    # Location filter
+    if location:
+        qs = qs.filter(project_location__icontains=location)
+
+    # Category filter based on project plan type (FIXED)
+    if category == "pro":
+        qs = qs.filter(plan_type=PlanType.COMPANY_PRO)
+    elif category == "normal":
+        qs = qs.filter(plan_type=PlanType.COMPANY_NORMAL)
+
+    return render(request, "all_projects.html", {
+        "projects": qs,
+        "category": category,
+        "name": name,
+        "location": location,
+    })
 
 
 #property listings 
@@ -154,21 +263,57 @@ def user_detail(request, user_id):
 
 
 def all_users(request):
-    category = request.GET.get("category", "company")  # default
+    category = request.GET.get("category", "company")  # default category
 
-    if category == "marketer":
-        users = User.objects.filter(role=Role.MARKETER)
+    # Prepare empty lists
+    marketer_export = marketer_export_pro = company_normal = company_pro = professional_users = None
+
+    # Base query based on role + plan type
+    if category in ["marketer", "marketer_pro"]:
+        # Separate plan types
+        marketer_export_pro = User.objects.filter(role=Role.MARKETER, plan_type=PlanType.MARKETER_EXPORT_PRO)
+        marketer_export = User.objects.filter(role=Role.MARKETER, plan_type=PlanType.MARKETER_EXPORT)
+    elif category in ["company", "company_pro"]:
+        company_pro = User.objects.filter(role=Role.COMPANY, plan_type=PlanType.COMPANY_PRO)
+        company_normal = User.objects.filter(role=Role.COMPANY).exclude(plan_type=PlanType.COMPANY_PRO)
     elif category == "professional":
-        users = User.objects.filter(role=Role.PROFESSIONAL)
-    else:
-        users = User.objects.filter(role=Role.COMPANY)
+        professional_users = User.objects.filter(role=Role.PROFESSIONAL)
 
+    # ------------------- Filters -------------------
+    name = request.GET.get("name", "")
+    user_category = request.GET.get("user_category", "")
+    experience = request.GET.get("experience", "")
+
+    def apply_filters(queryset):
+        if name:
+            queryset = queryset.filter(username__icontains=name)
+        if user_category:
+            queryset = queryset.filter(category__icontains=user_category)
+        if experience:
+            queryset = queryset.filter(experience__icontains=experience)
+        return queryset
+
+    marketer_export = apply_filters(marketer_export) if marketer_export else None
+    marketer_export_pro = apply_filters(marketer_export_pro) if marketer_export_pro else None
+    company_normal = apply_filters(company_normal) if company_normal else None
+    company_pro = apply_filters(company_pro) if company_pro else None
+    professional_users = apply_filters(professional_users) if professional_users else None
+
+    # ------------------- Render -------------------
     return render(request, "all_users.html", {
-        "users": users,
-        "category": category
+        "category": category,
+        "filters": {
+            "name": name,
+            "user_category": user_category,
+            "experience": experience,
+        },
+        "marketer_export": marketer_export,
+        "marketer_export_pro": marketer_export_pro,
+        "company_normal": company_normal,
+        "company_pro": company_pro,
+        "professional_users": professional_users,
     })
 
-    
     
 # franchise in home
 
@@ -254,12 +399,13 @@ def get_Property(req,prop):
     
     
 
+
 @login_required
 def property_list(request, prop):
    
     properties = AddPropertyModel.objects.filter(selectProperty=prop, is_notSold=False)
 
-  
+    name=request.GET.get("name")
     location = request.GET.get("location")
     is_verified = request.GET.get("verified")
     min_price = request.GET.get("min_price")
@@ -267,7 +413,8 @@ def property_list(request, prop):
     road_facing = request.GET.get("road")
     look = request.GET.get("look")
 
-   
+    if name:
+       properties=properties.filter(projectName__icontains=name)
     if location:
         properties = properties.filter(location__icontains=location)
     if is_verified in ['1', '0']:
@@ -303,7 +450,7 @@ def edit_profile(request):
         form = UserProfileForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()  # <-- updates the database
-            return redirect('profile')  # redirect back to profile page
+            return redirect('prop:profile')  # redirect back to profile page
     form = UserProfileForm(instance=user)
     return render(request, 'edit_profile.html', {'form': form})
 
@@ -439,7 +586,7 @@ def company_register(request):
             user.save()
 
             messages.success(request, "Company registered successfully!")
-            return redirect("login")
+            return redirect("prop:login")
         else:
             # If the form is not valid, Django will automatically add error messages
             # to the form object, which will be displayed on the template.
@@ -449,6 +596,104 @@ def company_register(request):
         form = CompanyRegisterForm()
 
     return render(request, "company_register.html", {"form": form})
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.utils import timezone
+from dateutil.relativedelta import relativedelta
+from django.core.files.storage import default_storage
+from .models import User,ContactMessage
+from .forms import CompanyRegisterForm
+
+
+@login_required
+def company_profile_view(request, user_id=None):
+
+    if user_id:  # Visitor
+        profile_user = User.objects.get(id=user_id)
+    else:        # Owner
+        profile_user = request.user
+
+    if request.method == "POST" and request.user == profile_user:
+        profile_user.company_name = request.POST.get("company_name")
+        profile_user.email = request.POST.get("email")
+        profile_user.address = request.POST.get("address")
+        profile_user.contact_number = request.POST.get("contact_number")
+        profile_user.experience = request.POST.get("experience")
+        profile_user.total_projects = request.POST.get("total_projects")
+        profile_user.ongoing_projects = request.POST.get("ongoing_projects")
+        profile_user.completed_projects = request.POST.get("completed_projects")
+
+        if request.FILES.get("company_logo_path"):
+            logo_file = request.FILES["company_logo_path"]
+            logo_path = default_storage.save(f"company_logo/{logo_file.name}", logo_file)
+            profile_user.company_logo_path = logo_path
+
+        if request.FILES.get("company_wallpaper_path"):
+            wall_file = request.FILES["company_wallpaper_path"]
+            wallpaper_path = default_storage.save(f"company_wallpaper/{wall_file.name}", wall_file)
+            profile_user.company_wallpaper_path = wallpaper_path
+
+        profile_user.save()
+        messages.success(request, "Profile Updated Successfully!")
+        return redirect("prop:company_profile")
+
+    # Increase views only for visitors
+    if request.user != profile_user:
+        profile_user.click = profile_user.click + 1 if profile_user.click else 1
+        profile_user.save()
+
+    is_owner = (request.user == profile_user)
+
+    contact_count = ContactMessage.objects.filter(cid=str(profile_user.id)).count()
+    projects = AddPropertyModel.objects.filter(user=profile_user)
+
+    return render(request, "company_profile.html", {
+        "profile_user": profile_user,
+        "contact_count": contact_count,
+        "projects": projects,
+        "is_owner": is_owner,
+    })
+
+
+@login_required
+def delete_project(request, id):
+    project = AddPropertyModel.objects.get(id=id, user=request.user)
+    project.delete()
+    messages.success(request, "Project deleted successfully!")
+    return redirect("prop:company_profile")
+
+@login_required
+def mark_sold(request, id):
+    project = AddPropertyModel.objects.get(id=id, user=request.user)
+    project.status = "Sold"
+    project.save()
+    messages.success(request, "Project marked as sold!")
+    return redirect("prop:company_profile")
+
+@login_required
+def delete_reel(request, id):
+    reel = reel.objects.get(id=id, user=request.user)
+    reel.delete()
+    messages.success(request, "Reel deleted successfully!")
+    return redirect("prop:company_profile")
+
+ 
+# Contact Form Submit
+def contact_submit(request):
+    if request.method == "POST":
+        ContactMessage.objects.create(
+            user=request.user if request.user.is_authenticated else None,
+            name=request.POST.get("contact_name"),
+            email=request.POST.get("email"),
+            requirement=request.POST.get("requirement"),
+            message=request.POST.get("message"),
+            cid=request.POST.get("contact_id"),
+        )
+        messages.success(request, "Message Sent Successfully!")
+        return redirect(request.META.get("HTTP_REFERER", "company_profile"))
+
+    return redirect(request.META.get("HTTP_REFERER", "company_profile"))
 
 
 # franchise register**********************
@@ -471,7 +716,7 @@ def franchise_register(request):
             user.save()
 
             messages.success(request, "Franchise registered successfully! Please login.")
-            return redirect("login")
+            return redirect("prop:login")
 
         messages.error(request, "Please correct the errors below.")
 
@@ -481,15 +726,152 @@ def franchise_register(request):
     return render(request, "franchise_register.html", {"form": form})
 
 
-# addproject-------
+# =============================
+# FRANCHISE PROFILE & EDIT
+# =============================
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from .models import FranchiseProperty
+@login_required
+def franchise_profile(request):
+    if request.user.role != "FRANCHISE":
+        return redirect("prop:home")
 
+    user_location = request.user.location
+
+    assigned_properties = AddPropertyModel.objects.filter(
+        location=user_location,
+        is_verified=False
+    )
+
+    verified_properties = AddPropertyModel.objects.filter(
+        location=user_location,
+        is_verified=True
+    )
+
+    return render(request, "franchise_profile.html", {
+        "profile": request.user,
+
+        "assigned": assigned_properties.count(),
+        "pending": assigned_properties.count(),
+        "verified": verified_properties.count(),
+
+        "properties": assigned_properties,
+        "verified_properties": verified_properties,
+        "not_verified_properties": assigned_properties,
+    })
+
+
+
+@login_required
+def franchise_edit(request):
+    user = request.user
+
+    if request.method == "POST":
+        errors = {}
+        form_data = request.POST.copy()
+
+        email = request.POST.get("email", "").strip()
+        contact_number = request.POST.get("contact_number", "").strip()
+        location = request.POST.get("location", "").strip()
+        radius = request.POST.get("radius", "").strip()
+        experience = request.POST.get("experience", "").strip()
+        description = request.POST.get("description", "").strip()
+
+        # ===== REQUIRED VALIDATION =====
+        if not email:
+            errors["email"] = "Email is required."
+        if not contact_number:
+            errors["contact_number"] = "Contact number is required."
+        if not location:
+            errors["location"] = "Location is required."
+        if not radius:
+            errors["radius"] = "Radius is required."
+        if not experience:
+            errors["experience"] = "Experience is required."
+        if not description:
+            errors["description"] = "Description is required."
+
+        # If ANY errors ➝ return modal with errors
+        if errors:
+            return render(request, "franchise_profile.html", {
+                "profile": user,
+                "errors": errors,
+                "form_data": form_data,
+                "assigned": user.total_projects,
+                "pending": user.ongoing_projects,
+                "verified": user.completed_projects,
+                "show_modal": True,   
+            })
+
+        # ===== SAVE VALID DATA =====
+        user.email = email
+        user.contact_number = contact_number
+        user.location = location
+        user.radius = int(radius)
+        user.experience = int(experience)
+        user.description = description
+
+        if request.FILES.get("profile_image"):
+            user.profile_image_path = request.FILES["profile_image"]
+
+        user.save()
+
+        return redirect("prop:franchise_profile")
+
+    return redirect("prop:franchise_profile")
+
+
+@login_required
+def verify_property(request):
+    if request.method == "POST":
+
+        property_id = request.POST.get("property_id")
+        reviews = request.POST.get("reviews")
+        amount = request.POST.get("amount")
+        verified_location = request.POST.get("verified_location")
+        video_file = request.FILES.get("video_file")
+
+        try:
+            prop = AddPropertyModel.objects.get(id=property_id)
+        except AddPropertyModel.DoesNotExist:
+            return redirect("prop:franchise_profile")
+
+        # Create record in FranchiseProperty table
+        FranchiseProperty.objects.create(
+            property=prop,
+            property_id_number=prop.id,      # <-- here we store ID
+            franchise=request.user,
+            reviews=reviews,
+            amount=amount,
+            verified_location=verified_location,
+            video_file=video_file,
+        )
+
+        # Mark property verified
+        prop.is_verified = True
+        prop.save()
+
+        return redirect("prop:franchise_profile")
+
+
+
+
+
+
+# addproject-------
 def add_project(request):
+    # Only company users can add projects
+    if not request.user.is_authenticated or request.user.role != "COMPANY":
+        messages.error(request, "Only company users can add projects.")
+        return redirect("prop:home")
+
     if request.method == "POST":
         project_name = request.POST.get("project_name")
         type_of_project = request.POST.get("type_of_project")
-        project_location = request.POST.get("project_location")  # FIXED
-        location_url = request.POST.get("location_url")          # FIXED
-        number_of_units = request.POST.get("number_of_units")    # FIXED
+        project_location = request.POST.get("project_location")
+        location_url = request.POST.get("location_url")
+        number_of_units = request.POST.get("number_of_units")
         available_units = request.POST.get("available_units")
         available_facing = request.POST.get("available_facing")
         available_sizes = request.POST.get("available_sizes")
@@ -499,51 +881,181 @@ def add_project(request):
         if rera_approved_value == "True":
             rera_approved = True
         elif rera_approved_value == "False":
-         rera_approved = False
+            rera_approved = False
         else:
-         rera_approved = None
+            rera_approved = None
 
         amenities_list = request.POST.getlist("select_amenities")
         amenities = ",".join(amenities_list)
 
-        
         highlights = request.POST.get("highlights")
         type_of_approval = request.POST.get("type_of_approval")
         total_project_area = request.POST.get("total_project_area")
         contact_info = request.POST.get("contact_info")
         pricing = request.POST.get("pricing")
 
-        # Files should come from request.FILES — not POST
-        imgae = request.FILES.get("imgae")
+        image = request.FILES.get("image")
         video = request.FILES.get("video")
         document = request.FILES.get("document")
 
+        # ⭐ IMPORTANT: store company user + plan type ⭐
         AddProject.objects.create(
+            user=request.user,
+            plan_type=request.user.plan_type,  # COMPANY_NORMAL or COMPANY_PRO
+
             project_name=project_name,
             type_of_project=type_of_project,
-            project_location=project_location,   # NOW VALID
+            project_location=project_location,
             location_url=location_url,
             number_of_units=number_of_units,
             available_units=available_units,
             available_facing=available_facing,
             available_sizes=available_sizes,
-            rera_approved=rera_approved,   # <-- must be here
-            select_amenities=amenities,   # ← Now this variable is defined
+            rera_approved=rera_approved,
+            select_amenities=amenities,
             highlights=highlights,
             type_of_approval=type_of_approval,
             total_project_area=total_project_area,
             contact_info=contact_info,
             pricing=pricing,
-            imgae=imgae,
+            image=image,
             video=video,
             document=document,
         )
 
-        messages.success(request, "Application submitted successfully")
-        return redirect("home")
+        messages.success(request, "Project added successfully")
+        return redirect("prop:home")
 
     return render(request, "add_project.html")
 
+def project_detail(request, id):
+    project = AddProject.objects.get(id=id)
+
+    images = []
+
+    # main image
+    if project.image:
+        images.append(project.image.url)
+
+    # extra images
+    extra = project.extra_images.all()
+    for img in extra:
+        images.append(img.image.url)
+
+    return render(request, "project_detail.html", {"project": project, "images": images})
+
+
+
+
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from .models import AddPropertyModel, SavedProperty
+
+
+@login_required
+def saved_properties(request):
+    saved_list = SavedProperty.objects.filter(user=request.user)
+    return render(request, "saved_properties.html", {"saved_list": saved_list})
+
+
+def save_property(request, property_id):
+    property_obj = AddPropertyModel.objects.get(id=property_id)
+
+    saved, created = SavedProperty.objects.get_or_create(
+        user=request.user,
+        property=property_obj
+    )
+
+    if not created:
+        saved.delete()
+        return JsonResponse({"status": "removed"})
+
+    return JsonResponse({"status": "saved"})
+
+
+
+#otp
+import time
+import random
+import urllib.parse
+import requests
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+API_KEY = "bGxMnkR7nUa3DpPDGdqhUg"
+SENDER_ID = "WDPROP"
+TEMPLATE_ID = "1007692442675920680"
+PE_ID = "1001053976927196733"
+SMS_URL = "https://cloud.smsindiahub.in/api/mt/SendSMS"
+
+otp_storage = {}  # temporary
+
+@csrf_exempt
+def send_otp(request):
+    phone = request.GET.get("phone")
+
+    if not phone:
+        return JsonResponse({"error": "Phone number required"}, status=400)
+
+    otp = "%06d" % random.randint(0, 999999)
+    otp_storage[phone] = {"otp": otp, "timestamp": time.time()}
+
+    # MUST MATCH EXACT DLT TEMPLATE
+    message = (
+        f"Your OTP for verification with Weekdays Properties is {otp}. "
+        "Please do not share this code with anyone. It is valid for 10 minutes."
+    )
+
+    params = {
+        "APIKey": API_KEY,
+        "senderid": SENDER_ID,
+        "channel": "Trans",
+        "DCS": 0,
+        "flashsms": 0,
+        "number": "91" + phone,
+        "text": message,   # RAW MESSAGE (NO URL ENCODE)
+        "DLTTemplateId": TEMPLATE_ID,
+        "route": "0",
+        "PEId": PE_ID
+    }
+
+    response = requests.get(SMS_URL, params=params)
+
+    print("SMSIndiaHub Response:", response.text)
+
+    return JsonResponse({
+        "status": response.status_code,
+        "response": response.text,
+        "otp": otp
+    })
+
+
+@csrf_exempt
+def verify_otp(request):
+    phone = request.GET.get("phone")
+    otp = request.GET.get("otp")
+
+    if not phone or not otp:
+        return JsonResponse({"error": "Phone and OTP required"}, status=400)
+
+    data = otp_storage.get(phone)
+
+    if not data:
+        return JsonResponse({"error": "OTP expired or not sent"}, status=400)
+
+    if time.time() - data["timestamp"] > 600:
+        otp_storage.pop(phone)
+        return JsonResponse({"error": "OTP expired"}, status=400)
+
+    if otp != data["otp"]:
+        return JsonResponse({"error": "Invalid OTP"}, status=400)
+
+    otp_storage.pop(phone)
+    return JsonResponse({"message": "OTP Verified"})
+
+
+
+from .forms import ReelsForm
 
 def reels_upload(req):
     user=req.user
@@ -557,16 +1069,44 @@ def reels_upload(req):
             return redirect("prop:home")
     return render(req,"reels_upload.html",{"f":f})
 
+import random 
 def get_reel(req):
-    reels=Reels.objects.all()
-    print(reels.values())
+    # reels=Reels.objects.all()
+    reels = list(Reels.objects.all())  # fetch all reels
+    random.shuffle(reels)   
+    
+    
     return render(req,'reelViewer.html',{'data':reels})
 
-def like_reel(req,id):
-    reel=Reels.objects.get(id=id)
-    reel.likeCount=reel.likeCount+1
+def like_reel(req, id):
+    reel = Reels.objects.get(id=id)
+
+    # Get liked reels list from session
+    liked_reels = req.session.get("liked_reels", [])
+
+    if id in liked_reels:
+        # UNLIKE
+        reel.likeCount -= 1
+        liked_reels.remove(id)
+        liked = False
+    else:
+        # LIKE
+        reel.likeCount += 1
+        liked_reels.append(id)
+        liked = True
+
+    # Save back to session
+    req.session["liked_reels"] = liked_reels
+
     reel.save()
-    return JsonResponse({"status": "success", "likes": reel.likeCount})
+
+    return JsonResponse({
+        "status": "success",
+        "liked": liked,
+        "likes": reel.likeCount
+    })
+
+
 def comment_reel(req,id,comment):
     reel=Reels.objects.get(id=id)
     new_comment=Comment.objects.create(
@@ -575,4 +1115,67 @@ def comment_reel(req,id,comment):
         comment=comment
     )
     return JsonResponse({"status": "success", "comment": reel.commentCount})
-    
+
+def getAllComments(request, id):
+    try:
+        reel = Reels.objects.get(id=id)
+        # Select only the fields needed and convert to list
+        comments = Comment.objects.filter(reel=reel).values(
+            'id', 'comment', 'user__username', 'created_at'
+        )
+        comments_list = list(comments)  # ✅ Convert QuerySet to list
+        return JsonResponse({"status": "success", "comments": comments_list}, safe=False)
+    except Reels.DoesNotExist:
+        return JsonResponse({"status": "error", "message": "Reel not found"}, status=404)
+
+
+
+
+# views.py
+from django.shortcuts import render, get_object_or_404
+from .models import Reels
+
+def reel_viewer(request):
+    u=request.user
+    reels=Reels.objects.filter(user=u)
+    return render(request,'all_reels.html',{'reel':reels})
+
+
+
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from .models import Reels
+
+def delete_reel(request, pk):
+    if request.method == "POST":
+        reel = get_object_or_404(Reels, id=pk)
+        reel.delete()
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False}, status=400)
+
+
+from django.urls import reverse
+from urllib.parse import urlencode
+
+def search(req):
+    # If it's a GET request → show the search box page
+    if req.method == "GET":
+        return render(req, "search_box.html")
+
+    # If it's POST → process search
+    cat = req.POST.get('search-cat') or "All"
+    btn = (req.POST.get('search-input') or "").strip()
+
+    query = {}
+    if btn:
+        query['name'] = btn
+
+    prop = cat if cat else "All"
+
+    url = reverse('prop:property_list', args=[prop])
+    if query:
+        url = f"{url}?{urlencode(query)}"
+
+    return redirect(url)
+
+
