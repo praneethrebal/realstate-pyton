@@ -272,11 +272,17 @@
         <!-- Plan -->
         <label>Choose Plan</label>
         <div class="plan-box">
-          <div class="plan-btn blue-plan" onclick="selectPlan(14999, this)">
-            ₹14999
+          <div
+            class="plan-btn blue-plan"
+            onclick="selectPlan('NORMAL', 14999, this)"
+          >
+            Normal ₹14999
           </div>
-          <div class="plan-btn red-plan" onclick="selectPlan(19999, this)">
-            ₹19999
+          <div
+            class="plan-btn red-plan"
+            onclick="selectPlan('PRO', 19999, this)"
+          >
+            Pro ₹19999
           </div>
         </div>
         {{ form.plan }}
@@ -330,9 +336,9 @@
         )})`;
       });
 
-      function selectPlan(amount, elem) {
+      function selectPlan(planType, amount, elem) {
+        document.getElementById("id_plan").value = planType; // Store plan type
         selectedPlanAmount = amount;
-        document.getElementById("id_plan").value = amount;
 
         document
           .querySelectorAll(".plan-btn")

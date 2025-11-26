@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -8,89 +9,117 @@
     <style>
       body {
         margin: 0;
+        padding: 20px;
         background: #f4f4f4;
         font-family: Arial, sans-serif;
-        padding: 20px;
       }
 
+      /* Center the content */
       .container {
-        max-width: 1000px;
-        margin: auto;
+        max-width: 800px;
+        margin: 0 auto;
       }
 
-      /* CARD DESIGN */
-      .card {
+      /* HEADER */
+      .container h2 {
+        font-size: 26px;
+        font-weight: 700;
+        margin-bottom: 20px;
+      }
+
+      /* Row card */
+      .owner-row-card {
+        width: 100%;
         background: white;
-        border-radius: 14px;
-        padding: 15px;
+        padding: 18px;
         margin: 15px 0;
         display: flex;
-        gap: 15px;
         align-items: center;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.08);
+        gap: 20px;
+        border-radius: 16px;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.12);
       }
 
-      /* Profile Image */
-      .card img {
-        width: 90px;
-        height: 90px;
-        border-radius: 12px;
+      /* IMAGE */
+      .owner-img {
+        width: 110px;
+        height: 110px;
+        border-radius: 14px;
         object-fit: cover;
+        background: #ddd;
       }
 
-      /* Details */
-      .details {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
+      /* DETAILS TEXT */
+      .owner-details {
+        flex: 1;
       }
 
-      .details h3 {
+      .owner-details h4 {
         margin: 0;
-        font-size: 20px;
+        font-size: 22px;
+        font-weight: 700;
         color: #222;
       }
 
-      .details p {
-        margin: 0;
-        font-size: 14px;
-        color: #666;
+      .owner-details p {
+        margin: 5px 0;
+        font-size: 16px;
+        color: #444;
       }
 
-      /* Desktop – horizontal */
-      @media (min-width: 768px) {
-        .card {
-          padding: 20px;
-          flex-direction: row;
+      /* MOBILE RESPONSIVE */
+      @media (max-width: 600px) {
+        .owner-row-card {
+          gap: 12px;
+          padding: 14px;
         }
-      }
 
-      /* Mobile – stacks but keeps horizontal look */
-      @media (max-width: 768px) {
-        .card {
-          flex-direction: row;
+        .owner-img {
+          width: 80px;
+          height: 80px;
+        }
+
+        .owner-details h4 {
+          font-size: 18px;
         }
       }
     </style>
   </head>
+
   <body>
     <div class="container">
       <h2>Franchise Profiles</h2>
 
       {% if data %} {% for f in data %}
-      <div class="card">
+      <div class="owner-row-card">
         <!-- Profile Image -->
-        <img src="/media/{{ f.profile_image_path }}" alt="Profile" />
+        {% if f.profile_image_path %}
+        <img
+          src="/media/{{ f.profile_image_path }}"
+          class="owner-img"
+          alt="Profile"
+        />
+        {% else %}
+        <img
+          src="{% static 'images/default_profile.jpg' %}"
+          class="owner-img"
+          alt="Default"
+        />
+        {% endif %}
 
         <!-- Details -->
-        <div class="details">
-          <h3>{{ f.company_name|default:f.username }}</h3>
+        <div class="owner-details">
+          <h4>{{ f.company_name|default:f.username }}</h4>
+
+          {% if f.location %}
           <p><b>Location:</b> {{ f.location }}</p>
+          {% endif %} {% if f.experience %}
           <p><b>Experience:</b> {{ f.experience }} years</p>
+          {% endif %}
         </div>
       </div>
       {% endfor %} {% else %}
-      <h3 style="color: #777; text-align: center; margin-top: 50px">
+      <h3 style="text-align: center; color: #777; margin-top: 40px">
         No Franchise Profiles Found
       </h3>
       {% endif %}

@@ -559,11 +559,11 @@ def company_register(request):
 
         if form.is_valid():
             user = form.save(commit=False)
-            
+            user.role = Role.COMPANY
             # Set fields that are not part of the form's main fields
-            user.role = "COMPANY"
-            user.phone = form.cleaned_data["contact_number"]
+            user.company_subscription_type = form.cleaned_data["plan"]
             
+
             # Handle subscription dates
             duration = form.cleaned_data["duration"]
             plan = form.cleaned_data["plan"]
@@ -578,6 +578,11 @@ def company_register(request):
             # to the correct model fields before saving.
             user.company_logo_path = form.cleaned_data.get('logo')
             user.company_wallpaper_path = form.cleaned_data.get('wallpaper')
+            if plan == "NORMAL":
+                user.plan_type = PlanType.COMPANY_NORMAL
+            else:
+                user.plan_type = PlanType.COMPANY_PRO
+
 
             # Now, save the user instance. This single call will:
             # 1. Save the user to the database.

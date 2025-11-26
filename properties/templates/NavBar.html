@@ -217,21 +217,25 @@
     });
 
       function handleAddPost() {
-          {% if user.role == "COMPANY" %}
-              redirect("addproject/");
-          {% else %}
-              redirect("/addProperty");
-          {% endif %}
+         let url = "{% url 'prop:add_project' %}";
+
+    {% if user.role == "COMPANY" %}
+        url = "{% url 'prop:add_project' %}";
+    {% else %}
+        url = "{% url 'prop:add_property' %}";
+    {% endif %}
+
+    window.location.href = url;
       }
 
       function redirectProfile() {
           {% if user.role == "COMPANY" %}
-              redirect("/company/profile/");
-          {% elif user.role == "FRANCHISE" %}
-              redirect("franchise-profile/");
-          {% else %}
-              redirect("/profile");
-          {% endif %}
+        window.location.href = "{% url 'prop:company_profile' %}";
+    {% elif user.role == "FRANCHISE" %}
+        window.location.href = "{% url 'prop:franchise_profile' %}";
+    {% else %}
+        window.location.href = "{% url 'prop:profile' %}";
+    {% endif %}
       }
 
   function openAddModal() {
