@@ -347,7 +347,7 @@ def requirement_form(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Your requirement has been submitted successfully!')
-            return redirect('require')  # URL name defined in urls.py
+            return redirect('prop:require')  # URL name defined in urls.py
         else:
             print("Form errors:", form.errors)  # Debugging help in terminal
     else:
@@ -1177,5 +1177,15 @@ def search(req):
         url = f"{url}?{urlencode(query)}"
 
     return redirect(url)
+
+
+
+def franchis(req):
+    
+    fran=User.objects.filter(role='FRANCHISE')
+    # if not fran.exists():
+    #     return render(req, "franchise_list.html", {"data": None})
+    return render(req, "franchise_list.html", {"data": fran})
+    
 
 

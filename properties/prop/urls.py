@@ -87,6 +87,8 @@ urlpatterns = [
 
     path('reels/', views.reel_viewer, name='all_reels'),
     path('delete-reel/<int:pk>/', views.delete_reel, name='deleteReel'),
+    
+    path('get-franchise_members',views.franchis,name='get-franchise_members')
 
     
   

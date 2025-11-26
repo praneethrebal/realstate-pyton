@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Franchise Profiles</title>
+
+    <style>
+      body {
+        margin: 0;
+        background: #f4f4f4;
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: auto;
+      }
+
+      /* CARD DESIGN */
+      .card {
+        background: white;
+        border-radius: 14px;
+        padding: 15px;
+        margin: 15px 0;
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.08);
+      }
+
+      /* Profile Image */
+      .card img {
+        width: 90px;
+        height: 90px;
+        border-radius: 12px;
+        object-fit: cover;
+      }
+
+      /* Details */
+      .details {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .details h3 {
+        margin: 0;
+        font-size: 20px;
+        color: #222;
+      }
+
+      .details p {
+        margin: 0;
+        font-size: 14px;
+        color: #666;
+      }
+
+      /* Desktop – horizontal */
+      @media (min-width: 768px) {
+        .card {
+          padding: 20px;
+          flex-direction: row;
+        }
+      }
+
+      /* Mobile – stacks but keeps horizontal look */
+      @media (max-width: 768px) {
+        .card {
+          flex-direction: row;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Franchise Profiles</h2>
+
+      {% if data %} {% for f in data %}
+      <div class="card">
+        <!-- Profile Image -->
+        <img src="/media/{{ f.profile_image_path }}" alt="Profile" />
+
+        <!-- Details -->
+        <div class="details">
+          <h3>{{ f.company_name|default:f.username }}</h3>
+          <p><b>Location:</b> {{ f.location }}</p>
+          <p><b>Experience:</b> {{ f.experience }} years</p>
+        </div>
+      </div>
+      {% endfor %} {% else %}
+      <h3 style="color: #777; text-align: center; margin-top: 50px">
+        No Franchise Profiles Found
+      </h3>
+      {% endif %}
+    </div>
+  </body>
+</html>

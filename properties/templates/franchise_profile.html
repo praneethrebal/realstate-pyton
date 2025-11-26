@@ -1,615 +1,128 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
-<head>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Franchise Profiles</title>
 
-<title>Franchise Profile</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 20px;
+        background: #f4f4f4;
+        font-family: Arial, sans-serif;
+      }
 
-<style>
-/* ============ GLOBAL ============ */
-body {
-    font-family: 'Poppins', sans-serif;
-    background: #f5f6fa;
-    margin: 0;
-}
+      /* Center the content */
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
 
-/* ============ PROFILE CARD ============ */
-.profile-card {
-    max-width: 540px;
-    margin: 40px auto;
-    background: #fff;
-    padding: 35px;
-    border-radius: 22px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-}
+      /* HEADER */
+      .container h2 {
+        font-size: 26px;
+        font-weight: 700;
+        margin-bottom: 20px;
+      }
 
-/* IMAGE */
-.profile-img {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    margin: 0 auto;
-    background-size: cover;
-    background-position: center;
-    border: 4px solid #ff7a00;
-    box-shadow: 0 4px 18px rgba(255, 122, 0, 0.3);
-}
+      /* Row card */
+      .owner-row-card {
+        width: 100%;
+        background: white;
+        padding: 18px;
+        margin: 15px 0;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        border-radius: 16px;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.12);
+      }
 
-/* INFO BOXES */
-.profile-info {
-    margin-top: 28px;
-}
+      /* IMAGE */
+      .owner-img {
+        width: 110px;
+        height: 110px;
+        border-radius: 14px;
+        object-fit: cover;
+        background: #ddd;
+      }
 
-.info-row {
-    margin: 12px 0;
-    padding: 12px 14px;
-    background: #fafafa;
-    border: 1px solid #eee;
-    border-radius: 12px;
-    color: #333;
-    font-size: 16px;
-}
+      /* DETAILS TEXT */
+      .owner-details {
+        flex: 1;
+      }
 
-/* EDIT BUTTON */
-.edit-btn {
-    width: 100%;
-    padding: 15px;
-    margin-top: 25px;
-    background: linear-gradient(135deg, #ff7a00, #ff9500);
-    color: white;
-    border: none;
-    border-radius: 14px;
-    font-size: 18px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s ease;
-}
+      .owner-details h4 {
+        margin: 0;
+        font-size: 22px;
+        font-weight: 700;
+        color: #222;
+      }
 
-.edit-btn:hover {
-    background: linear-gradient(135deg, #ff6a00, #ff8500);
-    box-shadow: 0 6px 20px rgba(255, 140, 0, 0.28);
-}
+      .owner-details p {
+        margin: 5px 0;
+        font-size: 16px;
+        color: #444;
+      }
 
-/* MODAL */
-.modal-bg {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.55);
-    backdrop-filter: blur(3px);
-    z-index: 999;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
+      /* MOBILE RESPONSIVE */
+      @media (max-width: 600px) {
+        .owner-row-card {
+          gap: 12px;
+          padding: 14px;
+        }
 
-.modal-box {
-    width: 100%;
-    max-width: 720px;
-    max-height: 90vh;
-    overflow-y: auto;
-    background: #ffffff;
-    padding: 25px;
-    border-radius: 14px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.18);
-    animation: fadeIn 0.3s ease-in-out;
-}
+        .owner-img {
+          width: 80px;
+          height: 80px;
+        }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
+        .owner-details h4 {
+          font-size: 18px;
+        }
+      }
+    </style>
+  </head>
 
-.modal-header {
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:12px;
-}
+  <body>
+    <div class="container">
+      <h2>Franchise Profiles</h2>
 
-.modal-close {
-    cursor:pointer;
-    font-weight:700;
-    font-size:18px;
-}
+      {% if data %} {% for f in data %}
+      <div class="owner-row-card">
+        <!-- Profile Image -->
+        {% if f.profile_image_path %}
+        <img
+          src="/media/{{ f.profile_image_path }}"
+          class="owner-img"
+          alt="Profile"
+        />
+        {% else %}
+        <img
+          src="{% static 'images/default_profile.jpg' %}"
+          class="owner-img"
+          alt="Default"
+        />
+        {% endif %}
 
-.modal-box input,
-.modal-box textarea {
-    width:100%;
-    padding:10px 12px;
-    border:1.5px solid #ddd;
-    border-radius:10px;
-    margin-bottom:12px;
-}
+        <!-- Details -->
+        <div class="owner-details">
+          <h4>{{ f.company_name|default:f.username }}</h4>
 
-.modal-box textarea {
-    height:90px;
-}
-
-#currentPreview {
-    width: 110px;
-    height: 110px;
-    background-size: cover;
-    background-position: center;
-    border-radius: 14px;
-    border: 2px solid #eee;
-    margin-bottom: 5px;
-}
-
-.page-back-btn {
-    display: inline-block;
-    background: #e5e5e5;
-    padding: 10px 18px;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: 600;
-    color: #333;
-    cursor: pointer;
-    border: none;
-    text-decoration: none;
-    transition: 0.3s ease;
-    margin-bottom: 20px;
-}
-
-.page-back-btn:hover {
-    background: #d4d4d4;
-}
-
-@media (max-width: 760px) {
-    .profile-card { margin: 20px; padding: 22px; }
-}
-</style>
-</head>
-
-<body>
-
-    {% include 'NavBar.html' %}
-
-
-
-    
-
-<div class="profile-card">
-<div style="max-width:540px; margin:20px auto 0;">
-    <a href="{% url 'prop:home' %}" class="page-back-btn">← Back </a>
-</div>
-
-<div class="profile-img"
-    style="background-image:url('{% if profile.profile_image_path %}{{ profile.profile_image_path.url }}{% else %}/static/default_profile.png{% endif %}');">
-</div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:25px;">
-
-        <div>
-            <div class="info-row"><b>Email:</b> {{ profile.email }}</div>
-            <div class="info-row"><b>Contact:</b> {{ profile.contact_number }}</div>
-            <div class="info-row"><b>Location:</b> {{ profile.location }}</div>
+          {% if f.location %}
+          <p><b>Location:</b> {{ f.location }}</p>
+          {% endif %} {% if f.experience %}
+          <p><b>Experience:</b> {{ f.experience }} years</p>
+          {% endif %}
         </div>
-
-        <div>
-            <div class="info-row"><b>Radius:</b> {{ profile.radius }}</div>
-            <div class="info-row"><b>Experience:</b> {{ profile.experience }} yrs</div>
-            <div class="info-row"><b>Description:</b> {{ profile.description }}</div>
-        </div>
-
+      </div>
+      {% endfor %} {% else %}
+      <h3 style="text-align: center; color: #777; margin-top: 40px">
+        No Franchise Profiles Found
+      </h3>
+      {% endif %}
     </div>
-
-    <button class="edit-btn" onclick="openModal('editProfileModal')">Edit Profile</button>
-   
-
-<!-- DASHBOARD CARDS -->
-<div class="dashboard-cards">
-
-    <!-- ASSIGNED PROPERTIES -->
-    <div class="dash-card">
-        <h4>Assigned Properties</h4>
-        <h2>{{ assigned }}</h2>
-        <a onclick="openPropertyDropdown()" class="view-btn">View</a>
-    </div>
-
-    <!-- VERIFIED -->
-    <div class="dash-card">
-        <h4>Verified</h4>
-        <h2>{{ verified }}</h2>
-        <a onclick="openVerifiedDropdown()" class="view-btn">View</a>
-    </div>
-
-    <!-- NOT VERIFIED -->
-    <div class="dash-card">
-        <h4>Not Verified</h4>
-        <h2>{{ pending }}</h2>
-        <a onclick="openPendingDropdown()" class="view-btn">View</a>
-    </div>
-
-</div>
-
-
-
-<!-- =============================== -->
-<!-- POPUP 1: ASSIGNED PROPERTIES LIST -->
-<!-- =============================== -->
-
-<div id="propertyDropdown" class="overlay">
-    <div class="popup-box">
-        <h3>Assigned Properties</h3>
-        <hr>
-
-        {% for p in properties %}
-        <div class="property-row">
-
-            <div class="property-name">
-                Property ID: {{ p.id }}
-            </div>
-
-
-            <div class="btn-group">
-
-                <a href="{% url 'prop:property_detail' p.id %}" class="small-btn view-small">
-                    View
-                </a>
-
-                <button class="small-btn verify-small"
-                        onclick="openVerifyForm('{{ p.id }}')">
-                    Verify
-                </button>
-
-            </div>
-        </div>
-        {% empty %}
-        <p>No assigned properties.</p>
-        {% endfor %}
-
-        <button class="close-btn" onclick="closeAll()">Close</button>
-    </div>
-</div>
-
-
-
-<!-- =============================== -->
-<!-- POPUP 2: VERIFIED LIST -->
-<!-- =============================== -->
-
-<div id="verifiedDropdown" class="overlay">
-    <div class="popup-box">
-        <h3>Verified Properties</h3>
-        <hr>
-
-        {% for p in verified_properties %}
-        <div class="property-row">
-            <div class="property-name">
-                Property ID: {{ p.id }}
-             </div>
-
-            <a href="{% url 'prop:property_detail' p.id %}" class="small-btn view-small">
-                View
-            </a>
-        </div>
-        {% empty %}
-        <p>No verified properties.</p>
-        {% endfor %}
-
-        <button class="close-btn" onclick="closeAll()">Close</button>
-    </div>
-</div>
-
-
-
-<!-- =============================== -->
-<!-- POPUP 3: NOT VERIFIED LIST -->
-<!-- =============================== -->
-
-<div id="pendingDropdown" class="overlay">
-    <div class="popup-box">
-        <h3>Not Verified Properties</h3>
-        <hr>
-
-        {% for p in not_verified_properties %}
-        <div class="property-row">
-            <div class="property-name">
-               Property ID: {{ p.id }}
-            </div>
- 
-            <button class="small-btn verify-small"
-                    onclick="openVerifyForm('{{ p.id }}')">
-                Verify
-            </button>
-        </div>
-        {% empty %}
-        <p>No pending properties.</p>
-        {% endfor %}
-
-        <button class="close-btn" onclick="closeAll()">Close</button>
-    </div>
-</div>
-
-
-
-<!-- =============================== -->
-<!-- VERIFY POPUP FORM (with Video Upload) -->
-<!-- =============================== -->
-
-<div id="verifyPopup" class="verify-popup">
-    <button class="close-x" onclick="closeVerify()">×</button>
-
-<form method="post" enctype="multipart/form-data" action="{% url 'prop:verify_property' %}">
-    {% csrf_token %}
-
-    <input type="hidden" id="popup_property_id" name="property_id">
- 
-    <label>Amount</label>
-    <input type="number" name="amount" required>
-
-    <label>Location</label>
-    <input type="text" name="verified_location" required>
-
-    <label>Reviews</label>
-    <textarea name="reviews" required></textarea>
-
-    <label>Upload Video</label>
-    <input type="file" name="video_file" accept="video/*" required>
-
-    <button type="submit" class="submit-btn">Submit</button>
-</form>
-
-
-</div>
-
-
-
-
-<!-- =============================== -->
-<!-- JAVASCRIPT -->
-<!-- =============================== -->
-
-<script>
-function openPropertyDropdown() {
-    closeAll();
-    document.getElementById("propertyDropdown").style.display = "flex";
-}
-
-function openVerifiedDropdown() {
-    closeAll();
-    document.getElementById("verifiedDropdown").style.display = "flex";
-}
-
-function openPendingDropdown() {
-    closeAll();
-    document.getElementById("pendingDropdown").style.display = "flex";
-}
-
-function openVerifyForm(id) {
-    closeAll();
-    document.getElementById("popup_property_id").value = id;
-    document.getElementById("verifyPopup").style.display = "block";
-}
-
-function closeVerify() {
-    document.getElementById("verifyPopup").style.display = "none";
-}
-
-function closeAll() {
-    document.getElementById("propertyDropdown").style.display = "none";
-    document.getElementById("verifiedDropdown").style.display = "none";
-    document.getElementById("pendingDropdown").style.display = "none";
-    document.getElementById("verifyPopup").style.display = "none";
-}
-</script>
-
-
-
-
-<!-- =============================== -->
-<!-- CLEAN MODERN CSS -->
-<!-- =============================== -->
-
-<style>
-
-.dashboard-cards {
-    max-width: 980px;
-    margin: 40px auto;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 22px;
-}
-
-.dash-card {
-    background: white;
-    padding: 25px;
-    border-radius: 14px;
-    text-align: center;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-}
-
-.view-btn {
-    background: #0d6efd;
-    color: white;
-    padding: 9px 20px;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    text-decoration: none;
-}
-
-
-
-/* OVERLAY BOX */
-.overlay {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.55);
-    justify-content: center;
-    align-items: center;
-    z-index: 900;
-}
-
-.popup-box {
-    background: white;
-    width: 480px;
-    padding: 25px;
-    border-radius: 12px;
-    max-height: 80%;
-    overflow-y: auto;
-}
-
-
-
-/* PROPERTY LIST ROW */
-.property-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 12px 2px;
-    border-bottom: 1px solid #eee;
-}
-
-.property-name {
-    font-weight: 600;
-}
-
-
-
-/* SMALL BUTTONS */
-.small-btn {
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 14px;
-    margin-right: 10px;
-}
-
-.view-small {
-    background: #007bff;
-    color: white;
-}
-
-.verify-small {
-    background: #28a745;
-    color: white;
-}
-
-
-
-/* VERIFY FORM POPUP */
-.verify-popup {
-    display: none;
-    position: fixed;
-    top: 50%; left: 50%;
-    transform: translate(-50%,-50%);
-    background: #ffffff;
-    width: 380px;
-    padding: 28px;
-    border-radius: 14px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    z-index: 1000;
-}
-
-.verify-popup input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 6px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-}
-
-.submit-btn {
-    width: 100%;
-    padding: 12px;
-    background: #28a745;
-    color: white;
-    border: none;
-    margin-top: 15px;
-    border-radius: 8px;
-    font-weight: bold;
-}
-
-.close-x {
-    position: absolute;
-    top: 8px;
-    right: 10px;
-    background: #333;
-    color: white;
-    padding: 4px 9px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-</style>
-
- 
-<div class="modal-bg" id="editProfileModal">
-
-    <div class="modal-box">
-
-        <div class="modal-header">
-            <h2>Edit Franchise</h2>
-            <div class="modal-close" onclick="closeModal('editProfileModal')">✕</div>
-        </div>
-
-<form method="POST" enctype="multipart/form-data" action="{% url 'prop:franchise_edit' %}">
-    {% csrf_token %}
-
-    <label>Email</label>
-    <input type="email" name="email" value="{{ form_data.email|default:profile.email }}">
-    {% if errors.email %}
-        <p style="color:red">{{ errors.email }}</p>
-    {% endif %}
-
-    <label>Contact Number</label>
-    <input type="text" name="contact_number" value="{{ form_data.contact_number|default:profile.contact_number }}">
-    {% if errors.contact_number %}
-        <p style="color:red">{{ errors.contact_number }}</p>
-    {% endif %}
-
-    <label>Location</label>
-    <input type="text" name="location" value="{{ form_data.location|default:profile.location }}">
-    {% if errors.location %}
-        <p style="color:red">{{ errors.location }}</p>
-    {% endif %}
-
-    <label>Radius</label>
-    <input type="number" name="radius" value="{{ form_data.radius|default:profile.radius }}">
-    {% if errors.radius %}
-        <p style="color:red">{{ errors.radius }}</p>
-    {% endif %}
-
-    <label>Experience</label>
-    <input type="number" name="experience" value="{{ form_data.experience|default:profile.experience }}">
-    {% if errors.experience %}
-        <p style="color:red">{{ errors.experience }}</p>
-    {% endif %}
-
-    <label>Description</label>
-    <textarea name="description">{{ form_data.description|default:profile.description }}</textarea>
-    {% if errors.description %}
-        <p style="color:red">{{ errors.description }}</p>
-    {% endif %}
-
-    <label>Profile Image</label>
-    <input type="file" name="profile_image">
-
-    <button class="edit-btn" type="submit">Save Changes</button>
-</form>
-
-    </div>
-</div>
- 
-
-<script>
-function openModal(id) {
-    document.getElementById(id).style.display = 'flex';
-}
-function closeModal(id) {
-    document.getElementById(id).style.display = 'none';
-}
-</script>
-{% if show_modal %}
-<script>
-    document.getElementById("editProfileModal").style.display = "flex";
-</script>
-{% endif %}
-
-</body>
+  </body>
 </html>
