@@ -52,6 +52,8 @@ class User(AbstractUser):
     referred_by_code = models.CharField(max_length=50, null=True, blank=True, help_text="The referral code used by the user during registration.")
     deals = models.CharField(max_length=255, null=True, blank=True)
 
+    radius = models.IntegerField(null=True, blank=True, default=5)
+
     # ===== Image fields =====
     # profile_image_name = models.CharField(max_length=255, null=True, blank=True)
     profile_image_path = models.ImageField(upload_to='profile_images/', default='images/Default_profile_picture.jpeg', null=True, blank=True)
@@ -191,6 +193,7 @@ class AddPropertyModel(models.Model):
     actualPrice = models.FloatField(null=True, blank=True)
     salePrice = models.FloatField(null=True, blank=True)
     price = models.FloatField(default=0)
+    status = models.CharField(max_length=20, default="Available")
 
     look = models.CharField(max_length=20, choices=LOOKING_CHOICES, null=True, blank=True)
     selectProperty = models.CharField(max_length=50, choices=PROPERTY_CHOICES, null=True, blank=True)
@@ -225,16 +228,38 @@ class AddPropertyModel(models.Model):
 
 # franchise Form
 class FranchiseApplication(models.Model):
-    full_name = models.CharField(max_length=100)
-    email = models.EmailField()
-    contact = models.CharField(max_length=20)
-    location = models.CharField(max_length=100)
+    full_name = models.CharField(max_length=100, null=False, blank=False)
+    email = models.EmailField(null=False, blank=False)
+    contact = models.CharField(max_length=20, null=False, blank=False) 
+    location = models.CharField(max_length=100, null=False, blank=False)
     experience = models.TextField(blank=True, null=True)
     reason = models.TextField(blank=True, null=True)
     submitted_at = models.DateTimeField(auto_now_add=True)
 
     def _str_(self):
         return f"{self.full_name} - {self.location}"
+    
+
+    
+class FranchiseProperty(models.Model):
+    property = models.ForeignKey(AddPropertyModel, on_delete=models.CASCADE)
+
+    # Store Property ID separately as requested
+    property_id_number = models.IntegerField(null=True, blank=True)
+
+    franchise = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    reviews = models.TextField(null=True, blank=True)
+    amount = models.FloatField(null=True, blank=True)
+    verified_location = models.CharField(max_length=200, null=True, blank=True)
+    video_file = models.FileField(upload_to="verification_videos/", null=True, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Verification for Property {self.property_id_number}"
+    
+
     
     
 class FutureRequirement(models.Model):
@@ -315,38 +340,79 @@ class LoanApplication(models.Model):
     def __str__(self):
         return f"{self.full_name} - {self.loan_purpose}"
     
+    
     # add project**********
-
 class AddProject(models.Model):
-    project_name=models.CharField(max_length=100)
-    type_of_project=models.CharField(max_length=100)
-    project_location=models.CharField(max_length=200)
-    location_url=models.CharField(max_length=300)
-    number_of_units=models.CharField(max_length=100)
-    available_units=models.CharField(max_length=100)
-    available_facing=models.CharField(max_length=100)
-    available_sizes=models.CharField(max_length=100)
-    rera_approved = models.BooleanField( null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    plan_type = models.CharField(max_length=50, choices=PlanType.choices, null=True, blank=True)
+
+    project_name = models.CharField(max_length=100)
+    type_of_project = models.CharField(max_length=100)
+    project_location = models.CharField(max_length=200)
+    location_url = models.CharField(max_length=300)
+    number_of_units = models.CharField(max_length=100)
+    available_units = models.CharField(max_length=100)
+    available_facing = models.CharField(max_length=100)
+    available_sizes = models.CharField(max_length=100)
+
+    rera_approved = models.BooleanField(null=True, blank=True)
     select_amenities = models.CharField(max_length=255, null=True, blank=True)
-    highlights=models.CharField(max_length=100)
-    type_of_approval=models.CharField(max_length=100)
-    total_project_area=models.CharField(max_length=100)
-    contact_info=models.IntegerField()
-    pricing=models.IntegerField()
+    highlights = models.CharField(max_length=100)
+    type_of_approval = models.CharField(max_length=100)
+    total_project_area = models.CharField(max_length=100)
+    contact_info = models.IntegerField()
+    pricing = models.IntegerField()
+
+    image = models.ImageField(upload_to='project_image/', null=True, blank=True)
+    video = models.FileField(upload_to='project_video/', null=True, blank=True)
+    document = models.FileField(upload_to='project_docs/', null=True, blank=True)
+
+    def __str__(self):
+        return self.project_name
 
 
 
+class ProjectImage(models.Model):
+    project = models.ForeignKey(AddProject, related_name="extra_images", on_delete=models.CASCADE)
+    image = models.ImageField(upload_to="project_extra/")
 
-    # img,video,doc-----
+    def __str__(self):
+        return f"Image for {self.project.project_name}"
     
 
-    imgae=models.ImageField(upload_to='project_image/', null=True, blank=True)
-    video=models.FileField(upload_to='project-video/',   null=True, blank=True)
-    document=models.FileField( upload_to='project-doc/',null=True,blank=True)
+
+class SavedProperty(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    property = models.ForeignKey(AddPropertyModel, on_delete=models.CASCADE)
+    saved_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("user", "property")
 
     def _str_(self):
-        return  f"{self.project_name} - {self.project_location}"
+        return f"{self.user.username} saved {self.property.title}"
     
+
+
+    # companny contact
+ 
+class ContactMessage(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    name = models.CharField(max_length=150)
+    email = models.EmailField(max_length=150, null=True, blank=True)
+    requirement = models.CharField(max_length=255, null=True, blank=True)
+    message = models.TextField(null=True, blank=True)
+    cid = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "company_contact"
+
+    def __str__(self):
+        return self.name
+    
+
+
 class Reels(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
     reel=models.FileField(upload_to='reels/',null=True,blank=True)
@@ -359,9 +425,12 @@ class Comment(models.Model):
     reel=models.ForeignKey(Reels,on_delete=models.CASCADE)
     comment=models.CharField(max_length=255)
     created_at=models.DateTimeField(auto_now_add=True)
-    def __str__(self):
+    def _str_(self):
         return self.comment
     
+
+
+
 
 
  

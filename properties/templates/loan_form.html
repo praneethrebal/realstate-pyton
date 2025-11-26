@@ -5,27 +5,30 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Loan Application Form</title>
+
 <link rel="stylesheet" href="{% static '/css/loanform.css' %}" />
+
 <style>
+/* Force page to stack vertically */
 body {
     font-family: 'Poppins', sans-serif;
+    display: block !important;
     background-color: #f1f3f6;
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
 }
 
 /* ---------- MAIN CONTAINER ---------- */
 .container {
     background-color: #ffffff;
-    margin: 40px 0;
+    margin: 40px auto;
     padding: 40px 50px;
     border-radius: 12px;
     width: 90%;
     max-width: 600px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-     margin-top: 100px;
+    margin-top: 120px;
+    clear: both;
 }
 
 /* HEADINGS */
@@ -116,119 +119,243 @@ button {
     background-color: #0069d9;
 }
 
-/* ===== EMI POPUP STYLES ===== */
+/* EMI POPUP (centered) */
 .emi-popup {
-    display: none;
+    display: none;               /* hidden by default */
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.6);
     justify-content: center;
     align-items: center;
     z-index: 9999;
+    padding: 20px;
 }
 
 .emi-content {
+    width: 100%;
+    max-width: 420px;
     background-color: #fff;
     border-radius: 10px;
-    padding: 25px;
-    width: 90%;
-    max-width: 350px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-    from {opacity: 0; transform: translateY(-10px);}
-    to {opacity: 1; transform: translateY(0);}
+    padding: 22px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    position: relative;
 }
 
 .emi-content h3 {
+    margin: 0 0 12px 0;
     text-align: center;
-    margin-top: 0;
 }
 
-.emi-content label {
-    font-weight: bold;
+.close-x {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    font-size: 22px;
+    cursor: pointer;
+    color: #555;
 }
 
-.emi-content input {
-    width: 100%;
-    margin-bottom: 10px;
-    padding: 8px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
+.emi-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 12px;
 }
 
-.emi-content .result {
-    font-size: 18px;
-    font-weight: bold;
-    color: #007bff;
-    text-align: center;
-    margin: 10px 0;
-}
-
-.close-btn, .calc-btn {
-    background-color: #dc3545;
+.calc-btn {
+    background: #007bff;
     color: white;
     border: none;
-    border-radius: 5px;
+    padding: 10px 14px;
+    border-radius: 6px;
     cursor: pointer;
-    width: 48%;
-    padding: 10px;
+    font-weight: 600;
+    width: 100%;
+}
+
+.close-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    width: 100%;
+    margin-top: 8px;
+}
+
+.emi-results {
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    background: #f7fbff;
+    border: 1px solid #e6f0ff;
+}
+
+.emi-results p {
+    margin: 6px 0;
+    font-weight: 600;
+    color: #0a47a1;
+}
+
+/* FOOTER */
+.footer {
+    font-family: 'Poppins', sans-serif;
+    background: #fff;
+    color: #333;
+}
+
+.footer-main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: auto;
+    padding: 50px 20px;
+    gap: 40px;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 230px;
+}
+
+.footer-section h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.footer-section p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.footer-section a {
+    color: #333;
+    text-decoration: none;
+}
+
+.footer-section a:hover {
+    text-decoration: underline;
+}
+
+.footer-section button {
+    background: #888;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 18px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.footer-section button:hover {
+    background: #555;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-box input {
+    width: 200px;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+    border-color: #0056d2;
+    box-shadow: 0 0 4px rgba(0, 86, 210, 0.3);
+}
+
+.search-box button {
+    background-color: #666;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.search-box button:hover {
+    background-color: #0056d2;
+}
+
+.social-icons a {
+    font-size: 18px;
+    color: #444;
+    margin-right: 12px;
+    transition: color 0.3s;
+}
+
+.social-icons a:hover {
+    color: #0a66c2;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 6px;
+}
+
+.footer-section ul li a {
+    font-size: 14px;
+}
+
+.footer-bottom {
+    background: #0056d2;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 15px 40px;
+    font-size: 14px;
+}
+
+.footer-bottom span {
     font-weight: 600;
 }
 
-.close-btn:hover, .calc-btn:hover {
-    background-color: blue;
-}
+/* Responsive */
+@media (max-width:600px) {
+    .emi-content { padding: 18px; }
+    .container { padding: 30px 18px; margin-top: 80px; }
+    
 
-.call {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-}
-
-/* ===== RESPONSIVE FIXES ===== */
-@media (max-width: 600px) {
-    .container {
-        padding: 25px 20px;
-    }
-
-    .button-group {
-        flex-direction: column;
-    }
-
-    button {
-        width: 100%;
-        max-width: 100%;
-    }
-
-    .radio-group, .checkbox-group {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .emi-content {
-        width: 90%;
-        padding: 20px;
-    }
-
-    .close-btn, .calc-btn {
-        width: 100%;
+    .footer{
+        display: none !important;
     }
 }
-
 </style>
+
 </head>
 <body>
 
 {% include 'NavBar.html' %}
 
-
 <div class="container">
     <h2>Loan Application Form</h2>
-    <form id="loanForm" method="POST" action="">
+
+    <form id="loanForm" method="POST">
         {% csrf_token %}
 
         <label>Full Name</label>
@@ -259,7 +386,7 @@ button {
         <input type="text" name="zip_code" required>
 
         <label>Loan Amount</label>
-        <input type="number" name="loan_amount" required>
+        <input type="number" id="formLoanAmount" name="loan_amount" required>
 
         <label>Loan Purpose</label>
         <select name="loan_purpose" required>
@@ -305,58 +432,194 @@ button {
 
         <div class="button-group">
             <button type="submit" class="btn-apply">Apply Now</button>
-            <button type="button" class="btn-emi" onclick="openEMIPopup()">EMI Calculator</button>
+            <button type="button" class="btn-emi" onclick="openEMIPopupFromForm()">EMI Calculator</button>
         </div>
     </form>
 </div>
 
 <!-- EMI POPUP -->
-<div class="emi-popup" id="emiPopup">
-    <div class="emi-content">
-        <h3>EMI Calculator</h3>
-        <label>Loan Amount</label>
-        <input type="number" id="loanAmount" placeholder="Enter loan amount">
-        <label>Annual Interest Rate (%)</label>
-        <input type="number" id="interestRate" placeholder="Enter interest rate">
-        <label>Loan Tenure (in months)</label>
-        <input type="number" id="loanTenure" placeholder="Enter loan tenure">
-        <div class="result" id="emiResult">Estimated EMI: ₹0.00</div>
-        <div class="call">
-            <button class="calc-btn" onclick="calculateEMI()">Calculate</button>
-            <button class="close-btn" onclick="closeEMIPopup()">Close</button>
+<div class="emi-popup" id="emiPopup" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="emi-content" role="document" aria-labelledby="emiTitle">
+        <span class="close-x" id="emiClose" aria-label="">&times;</span>
+        <h3 id="emiTitle">EMI Calculator</h3>
+
+        <div class="emi-row">
+            <label for="loanAmount">Loan Amount (₹)</label>
+            <input type="number" id="loanAmount" placeholder="Enter loan amount" min="0" step="any">
         </div>
+
+        <div class="emi-row">
+            <label for="interestRate">Annual Interest Rate (%)</label>
+            <input type="number" id="interestRate" placeholder="e.g. 9.5" min="0" step="any">
+        </div>
+
+        <div class="emi-row">
+            <label for="loanMonths">Tenure (months)</label>
+            <input type="number" id="loanMonths" placeholder="e.g. 60" min="1" step="1">
+        </div>
+
+        <button class="calc-btn" id="calcEmiBtn">Calculate</button>
+        <div class="emi-results" id="emiResults" style="display:none" aria-live="polite">
+            <p id="monthlyEmi">Monthly EMI: ₹0.00</p>
+            <p id="totalPayment">Total Payment: ₹0.00</p>
+            <p id="totalInterest">Total Interest: ₹0.00</p>
+        </div>
+
+   
     </div>
 </div>
 
+<br><br><br>
+ <footer class="footer">
+  <div class="footer-main">
+      <div class="footer-section">
+          <h3>SEARCH</h3>
+          <div class="search-box">
+              <input type="text" placeholder="Search For State">
+              <button type="button">Search</button>
+          </div>
+      </div>
+
+      <div class="footer-section">
+          <h3>FIND PROPERTY</h3>
+          <p>Select From Thousands Of Options, Without Brokerage.</p>
+          <button>Enquiry Now</button>
+
+          <h3 style="margin-top:25px;">LIST YOUR PROPERTY</h3>
+          <p>For Free. Without Any Brokerage.</p>
+          <button>Post Now</button>
+      </div>
+
+      <div class="footer-section">
+          <h3>CONTACT US</h3>
+          <p>Toll Free - 1800 41 99099</p>
+          <p>9:30 AM To 6:30 PM (Mon-Sun)</p>
+          <p>Email - <a href="mailto:feedback@propertysr.com">feedback@propertysr.com</a></p>
+
+          <h3 style="margin-top:20px;">FOLLOW US</h3>
+          <div class="social-icons">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+      </div>
+
+      <div class="footer-section">
+          <h3>COMPANY</h3>
+          <ul>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">For Partners</a></li>
+              <li><a href="#">Terms</a></li>
+              <li><a href="#">Annual Return</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Contact Us</a></li>
+              <li><a href="#">Unsubscribe</a></li>
+              <li><a href="#">Merger Hearing Advertisement</a></li>
+          </ul>
+      </div>
+  </div>
+
+  <div class="footer-bottom">
+      <p>©<span>WEEKDAYS PROPERTIES</span>, All Rights Reserved.</p>
+      <p>Designed By <span> YGR GOBAL IT SERVICES Pvt. Ltd,2023.</span></p>
+  </div>
+</footer>
+
 <script>
+/* Open EMI popup and prefill loan amount from form input if available */
+function openEMIPopupFromForm() {
+    const formLoan = document.getElementById('formLoanAmount');
+    if (formLoan && formLoan.value) {
+        document.getElementById('loanAmount').value = formLoan.value;
+    }
+    openEMIPopup();
+}
+
 function openEMIPopup() {
-    document.getElementById('emiPopup').style.display = 'flex';
+    const popup = document.getElementById('emiPopup');
+    popup.style.display = 'flex';
+    popup.setAttribute('aria-hidden', 'false');
+    // set focus to first input for accessibility
+    document.getElementById('loanAmount').focus();
 }
 
 function closeEMIPopup() {
-    document.getElementById('emiPopup').style.display = 'none';
+    const popup = document.getElementById('emiPopup');
+    popup.style.display = 'none';
+    popup.setAttribute('aria-hidden', 'true');
 }
 
-function calculateEMI() {
-    const loanAmount = parseFloat(document.getElementById('loanAmount').value);
-    const interestRate = parseFloat(document.getElementById('interestRate').value)/12/100;
-    const loanTenure = parseFloat(document.getElementById('loanTenure').value);
+/* Close handlers */
+document.getElementById('emiClose').addEventListener('click', closeEMIPopup);
+document.getElementById('closeEmiBtn').addEventListener('click', closeEMIPopup);
 
-    if (!loanAmount || !interestRate || !loanTenure) {
-        document.getElementById('emiResult').textContent = "Please fill all fields.";
+// Close on ESC
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeEMIPopup();
+});
+
+// Click outside content to close
+document.getElementById('emiPopup').addEventListener('click', function(e) {
+    if (e.target === this) closeEMIPopup();
+});
+
+/* EMI Calculation */
+function calculateEMIValues(P, annualRate, N) {
+    // P = principal, annualRate in %, N = months
+    const R = annualRate / 12 / 100; // monthly decimal rate
+    if (R === 0) {
+        // no interest (simple division)
+        const emi = P / N;
+        return {
+            emi: emi,
+            totalPayment: emi * N,
+            totalInterest: emi * N - P
+        };
+    }
+    const pow = Math.pow(1 + R, N);
+    const emi = (P * R * pow) / (pow - 1);
+    const totalPayment = emi * N;
+    const totalInterest = totalPayment - P;
+    return {
+        emi: emi,
+        totalPayment: totalPayment,
+        totalInterest: totalInterest
+    };
+}
+
+document.getElementById('calcEmiBtn').addEventListener('click', function() {
+    const P = parseFloat(document.getElementById('loanAmount').value);
+    const annualRate = parseFloat(document.getElementById('interestRate').value);
+    const N = parseInt(document.getElementById('loanMonths').value, 10);
+
+    if (!P || P <= 0) {
+        alert('Please enter a valid loan amount.');
+        document.getElementById('loanAmount').focus();
+        return;
+    }
+    if (isNaN(annualRate) || annualRate < 0) {
+        alert('Please enter a valid annual interest rate (0 or positive).');
+        document.getElementById('interestRate').focus();
+        return;
+    }
+    if (!N || N <= 0) {
+        alert('Please enter a valid tenure in months.');
+        document.getElementById('loanMonths').focus();
         return;
     }
 
-    const emi = (loanAmount * interestRate * Math.pow(1 + interestRate, loanTenure)) /
-                (Math.pow(1 + interestRate, loanTenure) - 1);
+    const res = calculateEMIValues(P, annualRate, N);
 
-    document.getElementById('emiResult').textContent = `Estimated EMI: ₹${emi.toFixed(2)}`;
-}
+    // show results with commas & 2 decimals
+    function fmt(num) {
+        return num.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
 
-document.getElementById('loanForm').addEventListener('submit', function(e){
-    e.preventDefault();
-    alert("✅ Loan Application submitted successfully!");
-    this.reset();
+    document.getElementById('monthlyEmi').textContent = 'Monthly EMI: ₹ ' + fmt(res.emi);
+    document.getElementById('totalPayment').textContent = 'Total Payment: ₹ ' + fmt(res.totalPayment);
+    document.getElementById('totalInterest').textContent = 'Total Interest: ₹ ' + fmt(res.totalInterest);
+    document.getElementById('emiResults').style.display = 'block';
 });
 </script>
 

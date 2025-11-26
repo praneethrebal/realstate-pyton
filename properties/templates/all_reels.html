@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Reels</title>
+<style>
+body {
+    margin: 0;
+    padding: 20px;
+    background: #fff; /* dark background for better video view */
+    font-family: Arial, sans-serif;
+    color: white;
+}
+
+.reels-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.reel-card {
+    position: relative;
+}
+
+.reel-card video {
+    width: 300px;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.reel-card video:hover {
+    transform: scale(1.05);
+}
+
+.button-group {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.button-group button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.view-btn { background: green; color: white; }
+.delete-btn { background: red; color: white; }
+
+/* Modal */
+.modal {
+    position: fixed;
+    top:50%; left:50%;
+    width: 300px;
+    height: 400px;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0,0,0.95);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    border-radius: 12px;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: red;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .reel-card video {
+        width: 90vw;  /* almost full width of screen */
+        height: 60vh; /* proportional height */
+    }
+
+    .modal {
+        width: 90vw;
+        height: 60vh;
+    }
+
+    .button-group {
+        top: 5px;
+        right: 5px;
+        gap: 3px;
+    }
+
+    .button-group button {
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+
+    .close-btn {
+        top: 5px;
+        right: 5px;
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+}
+
+</style>
+</head>
+<body>
+
+{% if reel %}
+<div class="reels-container">
+    {% for i in reel %}
+    <div class="reel-card">
+        <video src="{{ i.reel.url }}" muted loop></video>
+        <div class="button-group">
+            <button class="view-btn" onclick="openModal('{{ i.reel.url }}')">View</button>
+            <button class="delete-btn" onclick="deleteReel({{ i.id }}, this)">Delete</button>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>No reel uploaded yet.</p>
+{% endif %}
+
+<!-- Modal same size -->
+<div class="modal" id="videoModal">
+    <video id="modalVideo" autoplay loop></video>
+    <button class="close-btn" onclick="closeModal()">Close</button>
+</div>
+
+<script>
+// ============================
+// Open video modal
+// ============================
+function openModal(url) {
+    const modal = document.getElementById('videoModal');
+    const modalVideo = document.getElementById('modalVideo');
+    modalVideo.src = url;
+    modal.classList.add('active');
+    modalVideo.muted = false; // sound enabled
+    modalVideo.play();
+}
+
+// ============================
+// Close video modal
+// ============================
+function closeModal() {
+    const modal = document.getElementById('videoModal');
+    const modalVideo = document.getElementById('modalVideo');
+    modal.classList.remove('active');
+    modalVideo.pause();
+    modalVideo.src = '';
+}
+
+// ============================
+// Delete reel using AJAX
+// ============================
+function deleteReel(id, btn) {
+    if (!confirm('Are you sure you want to delete this reel?')) return;
+
+    fetch(`/delete-reel/${id}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            btn.closest('.reel-card').remove();
+            alert('Reel deleted successfully!');
+        } else {
+            alert('Failed to delete reel.');
+        }
+    })
+    .catch(err => console.error(err));
+}
+</script>
+
+
+</body>
+</html>

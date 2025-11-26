@@ -1,9 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import User, AddPropertyModel,FutureRequirement,Reels
-
+from .models import *
 ROLE_CHOICES = [
-  
+     ('','Select Role'),
     ('PROFESSIONAL', 'Professional'),
     ('OWNER', 'Citizen'),
     ('MARKETER', 'Marketer'),
@@ -38,11 +37,11 @@ CATEGORY_CHOICES = [
 
 class UserRegisterForm(UserCreationForm):
     role = forms.ChoiceField(choices=ROLE_CHOICES)
-    category = forms.ChoiceField(choices=CATEGORY_CHOICES, required=False)
-    plan_type = forms.ChoiceField(choices=PLAN_CHOICES, required=False, widget=forms.RadioSelect(attrs={'class': 'plan-radio-select'}))
-    description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Description'}), required=False)
-    location = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Location'}), required=False)
-    experience = forms.IntegerField(required=False)
+    category = forms.ChoiceField(choices=CATEGORY_CHOICES, required=True)
+    plan_type = forms.ChoiceField(choices=PLAN_CHOICES, required=True, widget=forms.RadioSelect(attrs={'class': 'plan-radio-select'}))
+    description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Description'}), required=True)
+    location = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Location'}), required=True)
+    experience = forms.IntegerField(required=True,widget=forms.NumberInput(attrs={'placeholder': 'Experience'}))
     referred_by_code = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Referral Code (Optional)'}), required=False)
     deals = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Deals (Optional)'}), required=False)
     profile_image_path = forms.ImageField(required=False, widget=forms.FileInput(attrs={'id': 'id_profile_image_path'}))
@@ -190,11 +189,11 @@ class MoveRequestForm(forms.ModelForm):
 class CompanyRegisterForm(UserCreationForm):
 
     company_name = forms.CharField(max_length=255, required=True)
-    description = forms.CharField(required=False, widget=forms.Textarea)
-    experience = forms.IntegerField(required=False, min_value=0)
-    total_projects = forms.IntegerField(required=False, min_value=0)
-    ongoing_projects = forms.IntegerField(required=False, min_value=0)
-    completed_projects = forms.IntegerField(required=False, min_value=0)
+    description = forms.CharField(required=True, widget=forms.Textarea)
+    experience = forms.IntegerField(required=True, min_value=0)
+    total_projects = forms.IntegerField(required=True, min_value=0)
+    ongoing_projects = forms.IntegerField(required=True, min_value=0)
+    completed_projects = forms.IntegerField(required=True, min_value=0)
     address = forms.CharField(max_length=255, required=True)
     contact_number = forms.CharField(max_length=15, required=True)
 
@@ -214,12 +213,16 @@ class CompanyRegisterForm(UserCreationForm):
             "address", "contact_number",
             "wallpaper", "logo"
         ]
+def clean_contact_number(self):
+    num = self.cleaned_data["contact_number"]
 
-    def clean_contact_number(self):
-        num = self.cleaned_data["contact_number"]
-        if not num.isdigit():
-            raise forms.ValidationError("Contact number must be digits.")
-        return num
+    if not num.isdigit():
+        raise forms.ValidationError("Contact number must contain only digits.")
+
+    if User.objects.filter(phone=num).exists():
+        raise forms.ValidationError("This contact number is already registered.")
+
+    return num
     
 
 class FranchiseForm(UserCreationForm):
@@ -251,12 +254,34 @@ class FranchiseForm(UserCreationForm):
         if not phone.isdigit():
             raise forms.ValidationError("Phone number must contain only digits.")
         return phone
-        
+    
+
 class ReelsForm(forms.ModelForm):
-    class Meta:
+  class Meta:
         model=Reels
         fields=['reel','description']
-      
+
+
+
+        from .models import FranchiseApplication
+
+class FranchiseApplicationForm(forms.ModelForm):
+    class Meta:
+        model = FranchiseApplication
+        fields = ['full_name', 'email', 'contact', 'location', 'experience', 'reason']
+        widgets = {
+            'experience': forms.Textarea(attrs={'rows': 2, 'placeholder': 'Describe your experience'}),
+            'reason': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Why do you want to start a franchise?'}),
+            'contact': forms.TextInput(attrs={'placeholder': 'Enter contact number'}),
+        }
+
+    def clean_contact(self):
+        contact = self.cleaned_data.get('contact')
+        if not contact.isdigit():
+            raise forms.ValidationError("Contact must be numeric.")
+        return contact
+        
+
 
 
 

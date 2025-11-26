@@ -1,165 +1,202 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>User Registration</title>
+
     <link rel="stylesheet" href="{% static 'css/register.css' %}" />
+
     <style>
-      .hidden {
-        display: none;
-      }
-      .profile-preview {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-      }
-      button.otp-btn {
-        background-color: #007bff;
-        color: white;
-        padding: 4px 10px;
-        border: none;
-        cursor: pointer;
-      }
+        .hidden { display: none; }
+        .profile-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+        }
+        button.otp-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 4px 10px;
+            border: none;
+            cursor: pointer;
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
     </style>
-  </head>
-  <body>
+</head>
+
+<body>
     <div class="register-form-container">
-      <h1 class="formHeading">Register</h1>
-      {% if form.errors %}
-      <div class="error-messages">
-        {% for field, errors in form.errors.items %} {% for error in errors %}
-        <p class="error">{{ error }}</p>
-        {% endfor %} {% endfor %}
-      </div>
-      {% endif %}
+        <h1 class="formHeading">Register</h1>
 
-      <form method="POST" enctype="multipart/form-data" id="register-form">
-        {% csrf_token %}
+        {% if form.errors %}
+            <div class="error-messages">
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <p class="error">{{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        {% endif %}
 
-        <!-- Profile Image -->
-        <div class="profile-Photo">
-          <img
-            src="{% static 'images/Default_profile_picture.jpeg' %}"
-            id="image-preview"
-            class="profile-preview"
-          />
-          <label for="id_profile_image_path">Upload Profile</label>
-          {{ form.profile_image_path }}
-        </div>
+        <form method="POST" enctype="multipart/form-data" id="register-form">
+            {% csrf_token %}
 
-        <!-- Common Fields -->
-        {{ form.username }} {{ form.email }}
-        <div class="otp-section">
-          {{ form.phone }}
-          <button type="button" id="send-otp-btn" class="otp-btn">
-            Send OTP
-          </button>
-          <input
-            type="text"
-            id="otp-input"
-            placeholder="Enter OTP"
-            class="hidden"
-          />
-          <button type="button" id="verify-otp-btn" class="otp-btn hidden">
-            Verify OTP
-          </button>
-        </div>
+            <!-- PROFILE IMAGE -->
+            <div class="profile-Photo">
+                <img src="{% static 'images/Default_profile_picture.jpeg' %}" id="image-preview" class="profile-preview" />
+                <label for="id_profile_image_path">Upload Profile</label>
+                {{ form.profile_image_path }}
+            </div>
 
-        {{ form.password1 }} {{ form.password2 }}
+            <!-- COMMON FIELDS -->
+            {{ form.username }}
+            {{ form.email }}
 
-        <!-- Role -->
-        <div class="role-dropdown">{{ form.role }}</div>
+            <!-- OTP SECTION -->
+            <div class="otp-section">
+                {{ form.phone }}
 
-        <!-- Dynamic Fields -->
-        <div id="professional-fields" class="hidden">
-          {{ form.category }} {{ form.description }} {{ form.location }}
-          <br />{{ form.experience }} 
-          <label>Price (₹)</label>
-          <input type="text" value="4999" readonly />
-        </div>
+                <button type="button" id="send-otp-btn" class="otp-btn">Send OTP</button>
 
-        <div id="owner-fields" class="hidden">
-          {{ form.description }} {{ form.location }} {{ form.experience }}<br />
-           {{ form.deals }}
-        </div>
+                <input type="text" id="otp-input" placeholder="Enter OTP" class="hidden" />
+                <button type="button" id="verify-otp-btn" class="otp-btn hidden">Verify OTP</button>
+            </div>
 
-        <div id="marketer-fields" class="hidden">
-          <label>Marketing Category</label>
-          {{ form.category }}
-          <label>Choose Plan</label>
-          <div id="plan-type-container">{{ form.plan_type }}</div>
-          {{ form.description }} {{ form.location }} {{ form.experience }}<br />
-           {{ form.deals }}
-        </div>
-        <div id="referral-code-container">
-          {{ form.referred_by_code}}
-        </div>
+            <!-- Hidden field - tracks OTP verification -->
+            <input type="hidden" id="otp-verified" value="false">
 
-        <div>
-          <input type="checkbox" required />
-          <span><a href="#">Terms & Conditions</a></span>
-        </div>
+            {{ form.password1 }}
+            {{ form.password2 }}
 
-        <button type="submit">Register</button>
-        <button
-          type="button"
-          onclick="window.location.href='/company-register'"
-        >
-          Register as Company
-        </button>
-      </form>
+            <!-- ROLE -->
+            <div id="role-container">
+    <label>Select Role</label>
+    {{ form.role }}
+         </div>
+            <!-- PROFESSIONAL -->
+            <div id="professional-fields" class="hidden">
+                {{ form.category }} {{ form.description }} {{ form.location }}
+                <br /> {{ form.experience }}
+                <label>Price (₹)</label>
+                <input type="text" value="4999" readonly />
+            </div>
+
+            <!-- OWNER -->
+            <div id="owner-fields" class="hidden">
+                {{ form.description }} {{ form.location }} {{ form.experience }}
+                <br /> {{ form.deals }}
+            </div>
+
+            <!-- MARKETER -->
+            <div id="marketer-fields" class="hidden">
+                <label>Marketing Category</label>
+                {{ form.category }}
+                <label>Choose Plan</label>
+                <div id="plan-type-container">{{ form.plan_type }}</div>
+                {{ form.description }} {{ form.location }} {{ form.experience }}
+                <br /> {{ form.deals }}
+            </div>
+
+            <div id="referral-code-container">{{ form.referred_by_code }}</div>
+
+            <div>
+                <input type="checkbox" style="width: auto;" required/>
+                <span><a href="#">Terms & Conditions</a></span>
+            </div>
+
+            <button type="submit" id="register-btn">Register</button>
+
+            <button type="button" onclick="window.location.href='/company-register'">Register as Company</button>
+           
+        </form>
     </div>
 
-    <script>
-      // ===== OTP Simulation =====
-      document
-        .getElementById("send-otp-btn")
-        .addEventListener("click", function () {
-          const phone = document.querySelector("input[name='phone']").value;
-          if (!phone) return alert("Enter your phone number first!");
-          document.getElementById("otp-input").classList.remove("hidden");
-          document.getElementById("verify-otp-btn").classList.remove("hidden");
-          alert("OTP sent to " + phone);
+
+<script>
+/* ============================
+   SEND OTP
+=============================== */
+document.getElementById("send-otp-btn").addEventListener("click", function () {
+
+    const phone = document.querySelector("input[name='phone']").value;
+    if (!phone) return alert("Enter your phone number first!");
+
+    fetch(`/otp/send/?phone=${phone}`)
+        .then((res) => res.json())
+        .then((data) => {
+            if (data.error) return alert(data.error);
+
+            document.getElementById("otp-input").classList.remove("hidden");
+            document.getElementById("verify-otp-btn").classList.remove("hidden");
+            alert("OTP sent successfully to " + phone);
+
+            console.log("DEV OTP:", data.otp); // remove in production
         });
+});
 
-      document
-        .getElementById("verify-otp-btn")
-        .addEventListener("click", function () {
-          const otp = document.getElementById("otp-input").value;
-          if (otp === "1234") alert("OTP verified ✅");
-          else alert("Invalid OTP");
+/* ============================
+   VERIFY OTP
+=============================== */
+document.getElementById("verify-otp-btn").addEventListener("click", function () {
+
+    const phone = document.querySelector("input[name='phone']").value;
+    const otp = document.getElementById("otp-input").value;
+
+    fetch(`/otp/verify/?phone=${phone}&otp=${otp}`)
+        .then((res) => res.json())
+        .then((data) => {
+            if (data.error) return alert(data.error);
+
+            alert("OTP verified successfully! ✔");
+
+            document.getElementById("otp-verified").value = "true";  // OTP verified
         });
+});
 
-      // ===== Role-based Dynamic Fields =====
-      const roleSelect = document.getElementById("id_role");
-      const professional = document.getElementById("professional-fields");
-      const owner = document.getElementById("owner-fields");
-      const marketer = document.getElementById("marketer-fields");
+/* ============================
+   BLOCK SUBMISSION IF OTP NOT VERIFIED
+=============================== */
+document.getElementById("register-form").addEventListener("submit", function (e) {
+    if (document.getElementById("otp-verified").value !== "true") {
+        e.preventDefault();
+        alert("Please verify OTP before submitting the form!");
+    }
+});
 
-      roleSelect.addEventListener("change", function () {
-        const role = this.value;
-        professional.classList.add("hidden");
-        owner.classList.add("hidden");
-        marketer.classList.add("hidden");
+/* ============================
+   ROLE-BASED FIELDS
+=============================== */
+const roleSelect = document.getElementById("id_role");
+const professional = document.getElementById("professional-fields");
+const owner = document.getElementById("owner-fields");
+const marketer = document.getElementById("marketer-fields");
 
-        if (role === "PROFESSIONAL") {
-          professional.classList.remove("hidden");
-        } else if (role === "OWNER") {
-          owner.classList.remove("hidden");
-        } else if (role === "MARKETER") {
-          marketer.classList.remove("hidden");
-        }
-      });
+roleSelect.addEventListener("change", function () {
+    professional.classList.add("hidden");
+    owner.classList.add("hidden");
+    marketer.classList.add("hidden");
 
-      // ===== Profile Picture Preview =====
-      const fileInput = document.getElementById("id_profile_image_path");
-      const previewImg = document.getElementById("image-preview");
-      fileInput.addEventListener("change", (e) => {
-        const file = e.target.files[0];
-        if (file) previewImg.src = URL.createObjectURL(file);
-      });
-    </script>
-  </body>
+    if (this.value === "PROFESSIONAL") professional.classList.remove("hidden");
+    if (this.value === "OWNER") owner.classList.remove("hidden");
+    if (this.value === "MARKETER") marketer.classList.remove("hidden");
+});
+
+/* ============================
+   PROFILE IMAGE PREVIEW
+=============================== */
+const fileInput = document.getElementById("id_profile_image_path");
+const previewImg = document.getElementById("image-preview");
+
+fileInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (file) previewImg.src = URL.createObjectURL(file);
+});
+</script>
+
+</body>
 </html>

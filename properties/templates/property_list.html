@@ -201,6 +201,11 @@ input, select {
         width: 100%;
         border-radius: 10px;
     }
+
+            .footer {
+    display: none !important;
+}
+   
 }
     </style>
 </head>
@@ -210,10 +215,12 @@ input, select {
 {% include 'NavBar.html' %}
 
 <div class="main-layout">
+<!-- MOBILE FILTER TOGGLE BUTTON (SHOW ON MOBILE ONLY) -->
+<button class="filter-toggle-btn" onclick="toggleFilters()">☰ Filters</button>
 
-    <!-- FILTER BOX -->
-    <div class="filter-box">
-        <h3>Filters</h3>
+<div class="filter-box">
+    <h3>Filters</h3>
+
 
         <form method="GET" id="filter-form">
 
@@ -282,7 +289,7 @@ input, select {
 
             <!-- DETAILS -->
             <div class="right">
-                <a href="{% url 'property_detail' item.id %}" style="color:inherit; text-decoration:none;">
+                <a href="{% url 'prop:property_detail' item.id %}" style="color:inherit; text-decoration:none;">
                     <h4>OWNER</h4>
                     <h2>{{ item.user }}</h2>
 
@@ -292,12 +299,13 @@ input, select {
                     <p>🔥 {{ item.description }}</p>
                 </a>
 
-                <!-- ACTION BUTTONS (not inside link) -->
+                <!-- ACTION BUTTONS -->
                 <div class="action-buttons">
                     <button class="action-btn">📞</button>
                     <button class="action-btn">🔗</button>
 
-                    <button class="action-btn" onclick="saveImage('{{ item.image.url }}')">💾</button>
+                    <!-- SAVE BUTTON -->
+                    <button class="action-btn" onclick="toggleSave({{ item.id }}, this)">💾</button>
                 </div>
 
             </div>
@@ -309,65 +317,316 @@ input, select {
 
 </div>
 
+<style>
+         /* ---------- FOOTER ---------- */
+.footer {
+    font-family: 'Poppins', sans-serif;
+    background: #fff;
+    color: #333;
+}
+
+.footer-main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: auto;
+    padding: 50px 20px;
+    gap: 40px;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 230px;
+}
+
+.footer-section h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.footer-section p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.footer-section a {
+    color: #333;
+    text-decoration: none;
+}
+
+.footer-section a:hover {
+    text-decoration: underline;
+}
+
+.footer-section button {
+    background: #888;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 18px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.footer-section button:hover {
+    background: #555;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-box input {
+    width: 200px;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+    border-color: #0056d2;
+    box-shadow: 0 0 4px rgba(0, 86, 210, 0.3);
+}
+
+.search-box button {
+    background-color: #666;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.search-box button:hover {
+    background-color: #0056d2;
+}
+
+.social-icons a {
+    font-size: 18px;
+    color: #444;
+    margin-right: 12px;
+    transition: color 0.3s;
+}
+
+.social-icons a:hover {
+    color: #0a66c2;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 6px;
+}
+
+.footer-section ul li a {
+    font-size: 14px;
+}
+
+.footer-bottom {
+    background: #0056d2;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 15px 40px;
+    font-size: 14px;
+}
+
+.footer-bottom span {
+    font-weight: 600;
+}
+
+
+/* MOBILE FILTER TOGGLE BUTTON */
+.filter-toggle-btn {
+    display: none;
+    background: #0d6efd;
+    color: white;
+    padding: 14px;
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .filter-toggle-btn {
+        display: block;
+    }
+
+    .filter-box {
+        display: none;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .filter-box.open {
+        display: block !important;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+</style>
+<br><br><br>
+ <footer class="footer">
+  <div class="footer-main">
+      <div class="footer-section">
+          <h3>SEARCH</h3>
+          <div class="search-box">
+              <input type="text" placeholder="Search For State">
+              <button type="button">Search</button>
+          </div>
+      </div>
+
+      <div class="footer-section">
+          <h3>FIND PROPERTY</h3>
+          <p>Select From Thousands Of Options, Without Brokerage.</p>
+          <button>Enquiry Now</button>
+
+          <h3 style="margin-top:25px;">LIST YOUR PROPERTY</h3>
+          <p>For Free. Without Any Brokerage.</p>
+          <button>Post Now</button>
+      </div>
+
+      <div class="footer-section">
+          <h3>CONTACT US</h3>
+          <p>Toll Free - 1800 41 99099</p>
+          <p>9:30 AM To 6:30 PM (Mon-Sun)</p>
+          <p>Email - <a href="mailto:feedback@propertysr.com">feedback@propertysr.com</a></p>
+
+          <h3 style="margin-top:20px;">FOLLOW US</h3>
+          <div class="social-icons">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+      </div>
+
+      <div class="footer-section">
+          <h3>COMPANY</h3>
+          <ul>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">For Partners</a></li>
+              <li><a href="#">Terms</a></li>
+              <li><a href="#">Annual Return</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Contact Us</a></li>
+              <li><a href="#">Unsubscribe</a></li>
+              <li><a href="#">Merger Hearing Advertisement</a></li>
+          </ul>
+      </div>
+  </div>
+
+  <div class="footer-bottom">
+       <p>©<span>WEEKDAYS PROPERTIES</span>, All Rights Reserved.</p>
+      <p>Designed By <span> YGR GOBAL IT SERVICES Pvt. Ltd,2023.</span></p>
+  </div>
+</footer>
+
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const filterForm = document.getElementById('filter-form');
-    const rightList = document.querySelector('.right-list');
 
-    filterForm.addEventListener('submit', function (event) {
-        event.preventDefault(); 
-        const formData = new FormData(filterForm);
-        const params = new URLSearchParams(formData);
-
-
-        const fetchUrl = `${window.location.pathname}?${params.toString()}`;
-
-        
-        fetch(fetchUrl, {
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest' // To identify this as an AJAX request on the server if needed
-            }
-        })
-        .then(response => response.text())
-        .then(html => {
-            
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            const newRightList = doc.querySelector('.right-list');
-
-            if (newRightList) {
-
-                rightList.innerHTML = newRightList.innerHTML;
+// SAVE PROPERTY AJAX
+function toggleSave(id, btn) {
+    fetch(`/save/${id}/`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "saved") {
+                btn.textContent = "❤";
             } else {
-                rightList.innerHTML = '<p>No properties found matching your criteria.</p>';
+                btn.textContent = "💾";
             }
-        })
-        .catch(error => {
-            console.error('Error fetching filtered properties:', error);
-            rightList.innerHTML = '<p>An error occurred while filtering. Please try again.</p>';
         });
-    });
+}
 
-    // Make the reset button work with AJAX as well
-    const resetButton = filterForm.querySelector('.reset');
-    resetButton.addEventListener('click', function(event) {
-        event.preventDefault(); // Stop the link from navigating
-        
-        // Clear the form fields
-        filterForm.reset();
 
-        // Create a new submit event to trigger the fetch with cleared filters
-        filterForm.dispatchEvent(new Event('submit'));
-    });
 
-    // Function to handle saving an image (as in your original code)
-    window.saveImage = function(imageUrl) {
-        // This is a placeholder. You might want to implement functionality
-        // to add this to a "saved items" list, perhaps using localStorage or a backend endpoint.
-        alert('Save functionality for ' + imageUrl + ' can be implemented here!');
+// FILTER AJAX
+document.addEventListener("DOMContentLoaded", function () {
+
+    const filterForm = document.getElementById("filter-form");
+    const rightList = document.querySelector(".right-list");
+
+    if (filterForm) {
+        filterForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(filterForm);
+            const params = new URLSearchParams(formData);
+
+            const fetchUrl = `${window.location.pathname}?${params.toString()}`;
+
+            fetch(fetchUrl)
+                .then(response => response.text())
+                .then(html => {
+
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, "text/html");
+
+                    const newRightList = doc.querySelector(".right-list");
+
+                    if (newRightList) {
+                        rightList.innerHTML = newRightList.innerHTML;
+                    } else {
+                        rightList.innerHTML = "<p>No properties found</p>";
+                    }
+                });
+        });
+
+        // RESET AJAX
+        const resetButton = filterForm.querySelector(".reset");
+        if (resetButton) {
+            resetButton.addEventListener("click", function (event) {
+                event.preventDefault();
+                filterForm.reset();
+                filterForm.dispatchEvent(new Event("submit"));
+            });
+        }
     }
 });
+
+
+
+
+// MOBILE FILTER TOGGLE
+function toggleFilters() {
+    const fb = document.querySelector(".filter-box");
+    const btn = document.querySelector(".filter-toggle-btn");
+
+    fb.classList.toggle("open");
+
+    if (fb.classList.contains("open")) {
+        btn.textContent = "✖ Close";
+    } else {
+        btn.textContent = "☰ Filters";
+    }
+}
+
 </script>
+
+
 
 </body>
 </html>

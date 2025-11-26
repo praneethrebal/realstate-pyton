@@ -1,4 +1,3 @@
-{% load static%}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -7,6 +6,8 @@
     <title>Add New Property</title>
   </head>
   <body>
+
+      {% include 'NavBar.html' %}
     <div class="addProperty">
       <style>
         /* ===========================
@@ -15,7 +16,7 @@
 
         .addProperty {
           height: 200%;
-          width: 100%;
+          width: 99vw;
           margin-top: 10px;
           display: flex;
           flex-direction: column;
@@ -220,14 +221,7 @@
             flex-direction: column;
           }
         }
-
-
       </style>
-
- {% include 'NavBar.html' %}
-
-
-
       <form method="post" id="addPropertyForm" enctype="multipart/form-data">
         {% csrf_token %}
 
@@ -242,8 +236,7 @@
                 type="button"
                 class="option"
                 data-field="look"
-                data-value="{{ value }}"
-              >
+                data-value="{{ value }}">
                 {{ text }}
               </button>
               {% endfor %}
@@ -683,108 +676,119 @@
         <div class="form-step" id="step-5">
           <h2>🎉 Property Added Successfully!</h2>
           <p>Your property information has been saved and is pending review.</p>
-          <a href="{% url 'home' %}" class="button next">Go to Home</a>
+          <a href="{% url 'prop:home' %}" class="button next">Go to Home</a>
         </div>
       </form>
     </div>
 
     <script>
-      let currentStep = 1;
-      const formSteps = document.querySelectorAll(".form-step");
+/* ==========================================================
+   MULTI-STEP FORM
+========================================================== */
+let currentStep = 1;
+const formSteps = document.querySelectorAll(".form-step");
 
-      function showStep(stepNumber) {
-        formSteps.forEach((step, index) => {
-          step.classList.toggle("active", index + 1 === stepNumber);
-        });
-      }
+function showStep(stepNumber) {
+    formSteps.forEach((step, index) => {
+        step.classList.toggle("active", index + 1 === stepNumber);
+    });
+}
 
-      function nextStep() {
-        if (currentStep < 4) {
-          currentStep++;
-          showStep(currentStep);
-        }
-      }
+function nextStep() {
+    if (currentStep < 4) {
+        currentStep++;
+        showStep(currentStep);
+    }
+}
 
-      function prevStep() {
-        if (currentStep > 1) {
-          currentStep--;
-          showStep(currentStep);
-        }
-      }
+function prevStep() {
+    if (currentStep > 1) {
+        currentStep--;
+        showStep(currentStep);
+    }
+}
 
-      function updateConditionalFields(propertyType) {
-        const allConditionalFields = document.querySelectorAll(
-          "#step-2 .conditional-fields"
-        );
+/* ==========================================================
+   CONDITIONAL FIELDS FOR PROPERTY TYPE
+========================================================== */
+function updateConditionalFields(propertyType) {
+    const allConditionalFields = document.querySelectorAll("#step-2 .conditional-fields");
 
-        allConditionalFields.forEach((set) => {
-          const isMatch = set.dataset.propertyType === propertyType;
-          set.style.display = isMatch ? "block" : "none"; // Set display style
-          set.classList.toggle("active-fieldset", isMatch);
-          set.querySelectorAll("input, select, textarea").forEach((input) => {
+    allConditionalFields.forEach((set) => {
+        const isMatch = set.dataset.propertyType === propertyType;
+        set.style.display = isMatch ? "block" : "none";
+        set.classList.toggle("active-fieldset", isMatch);
+
+        set.querySelectorAll("input, select, textarea").forEach((input) => {
             input.disabled = !isMatch;
-          });
         });
-      }
+    });
+}
 
-      function setupOptionButtons() {
-        document.querySelectorAll(".option").forEach((button) => {
-          button.addEventListener("click", () => {
+/* ==========================================================
+   OPTION BUTTONS CLICK HANDLING
+========================================================== */
+function setupOptionButtons() {
+    document.querySelectorAll(".option").forEach((button) => {
+        button.addEventListener("click", () => {
             const fieldName = button.dataset.field;
             const fieldValue = button.dataset.value;
 
-            document.querySelector(`input[name="${fieldName}"]`).value =
-              fieldValue;
+            // Correct query selector
+            document.querySelector(`input[name="${fieldName}"]`).value = fieldValue;
 
-            document
-              .querySelectorAll(`.option[data-field="${fieldName}"]`)
-              .forEach((btn) => btn.classList.remove("active"));
+            // Remove previous selection
+            document.querySelectorAll(`.option[data-field="${fieldName}"]`)
+                .forEach((btn) => btn.classList.remove("active"));
+
+            // Highlight the selected one
             button.classList.add("active");
 
+            // If property type changed → update fields
             if (fieldName === "selectProperty") {
-              updateConditionalFields(fieldValue);
+                updateConditionalFields(fieldValue);
             }
-          });
         });
-      }
+    });
+}
 
-      document.addEventListener("DOMContentLoaded", () => {
-        setupOptionButtons();
-        showStep(currentStep);
-        updateConditionalFields(null); // Initially hide all conditional fields
+/* ==========================================================
+   ENABLE FIELDS BEFORE SUBMIT
+========================================================== */
+document.addEventListener("DOMContentLoaded", () => {
+    setupOptionButtons();
+    showStep(currentStep);
+    updateConditionalFields(null); // Hide all on load
 
-        const propertyForm = document.getElementById("addPropertyForm");
-        propertyForm.addEventListener("submit", function (event) {
-          event.preventDefault();
+    const propertyForm = document.getElementById("addPropertyForm");
 
-          // Re-enable fields in non-conditional steps (1, 3, 4)
-          document
-            .querySelectorAll("#step-1, #step-3, #step-4")
-            .forEach((step) => {
-              step
-                .querySelectorAll("input, select, textarea")
-                .forEach((input) => {
-                  input.disabled = false;
-                });
-            });
+    propertyForm.addEventListener("submit", function (event) {
+        event.preventDefault();
 
-          // Specifically find and re-enable inputs ONLY in the ACTIVE conditional fieldset in Step 2
-          const activeFieldSet = document.querySelector(
-            "#step-2 .conditional-fields.active-fieldset"
-          );
-          if (activeFieldSet) {
-            activeFieldSet
-              .querySelectorAll("input, select, textarea")
-              .forEach((input) => {
+        // Re-enable all fields of step 1, 3, 4
+        document.querySelectorAll("#step-1, #step-3, #step-4").forEach((step) => {
+            step.querySelectorAll("input, select, textarea").forEach((input) => {
                 input.disabled = false;
-              });
-          }
-
-          this.submit();
+            });
         });
-      });
-    </script>
 
+        // Enable only active conditional fieldset inputs
+        const activeFieldSet = document.querySelector("#step-2 .conditional-fields.active-fieldset");
+        if (activeFieldSet) {
+            activeFieldSet.querySelectorAll("input, select, textarea").forEach((input) => {
+                input.disabled = false;
+            });
+        }
+
+        this.submit();
+    });
+});
+</script>
+
+
+<!-- ==========================================================
+     ADD CUSTOM AMENITIES SCRIPT (NO CHANGE – WORKING)
+========================================================== -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const input = document.getElementById("id_custom_amenities_text");
@@ -795,7 +799,6 @@ document.addEventListener("DOMContentLoaded", function () {
         let value = input.value.trim();
         if (value === "") return;
 
-        // Split comma-separated values
         let items = value.split(",").map(a => a.trim()).filter(a => a !== "");
 
         items.forEach(item => {
@@ -804,12 +807,12 @@ document.addEventListener("DOMContentLoaded", function () {
             list.appendChild(li);
         });
 
-        // Clear input
         input.value = "";
     });
 });
 </script>
 
+  {% include 'footer.html' %}
 
 
     

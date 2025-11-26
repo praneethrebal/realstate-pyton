@@ -1,229 +1,363 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>{{ property.owner_name }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- GOOGLE FONT -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
     <style>
-      body {
-        font-family: "Poppins", sans-serif;
-        margin: 0;
-        padding: 15px;
-        background: #f9f9f9;
-        color: #333;
-      }
-
-      .page-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 20px;
-        margin: 20px auto;
-        max-width: 1200px;
-      }
-
-      /* Property Details Card */
-      .property-container {
-        flex: 1 1 600px;
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-      }
-
-      .property-container img {
-        width: 100%;
-        height: auto;
-        max-height: 320px;
-        object-fit: cover;
-        border-radius: 10px;
-        margin-bottom: 15px;
-      }
-
-      .property-container p {
-        font-size: 15px;
-        margin: 8px 0;
-        line-height: 1.5;
-      }
-
-      .property-container strong {
-        color: #222;
-      }
-
-      .property-container a.map-link {
-        color: #007bff;
-        text-decoration: none;
-        font-weight: 500;
-      }
-
-      .property-container a.map-link:hover {
-        text-decoration: underline;
-      }
-
-      .btn-buy {
-        display: inline-block;
-        text-align: center;
-        background: #28a745;
-        color: #fff;
-        font-weight: 600;
-        padding: 12px 25px;
-        border-radius: 8px;
-        text-decoration: none;
-        margin-top: 15px;
-        transition: background 0.3s;
-      }
-
-      .btn-buy:hover {
-        background: #218838;
-      }
-
-      hr {
-        border: none;
-        border-top: 1px solid #eee;
-        margin: 20px 0;
-      }
-
-      .note {
-        margin-top: 20px;
-        font-size: 16px;
-        color: #d9534f; /* red for urgency */
-        font-weight: 600;
-        font-style: normal;
-        background: #fff3cd;
-        border: 1px solid #ffeeba;
-        border-radius: 8px;
-        padding: 12px;
-        display: inline-block;
-        animation: pulse 1.8s infinite;
-      }
-
-      /* simple highlight animation */
-      @keyframes pulse {
-        0% {
-          background-color: #fff3cd;
+        body {
+            font-family: "Poppins", sans-serif;
+            margin: 0;
+            padding: 15px;
+            background: #f9f9f9;
+            color: #333;
         }
-        50% {
-          background-color: #ffecb5;
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
         }
-        100% {
-          background-color: #fff3cd;
-        }
-      }
 
-      /* Winner Card */
-      .winner-container {
-        flex: 0 1 350px;
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-        text-align: center;
-      }
-
-      .winner-container h3 {
-        color: #444;
-        font-weight: 600;
-        margin-bottom: 15px;
-      }
-
-      .winner-image {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-bottom: 10px;
-        border: 3px solid #28a745;
-      }
-
-      .winner-info p {
-        font-size: 15px;
-        margin: 6px 0;
-        color: #555;
-      }
-
-      .congrats {
-        margin-top: 15px;
-        font-weight: 600;
-        color: #28a745;
-      }
-
-      .note {
-        margin-top: 10px;
-        font-size: 14px;
-        color: #777;
-        font-style: italic;
-      }
-
-      /* 📱 Mobile Responsive */
-      @media (max-width: 768px) {
         .page-container {
-          flex-direction: column;
-          align-items: center;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin: 0 auto;
+            max-width: 1200px;
         }
 
-        .winner-container,
+        /* Property Card */
         .property-container {
-          width: 100%;
+            flex: 1 1 600px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+
+        .property-container img {
+            width: 100%;
+            height: auto;
+            max-height: 320px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .property-container p {
+            font-size: 15px;
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+
+        .property-container strong {
+            color: #222;
+        }
+
+        .property-container a.map-link {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .property-container a.map-link:hover {
+            text-decoration: underline;
+        }
+
+        .btn-buy {
+            display: inline-block;
+            text-align: center;
+            background: #28a745;
+            color: #fff;
+            font-weight: 600;
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 15px;
+            transition: background 0.3s;
+        }
+
+        .btn-buy:hover {
+            background: #218838;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #eee;
+            margin: 20px 0;
+        }
+
+        /* Winner Card */
+        .winner-container {
+            flex: 0 1 350px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .winner-container h3 {
+            color: #444;
+            font-weight: 600;
+            margin-bottom: 15px;
         }
 
         .winner-image {
-          width: 100px;
-          height: 100px;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border: 3px solid #28a745;
         }
-      }
+
+        .winner-info p {
+            font-size: 15px;
+            margin: 6px 0;
+            color: #555;
+        }
+
+        .congrats {
+            margin-top: 15px;
+            font-weight: 600;
+            color: #28a745;
+        }
+
+        .note {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #777;
+            font-style: italic;
+        }
+
+        /* Footer */
+        .footer {
+            font-family: 'Poppins', sans-serif;
+            background: #fff;
+            color: #333;
+            margin-top: 40px;
+        }
+
+        .footer-main {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: auto;
+            padding: 50px 20px;
+            gap: 40px;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 230px;
+        }
+
+        .footer-section h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .footer-section p, .footer-section li a {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .footer-section a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        .footer-section a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-section button {
+            background: #888;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 18px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .footer-section button:hover {
+            background: #555;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .social-icons a {
+            font-size: 18px;
+            color: #444;
+            margin-right: 12px;
+        }
+
+        .social-icons a:hover {
+            color: #0a66c2;
+        }
+
+        .footer-bottom {
+            background: #0056d2;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 15px 40px;
+            font-size: 14px;
+        }
+
+        .footer-bottom span {
+            font-weight: 600;
+        }
+
+        /* ---------- MOBILE RESPONSIVE ---------- */
+        @media (max-width: 768px) {
+            .page-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .winner-container,
+            .property-container {
+                width: 100%;
+            }
+
+            .winner-image {
+                width: 100px;
+                height: 100px;
+            }
+
+            .footer {
+              display: none !important;
+            }
+          }
+             
     </style>
-  </head>
-  <body>
-    <h1><center>Book your Property</center></h1>
+</head>
+
+<body>
+    {% include 'NavBar.html' %}
+
+    <br><br><br>
+
+    <h1>Book Your Property</h1>
 
     <div class="page-container">
-      <!-- Property Details -->
-      <div class="property-container">
-        <img src="{{ property.image.url }}" alt="{{ property.owner_name }}" />
 
-        <p>
-          <strong>💰 Property Value:</strong> ₹{{ property.property_value }}
-        </p>
-        <p><strong>🎫 Ticket Price:</strong> ₹{{ property.ticket_price }}</p>
-        <p>
-          <strong>🎟️Total Tickets:</strong> {{ property.available_tickets }}
-        </p>
-        <p><strong>🎟Available Tickets:</strong>{{ property.total_tickets }}</p>
-        <p><strong>📍 Address:</strong> {{ property.address }}</p>
-        <p><strong>📝 Description:</strong> {{ property.description }}</p>
-        <p>
-          <strong>📍 Address URL:</strong>
-          <a href="{{ property.address_url }}" target="_blank" class="map-link"
-            >🗺️ View on Map</a
-          >
-        </p>
-
-        <hr />
-        <!-- template -->
-        <a href="{% url 'lucky:buy_ticket' property.id %}" class="btn-buy"
-          >BOOK A SLOT</a
-        >
-      </div>
-
-      <!-- Winner Section -->
-      <div class="winner-container">
-        <h3>🏆 Winner</h3>
-
-        {% if winner %}
-        <img
-          src="{{ winner.image.url }}"
-          alt="{{ winner.name }}"
-          class="winner-image"
-        />
-        <div class="winner-info">
-          <p><strong>Name:</strong> {{ winner.name }}</p>
-          <p><strong>Property:</strong> {{ property.owner_name }}</p>
-          <p><strong>Ticket ID:</strong> {{ winner.ticket_id }}</p>
-          <p><strong>Property Value:</strong> ₹{{ property.property_value }}</p>
+        <!-- Property Section -->
+        <div class="property-container">
+            <img src="{{ property.image.url }}" alt="{{ property.owner_name }}">
+            <p><strong>💰 Property Value:</strong> ₹{{ property.property_value }}</p>
+            <p><strong>🎫 Ticket Price:</strong> ₹{{ property.ticket_price }}</p>
+            <p><strong>🎟️ Total Tickets:</strong> {{ property.total_tickets }}</p>
+            <p><strong>🎟️ Available Tickets:</strong> {{ property.available_tickets }}</p>
+            <p><strong>📍 Address:</strong> {{ property.address }}</p>
+            <p><strong>📝 Description:</strong> {{ property.description }}</p>
+            <p><strong>📍 Address URL:</strong> <a href="{{ property.address_url }}" target="_blank" class="map-link">🗺️ View on Map</a></p>
+            <hr>
+            <a href="{% url 'lucky:buy_ticket' property.id %}" class="btn-buy">BOOK A SLOT</a>
         </div>
-        <p class="congrats">🎉 Congratulations from Weekdays Property Team!</p>
-        {% else %}
-        <p class="note">🏠 Winner will be announced soon.</p>
-        {% endif %}
-      </div>
+
+        <!-- Winner Section -->
+        <div class="winner-container">
+            <h3>🏆 Winner</h3>
+            {% if winner %}
+                <img src="{{ winner.image.url }}" class="winner-image">
+                <div class="winner-info">
+                    <p><strong>Name:</strong> {{ winner.name }}</p>
+                    <p><strong>Property:</strong> {{ property.owner_name }}</p>
+                    <p><strong>Ticket ID:</strong> {{ winner.ticket_id }}</p>
+                    <p><strong>Property Value:</strong> ₹{{ property.property_value }}</p>
+                </div>
+                <p class="congrats">🎉 Congratulations from Weekdays Property Team!</p>
+            {% else %}
+                <p class="note">🏠 Winner will be announced soon.</p>
+            {% endif %}
+        </div>
     </div>
-  </body>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="footer-section">
+                <h3>SEARCH</h3>
+                <div class="search-box">
+                    <input type="text" placeholder="Search For State">
+                    <button type="button">Search</button>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3>FIND PROPERTY</h3>
+                <p>Select From Thousands Of Options, Without Brokerage.</p>
+                <button>Enquiry Now</button>
+
+                <h3 style="margin-top:25px;">LIST YOUR PROPERTY</h3>
+                <p>For Free. Without Any Brokerage.</p>
+                <button>Post Now</button>
+            </div>
+
+            <div class="footer-section">
+                <h3>CONTACT US</h3>
+                <p>Toll Free - 1800 41 99099</p>
+                <p>9:30 AM To 6:30 PM (Mon-Sun)</p>
+                <p>Email - <a href="mailto:feedback@propertysr.com">feedback@propertysr.com</a></p>
+
+                <h3 style="margin-top:20px;">FOLLOW US</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3>COMPANY</h3>
+                <ul>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">For Partners</a></li>
+                    <li><a href="#">Terms</a></li>
+                    <li><a href="#">Annual Return</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Unsubscribe</a></li>
+                    <li><a href="#">Merger Hearing Advertisement</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>©<span>WEEKDAYS PROPERTIES</span>, All Rights Reserved.</p>
+            <p>Designed By <span> YGR GOBAL IT SERVICES Pvt. Ltd,2023.</span></p>
+        </div>
+    </footer>
+
+</body>
 </html>

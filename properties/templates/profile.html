@@ -170,6 +170,14 @@
         background: #ff4d4d;
       }
 
+      .desc {
+          padding: 0 15px;
+          margin-top: 20px;
+          font-size: 15px;
+          padding-left: 35px;
+          
+        }
+
       @keyframes fadeIn {
         from {
           opacity: 0;
@@ -333,7 +341,9 @@
           <a href="{% url 'prop:user_uploades'  %}" class="btn green"
             >Uploaded</a
           >
-          <button class="btn red">Reels</button>
+         <a href="{% url 'prop:all_reels'  %}" class="btn red"
+            >Reels</a
+          >
           <a href="{% url 'prop:referral'  %}" class="btn green"
             >My Referrals</a
           >

@@ -1,0 +1,13 @@
+<form method="POST" action="{% url 'prop:search' %}">
+  {% csrf_token %}
+  <select name="search-cat">
+    <option value="Flat">Flats</option>
+    <option value="Villa">Villas</option>
+    <option value="Plot">Plots</option>
+    <option value="Commerciallands">Commercial</option>
+    <option value="Lands">Lands</option>
+  </select>
+
+  <input type="text" name="search-input" placeholder="Enter City" />
+  <button class="search-btn">Search</button>
+</form>

@@ -1,246 +1,392 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Reels</title>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reels</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <style>
-      body {
-        margin: 0;
-        background: black;
-        font-family: Arial, sans-serif;
-      }
+<style>
+body {
+    margin: 0;
+    background: #fff;
+    font-family: Arial, sans-serif;
+}
+.reels-container {
+    height: 90vh;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    margin-top: 50px;
+}
+.reel-item {
+    height: 90vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    scroll-snap-align: start;
+    position: relative;
+    padding-top: 50px;
+    margin-bottom: 80px;
+}
+.reel-card {
+    width: 400px;
+    height: 700px;
+    background: #111;
+    border-radius: 22px;
+    overflow: hidden;
+    position: relative;
+}
+.reel-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: pointer;
+}
+.reel-actions {
+    position: absolute;
+    right: 15px;
+    bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+}
+.action-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+.action-icon {
+    font-size: 30px;
+    color: white;
+    -webkit-text-stroke: 2px black;
+}
+.action-icon.liked {
+    color: #ff3040 !important;
+    -webkit-text-stroke: 0px;
+    transform: scale(1.2);
+}
+.like-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px; 
+    margin-top: 10px;
+}
+.action-count {
+    font-size: 14px;
+    color: white;
+}
+/* COMMENT BOX */
+.comment-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.7);
+    width: 90%;
+    max-width: 350px;
+    background: white;
+    border-radius: 18px;
+    padding: 15px;
+    transition: 0.3s ease;
+    max-height: 400px;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 99999;
+}
+.comment-box.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+}
+.comment-list {
+    max-height: 250px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
+.comment-item {
+    margin-bottom: 8px;
+}
+.comment-input-area {
+    display: flex;
+    gap: 10px;
+}
+.comment-input-area input {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+}
+.comment-input-area button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+/* Overlay */
+.overlay-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s ease;
+}
+.overlay-bg.active {
+    opacity: 1;
+    visibility: visible;
+}
+/* SHARE POPUP */
+.share-popup-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+.share-popup-bg.active {
+    display: flex;
+}
+.share-popup {
+    width: 300px;
+    background: #222;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    animation: pop 0.3s ease;
+    color: white;
+}
+.share-item {
+    padding: 12px;
+    background: #333;
+    margin: 8px 0;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.close-btn {
+    margin-top: 15px;
+    background: red;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+@keyframes pop {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+/* SOUND ICON */
+.sound-icon {
+    position: absolute;
+    right: 20px;
+    bottom: 150px;
+    font-size: 35px;
+    color: white;
+    opacity: 0;
+    transition: opacity .3s;
+    z-index: 10;
+}
+.sound-icon.show {
+    opacity: 1;
+}
+</style>
+</head>
+<body>
 
-      .reels-container {
-        height: 100vh;
-        overflow-y: scroll;
-        scroll-snap-type: y mandatory;
-      }
+{% include 'NavBar.html' %}
 
-      .reel-item {
-        height: 100vh;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        scroll-snap-align: start;
-        position: relative;
-        padding-top: 50px;
-      }
+<div id="overlay" class="overlay-bg" onclick="closeCommentBox()"></div>
 
-      .reel-card {
-        width: 400px;
-        height: 700px;
-        background: #111;
-        border-radius: 22px;
-        overflow: hidden;
-        position: relative;
-      }
+<div class="reels-container">
+{% for i in data %}
+<div class="reel-item">
+    <div class="reel-card">
+       <!-- Video -->
+       <video src="{{ i.reel.url }}" class="reel-video" autoplay muted loop playsinline onclick="toggleUserSound(this)"></video>
+       <!-- Sound Icon -->
+       <div class="sound-icon"><i class="fa-solid fa-volume-xmark"></i></div>
 
-      .reel-video {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      /* bottom gradient */
-      .reel-gradient {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        height: 50%;
-        background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
-      }
-
-      /* User info */
-      .reel-info {
-        position: absolute;
-        bottom: 20px;
-        left: 20px;
-        color: white;
-        max-width: 70%;
-      }
-
-      .reel-user {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .reel-user img {
-        width: 35px;
-        height: 35px;
-        border-radius: 50%;
-        border: 2px solid white;
-      }
-
-      .reel-title {
-        margin: 0;
-        font-size: 18px;
-        font-weight: bold;
-      }
-
-      .reel-description {
-        margin-top: 6px;
-        font-size: 14px;
-        opacity: 0.9;
-      }
-
-      /* Right side icons */
-      .reel-actions {
-        position: absolute;
-        right: 15px;
-        bottom: 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 25px;
-      }
-
-      .action-icon {
-        font-size: 28px;
-        color: white;
-        cursor: pointer;
-      }
-
-      .action-count {
-        text-align: center;
-        color: white;
-        font-size: 13px;
-      }
-
-      /* Comment input box */
-      .comment-input-container {
-        width: 100%;
-        position: absolute;
-        bottom: 0;
-        background: rgba(255, 255, 255, 0.95);
-        padding: 10px;
-        display: flex;
-        gap: 10px;
-      }
-
-      .comment-input-field {
-        flex: 1;
-        padding: 8px;
-        border-radius: 20px;
-        border: 1px solid #ccc;
-      }
-
-      .comment-send {
-        background: none;
-        border: none;
-        cursor: pointer;
-      }
-
-      .comment-section {
-        max-height: 180px;
-        overflow-y: auto;
-        background: white;
-        padding: 10px;
-        border-top-left-radius: 12px;
-        border-top-right-radius: 12px;
-        position: absolute;
-        bottom: 60px;
-        width: 100%;
-      }
-
-      .comment-text {
-        padding: 4px 0;
-        color: #333;
-      }
-    </style>
-  </head>
-
-  <body>
-    <div class="reels-container">
-      {% for i in data %}
-      <div class="reel-item">
-        <div class="reel-card">
-          <video
-            src="{{ i.reel.url }}"
-            class="reel-video"
-            autoplay
-            loop
-            muted
-          ></video>
-
-          <div class="reel-gradient"></div>
-
-          <!-- User + Title -->
-          <div class="reel-info">
-            <div class="reel-user">
-              <img src="{{ i.user.profile_image_path.url }}" alt="profile" />
-              <h3 class="reel-title">{{ i.title }}</h3>
+       <!-- Actions -->
+       <div class="reel-actions">
+            <div class="action-item" onclick="toggleLike(this, {{ i.id }})">
+                <div class="like-wrapper">
+                    <i class="fa-solid fa-heart action-icon {% if i.id in request.session.liked_reels %}liked{% endif %}"></i>
+                    <span class="action-count">{{ i.likeCount }}</span>
+                </div>
             </div>
-            <p class="reel-description">{{ i.description }}</p>
-          </div>
-
-          <!-- Right Icons -->
-          <div class="reel-actions">
-            <div onclick="like({{ i.id }})">
-              ❤️
-              <div class="action-count">{{ i.likes }}</div>
+            <div class="action-item" onclick="openCommentBox({{ i.id }})">
+                <i class="fa-regular fa-comment action-icon"></i>
             </div>
-
-            <div onclick="toggleComment({{ i.id }})">💬</div>
-
-            <div>🔗</div>
-          </div>
-
-          <!-- Comments section -->
-          <div
-            id="comments_{{ i.id }}"
-            class="comment-section"
-            style="display: none"
-          >
-            <p class="comment-text">No comments yet</p>
-          </div>
-
-          <!-- Comment input -->
-          <div
-            id="commentInput_{{ i.id }}"
-            class="comment-input-container"
-            style="display: none"
-          >
-            <input
-              type="text"
-              id="commentBox_{{ i.id }}"
-              class="comment-input-field"
-              placeholder="Add a comment..."
-            />
-
-            <button onclick="commentBox({{ i.id }})" class="comment-send">
-              📩
-            </button>
-          </div>
+            <div class="action-item" onclick="openSharePopup('{{ i.id }}', '{{ i.reel.url }}')">
+                <i class="fa-solid fa-paper-plane action-icon"></i>
+            </div>
         </div>
-      </div>
-      {% endfor %}
+
+        <!-- Comment Box -->
+        <div class="comment-box" id="commentBox_{{ i.id }}">
+            <div class="comment-list" id="commentList_{{ i.id }}"></div>
+            <div class="comment-input-area">
+                <input type="text" id="commentInput_{{ i.id }}" placeholder="Write a comment...">
+                <button onclick="sendComment({{ i.id }})">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
     </div>
+</div>
+{% endfor %}
+</div>
 
-    <script>
-      function like(id) {
-        fetch(`likeReel/${id}`)
-          .then((res) => res.json())
-          .then(() => location.reload());
-      }
+<!-- Share Popup -->
+<div class="share-popup-bg" id="sharePopup">
+    <div class="share-popup">
+        <p>Share this reel</p>
+        <div class="share-item" id="shareWhatsapp">Share to WhatsApp</div>
+        <div class="share-item" id="shareFacebook">Share to Facebook</div>
+        <div class="share-item" id="copyLink">Copy Link</div>
+        <div class="close-btn" onclick="closeSharePopup()">Close</div>
+    </div>
+</div>
+<script>
+// ============================
+// Like Button
+// ============================
+function toggleLike(element, id) {
+    let icon = element.querySelector("i");
+    icon.classList.toggle("liked");
+    let count = element.querySelector(".action-count");
+    let val = parseInt(count.innerText);
+    count.innerText = icon.classList.contains("liked") ? val + 1 : val - 1;
 
-      function commentBox(id) {
-        const c = document.getElementById(`commentBox_${id}`).value;
-        fetch(`comment/${id}/${c}`)
-          .then((res) => res.json())
-          .then(() => location.reload());
-      }
+    fetch(`/likeReel/${id}`);
+}
 
-      function toggleComment(id) {
-        const section = document.getElementById(`comments_${id}`);
-        const input = document.getElementById(`commentInput_${id}`);
+// ============================
+// Comment Functions
+// ============================
+function openCommentBox(id) {
+    const box = document.getElementById(`commentBox_${id}`);
+    const overlay = document.getElementById("overlay");
+    const input = document.getElementById(`commentInput_${id}`);
+    if (!box || !overlay || !input) return;
 
-        section.style.display =
-          section.style.display === "none" ? "block" : "none";
-        input.style.display = input.style.display === "none" ? "flex" : "none";
-      }
-    </script>
-  </body>
+    box.classList.add("active");
+    overlay.classList.add("active");
+    input.focus();
+    enableEnterSend(id);
+    loadComments(id);
+}
+
+function closeCommentBox() {
+    document.querySelectorAll(".comment-box").forEach(b => b.classList.remove("active"));
+    document.getElementById("overlay").classList.remove("active");
+}
+
+function loadComments(id) {
+    fetch(`/getAllComments/${id}`)
+        .then(res => res.json())
+        .then(data => {
+            const list = document.getElementById(`commentList_${id}`);
+            list.innerHTML = "";
+            if (!data.comments || data.comments.length === 0) {
+                list.innerHTML = `<p style="color:#555;">No comments yet.</p>`;
+                return;
+            }
+            data.comments.forEach(c => {
+                const div = document.createElement("div");
+                div.classList.add("comment-item");
+                div.innerHTML = `<b>${c.user__username}</b>: ${c.comment}`;
+                list.appendChild(div);
+            });
+            list.scrollTop = list.scrollHeight;
+        });
+}
+
+function sendComment(id) {
+    const input = document.getElementById(`commentInput_${id}`);
+    const text = input.value.trim();
+    if (!text) return;
+    fetch(`/comment/${id}/${encodeURIComponent(text)}`)
+        .then(() => {
+            input.value = "";
+            loadComments(id);
+        });
+}
+
+function enableEnterSend(id) {
+    const input = document.getElementById(`commentInput_${id}`);
+    if (!input) return;
+    input.addEventListener("keypress", e => {
+        if (e.key === "Enter") sendComment(id);
+    });
+}
+
+// ============================
+// Share Popup
+// ============================
+let currentReelLink = "";
+
+function openSharePopup(reelId, reelUrl) {
+    currentReelLink = `https://yourwebsite.com/reels/${reelId}`;
+    document.getElementById("sharePopup").classList.add("active");
+}
+
+function closeSharePopup() {
+    document.getElementById("sharePopup").classList.remove("active");
+}
+
+document.getElementById("shareWhatsapp").addEventListener("click", () => {
+    if (!currentReelLink) return;
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(currentReelLink)}`, '_blank');
+});
+
+document.getElementById("shareFacebook").addEventListener("click", () => {
+    if (!currentReelLink) return;
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentReelLink)}`, '_blank');
+});
+
+document.getElementById("copyLink").addEventListener("click", () => {
+    if (!currentReelLink) return;
+    navigator.clipboard.writeText(currentReelLink).then(() => alert("Reel link copied!"));
+});
+
+// ============================
+// Video Sound
+// ============================
+const videos = document.querySelectorAll(".reel-video");
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        const video = entry.target;
+        if (entry.isIntersecting) {
+            video.play();
+        } else {
+            video.pause();
+        }
+    });
+}, { threshold: 0.65 });
+
+videos.forEach(v => observer.observe(v));
+
+function toggleUserSound(video) {
+    const iconBox = video.parentElement.querySelector(".sound-icon");
+    const icon = iconBox.querySelector("i");
+    video.muted = !video.muted;
+    icon.className = video.muted ? "fa-solid fa-volume-xmark" : "fa-solid fa-volume-high";
+    iconBox.classList.add("show");
+    setTimeout(() => iconBox.classList.remove("show"), 1200);
+}
+</script>
+
+</body>
 </html>
